@@ -104,7 +104,14 @@ export default {
     };
   },
   mounted() {
-    
+   this.http.post(this.ports.urls.HomePageData,res => {
+     console.log(res)
+      if (res.success) {
+          // 返回正确的处理
+      } else {
+        // 返回错误的处理 
+      }
+  })
   },
   computed: {
       author () {

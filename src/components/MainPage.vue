@@ -24,6 +24,9 @@
     <el-carousel-item>
       <page-eight></page-eight>
     </el-carousel-item>
+    <el-carousel-item>
+      <page-nine></page-nine>
+    </el-carousel-item>
   </el-carousel>
 </template>
 
@@ -36,6 +39,7 @@ import pageFive from "./pageFive.vue";
 import pageSix from "./pageSix.vue";
 import pageSeven from "./pageSeven.vue";
 import pageEight from "./pageEight.vue";
+import pageNine from "./pageNine.vue";
 export default {
   name: "app",
   components: {
@@ -46,7 +50,8 @@ export default {
     pageFive,
     pageSix,
     pageSeven,
-    pageEight
+    pageEight,
+    pageNine
   }
 };
 </script>

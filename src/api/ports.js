@@ -1,6 +1,12 @@
 export default {
     urls: {
-        register: '/manage/company/register', // 注册接口
+        HomePageData: '/getHomePageData', // 大屏首界面数据获取
+        ActivityPageData: '/getActivityAreaCatStaData', // 获取活动发布相关统计数据
+        ServicePageData: '/getActivityServiceStaData', // 获取活动参与人次数据
+        VenuePageData: '/getVenueBookingStaData', // 活动室预约数据接口
+        LivePageData: '/getLiveStaData', // 获取直播频道数据
+        ResourcePageData: '/getVideoResourceStaData', // 获取点播资源数据
+        userPageData: '/getUserStaData', // 获取用户相关数据
     }
 }
 
