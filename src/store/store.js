@@ -6,7 +6,7 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   // 定义状态
   state: {
-    author: 'Wise Wrong'
+    pageNum: 0,
   },
   mutations: {
     modifyMsg(state, Obj) {

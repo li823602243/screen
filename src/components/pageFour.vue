@@ -23,30 +23,56 @@
                   <el-row class="right">
                     <el-col :span="8">音乐厅</el-col>
                     <el-col :span="8">225552</el-col>
-                    <el-col :span="8">1</el-col>
+                    <el-col :span="8" class="order-type--icon order-type--first"></el-col>
                   </el-row> 
                   <el-row class="right">
                     <el-col :span="8">舞蹈厅</el-col>
                     <el-col :span="8">10000</el-col>
-                    <el-col :span="8">2</el-col>
+                    <el-col :span="8" class="order-type--icon order-type--second"></el-col>
                   </el-row>
                   <el-row class="right">
                     <el-col :span="8">展厅</el-col>
                     <el-col :span="8">1222</el-col>
-                    <el-col :span="8">3</el-col>
+                    <el-col :span="8" class="order-type--icon order-type--three"></el-col>
                   </el-row>
                   <el-row class="right">
                     <el-col :span="8">展厅</el-col>
                     <el-col :span="8">10055</el-col>
-                    <el-col :span="8">4</el-col>
+                    <el-col :span="8" class="order-type--icon order-type--nomal">4</el-col>
                   </el-row>
                   <el-row class="right">
                     <el-col :span="8">展厅</el-col>
                     <el-col :span="8">10022</el-col>
-                    <el-col :span="8">5</el-col>
+                    <el-col :span="8" class="order-type--icon order-type--nomal">5</el-col>
                   </el-row>
                 </el-col>
-                <el-col :span="12">1</el-col>
+                <el-col :span="12" class="order-type--right">
+                   <el-row class="right">
+                    <el-col :span="8">音乐厅</el-col>
+                    <el-col :span="8">225552</el-col>
+                    <el-col :span="8" class="order-type--icon order-type--nomal">6</el-col>
+                  </el-row> 
+                  <el-row class="right">
+                    <el-col :span="8">舞蹈厅</el-col>
+                    <el-col :span="8">10000</el-col>
+                    <el-col :span="8" class="order-type--icon order-type--nomal">7</el-col>
+                  </el-row>
+                  <el-row class="right">
+                    <el-col :span="8">展厅</el-col>
+                    <el-col :span="8">1222</el-col>
+                    <el-col :span="8" class="order-type--icon order-type--nomal">8</el-col>
+                  </el-row>
+                  <el-row class="right">
+                    <el-col :span="8">展厅</el-col>
+                    <el-col :span="8">10055</el-col>
+                    <el-col :span="8" class="order-type--icon order-type--nomal">9</el-col>
+                  </el-row>
+                  <el-row class="right">
+                    <el-col :span="8">展厅</el-col>
+                    <el-col :span="8">10022</el-col>
+                    <el-col :span="8" class="order-type--icon order-type--nomal">10</el-col>
+                  </el-row>
+                </el-col>
             </el-row>
           </el-col>
         </el-row>
@@ -557,7 +583,7 @@ export default {
 }
 .order-type--content {
   flex: 1;
-  height: 100%;
+  /* height: 100%; */
 }
 .order-type {
   position: relative;
@@ -589,7 +615,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: 100%;
+  height: 88%;
   margin-top: 30px;
 }
 .wrapper-col--left {
@@ -599,8 +625,7 @@ export default {
 .address-left {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  height: 100%;
+  height: 89%;
   border: 1px solid #032ac6;
 }
 .address-left--bottom {
@@ -652,6 +677,44 @@ export default {
   flex-direction: column;
   justify-content: space-around; */
   height: 100%;
+}
+.order-type--right  .el-row {
+  display: flex;
+  align-items: center;
+}
+.order-type--right  .el-row .el-col{
+  font-size: 24px;
+  color: #fff;
+  margin: 15px 0;
+}
+.order-type--icon {
+  height: 50px;
+  line-height: 50px;
+  width: 50px;
+}
+.order-type--first {
+  background-image: url(../../static/images/gold-one.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+.order-type--second {
+  background-image: url(../../static/images/gold-two.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+.order-type--three {
+  background-image: url(../../static/images/gold-three.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+.order-type--nomal {
+  background-image: url(../../static/images/gold-other.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
 }
 </style>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="top-bar">
   <div class="left"><div class="icon-run"></div></div>
-  <div class="right">2018.11.05 10:12:36</div>
+  <div class="right">{{nowTime}}</div>
   </div>
 </template>
 
@@ -9,7 +9,30 @@
 export default {
   name: "HelloWorld",
   props: {
-    msg: String
+    nowTime: ''
+  },
+  // 挂载完成时
+  mounted(){
+    this.nowTimes();
+  },
+  methods: {
+// 获取当前时间函数
+  timeFormate(timeStamp) {
+      let year = new Date(timeStamp).getFullYear();
+      let month =new Date(timeStamp).getMonth() + 1 < 10? "0" + (new Date(timeStamp).getMonth() + 1): new Date(timeStamp).getMonth() + 1;
+      let date =new Date(timeStamp).getDate() < 10? "0" + new Date(timeStamp).getDate(): new Date(timeStamp).getDate();
+      let hh =new Date(timeStamp).getHours() < 10? "0" + new Date(timeStamp).getHours(): new Date(timeStamp).getHours();
+      let mm =new Date(timeStamp).getMinutes() < 10? "0" + new Date(timeStamp).getMinutes(): new Date(timeStamp).getMinutes();
+      let ss =new Date(timeStamp).getSeconds() < 10? "0" + new Date(timeStamp).getSeconds(): new Date(timeStamp).getSeconds();
+      // return year + "年" + month + "月" + date +"日"+" "+hh+":"+mm ;
+      this.nowTime = year + "." + month + "." + date +" "+hh+":"+mm +":"+ss ;
+      // console.log(this.nowTime);
+    },
+    // 定时器函数
+    nowTimes(){
+      this.timeFormate(new Date());
+      //setInterval(this.nowTimes,1000);
+    },
   }
 };
 </script>

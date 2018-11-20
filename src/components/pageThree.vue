@@ -24,57 +24,13 @@
               <el-col :span="8" class="aside-list--td">占比</el-col>
   
             </el-row>
-  
-            <el-row :gutter="24" class="aside-list--th">
-  
-              <el-col :span="8" class="aside-list--td type">展览</el-col>
-  
-              <el-col :span="8" class="aside-list--td">2222</el-col>
-  
-              <el-col :span="8" class="aside-list--td">50%</el-col>
-  
-            </el-row>
-  
-            <el-row :gutter="24" class="aside-list--th">
-  
-              <el-col :span="8" class="aside-list--td type">曲艺</el-col>
-  
-              <el-col :span="8" class="aside-list--td">100</el-col>
-  
-              <el-col :span="8" class="aside-list--td">80%</el-col>
-  
-            </el-row>
-  
-            <el-row :gutter="24" class="aside-list--th">
-  
-              <el-col :span="8" class="aside-list--td type">音乐</el-col>
-  
-              <el-col :span="8" class="aside-list--td">5520</el-col>
-  
-              <el-col :span="8" class="aside-list--td">80%</el-col>
-  
-            </el-row>
-  
-            <el-row :gutter="24" class="aside-list--th">
-  
-              <el-col :span="8" class="aside-list--td type">舞蹈</el-col>
-  
-              <el-col :span="8" class="aside-list--td">552</el-col>
-  
-              <el-col :span="8" class="aside-list--td">30%</el-col>
-  
-            </el-row>
-  
-            <el-row :gutter="24" class="aside-list--th">
-  
-              <el-col :span="8" class="aside-list--td type">戏剧</el-col>
-  
-              <el-col :span="8" class="aside-list--td">50%</el-col>
-  
-              <el-col :span="8" class="aside-list--td">25%</el-col>
-  
-            </el-row>
-  
+            <block v-for="item in act_cat_join_num_lists" :key="item.filter_id">
+              <el-row :gutter="24" class="aside-list--th">
+                <el-col :span="8" class="aside-list--td type">{{item.filter_name}}</el-col>
+                <el-col :span="8" class="aside-list--td">{{item.amount}}</el-col>
+                <el-col :span="8" class="aside-list--td">{{item.percent.toFixed(2)}}%</el-col>
+              </el-row>
+            </block>
           </div>
   
         </div>
@@ -146,9 +102,8 @@
     data() {
   
       return {
-  
-        msg: "Welcome to Your Vue.js App"
-  
+        act_cat_join_num_lists: "",
+        act_cat_join_num_arr:[]
       };
   
     },
@@ -160,9 +115,7 @@
     },
   
     mounted() {
-  
-      this.drawLine();
-  
+      this.getServicePageData();
     },
   
     computed: {
@@ -176,1562 +129,1481 @@
     },
   
     methods: {
-  
+      getServicePageData() {
+        this.http.get(this.ports.urls.ServicePageData,res => {
+            console.log(res.data.results);
+            this.act_cat_join_num_lists = res.data.results.act_cat_join_num_lists;
+            this.act_register_date_num = res.data.results.act_register_date_num
+            this.act_sign_date_num = res.data.results.act_sign_date_num
+            this.act_sign_trend_data = res.data.results.act_sign_trend_data
+            this.user_age_period_num = res.data.results.user_age_period_num
+            console.log("00000000000000000000000000000")
+            this.drawLine();
+        })
+      },
       drawLine() {
-  
-        // 基于准备好的dom，初始化echarts实例
-  
-        let actTypeChart = this.$echarts.init(
-  
-          document.getElementById("aside-charts")
-  
-        );
-  
-        let orderChart = this.$echarts.init(
-  
-          document.getElementById("service-order")
-  
-        );
-  
-        let ageChart = this.$echarts.init(document.getElementById("service-age"));
-  
-        let trendWeekChart = this.$echarts.init(
-  
-          document.getElementById("trend-week")
-  
-        );
-  
-        let trendYearChart = this.$echarts.init(
-  
-          document.getElementById("trend-year")
-  
-        );
-  
-        var placeHolderStyle = {
-  
-          normal: {
-  
-            label: {
-  
-              show: false
-  
-            },
-  
-            labelLine: {
-  
-              show: false
-  
-            },
-  
-            color: "rgba(0,0,0,0)",
-  
-            borderWidth: 0
-  
-          },
-  
-          emphasis: {
-  
-            color: "rgba(0,0,0,0)",
-  
-            borderWidth: 0
-  
-          }
-  
-        };
-  
-  
-  
-        var dataStyle = {
-  
-          normal: {
-  
-            formatter: "{c}%",
-  
-            position: "center",
-  
-            show: true,
-  
-            textStyle: {
-  
-              fontSize: "28",
-  
-              fontWeight: "normal",
-  
-              color: "#fff"
-  
-            }
-  
-          }
-  
-        };
-  
-  
-  
-        let orderChartOption = {
-  
-          title: [{
-  
-              text: "预约人数",
-  
-              left: "29.8%",
-  
-              top: "60%",
-  
-              textAlign: "center",
-  
-              textStyle: {
-  
-                fontWeight: "normal",
-  
-                fontSize: "16",
-  
-                color: "#fff",
-  
-                textAlign: "center"
-  
-              }
-  
-            },
-  
-            {
-  
-              text: "参与人数",
-  
-              left: "70%",
-  
-              top: "60%",
-  
-              textAlign: "center",
-  
-              textStyle: {
-  
-                color: "#fff",
-  
-                fontWeight: "normal",
-  
-                fontSize: "16",
-  
-                textAlign: "center"
-  
-              }
-  
-            }
-  
-          ],
-  
-          series: [{
-  
-              type: "pie",
-  
-              hoverAnimation: false, //鼠标经过的特效
-  
-              radius: ["70%", "50%"],
-  
-              center: ["30%", "50%"],
-  
-              startAngle: 225,
-  
+          // 基于准备好的dom，初始化echarts实例
+          this.drawTotal();
+          let orderChart = this.$echarts.init(
+            document.getElementById("service-order")
+          );
+          let ageChart = this.$echarts.init(document.getElementById("service-age"));
+          let trendWeekChart = this.$echarts.init(
+            document.getElementById("trend-week")
+          );
+          let trendYearChart = this.$echarts.init(
+            document.getElementById("trend-year")
+          );
+          var placeHolderStyle = {
+    
+            normal: {
+    
+              label: {
+    
+                show: false
+    
+              },
+    
               labelLine: {
-  
-                normal: {
-  
-                  show: false
-  
-                }
-  
+    
+                show: false
+    
               },
-  
-              label: {
-  
-                normal: {
-  
-                  position: "center"
-  
-                }
-  
-              },
-  
-              data: [{
-  
-                  value: 75,
-  
-                  itemStyle: {
-  
-                    normal: {
-  
-                      color: new this.$echarts.graphic.LinearGradient(
-  
-                        0,
-  
-                        0,
-  
-                        0,
-  
-                        1, [{
-  
-                            offset: 0,
-  
-                            color: "#99da69"
-  
-                          },
-  
-                          {
-  
-                            offset: 1,
-  
-                            color: "#01babc"
-  
-                          }
-  
-                        ]
-  
-                      )
-  
-                    }
-  
-                  },
-  
-                  label: dataStyle
-  
-                },
-  
-                {
-  
-                  value: 25,
-  
-                  itemStyle: placeHolderStyle
-  
-                }
-  
-              ]
-  
+    
+              color: "rgba(0,0,0,0)",
+    
+              borderWidth: 0
+    
             },
-  
-            {
-  
-              type: "pie",
-  
-              hoverAnimation: false,
-  
-              radius: ["70%", "50%"],
-  
-              center: ["70%", "50%"],
-  
-              startAngle: 225,
-  
-              labelLine: {
-  
-                normal: {
-  
-                  show: false
-  
-                }
-  
-              },
-  
-              label: {
-  
-                normal: {
-  
-                  position: "center"
-  
-                }
-  
-              },
-  
-              data: [{
-  
-                  value: 20,
-  
-                  itemStyle: {
-  
-                    normal: {
-  
-                      color: new this.$echarts.graphic.LinearGradient(
-  
-                        0,
-  
-                        0,
-  
-                        0,
-  
-                        1, [{
-  
-                            offset: 0,
-  
-                            color: "#9f3edd"
-  
-                          },
-  
-                          {
-  
-                            offset: 1,
-  
-                            color: "#4897f6"
-  
-                          }
-  
-                        ]
-  
-                      )
-  
-                    }
-  
-                  },
-  
-                  label: dataStyle
-  
-                },
-  
-                {
-  
-                  value: 80,
-  
-                  itemStyle: placeHolderStyle
-  
-                }
-  
-              ]
-  
-            },
-  
-  
-  
-            //外圈的边框
-  
-            {
-  
-              // name: '总人数',
-  
-              type: "pie",
-  
-              hoverAnimation: false, //鼠标经过的特效
-  
-              radius: ["70%", "65%"],
-  
-              center: ["30%", "50%"],
-  
-              startAngle: 225,
-  
-              labelLine: {
-  
-                normal: {
-  
-                  show: false
-  
-                }
-  
-              },
-  
-              label: {
-  
-                normal: {
-  
-                  position: "center"
-  
-                }
-  
-              },
-  
-              data: [{
-  
-                  value: 75,
-  
-                  itemStyle: {
-  
-                    normal: {
-  
-                      color: new this.$echarts.graphic.LinearGradient(
-  
-                        0,
-  
-                        0,
-  
-                        0,
-  
-                        1, [{
-  
-                            offset: 0,
-  
-                            color: "#01babc"
-  
-                          },
-  
-                          {
-  
-                            offset: 1,
-  
-                            color: "#99da69"
-  
-                          }
-  
-                        ]
-  
-                      )
-  
-                    }
-  
-                  }
-  
-                },
-  
-                {
-  
-                  value: 25,
-  
-                  itemStyle: placeHolderStyle
-  
-                }
-  
-              ]
-  
-            },
-  
-            {
-  
-              type: "pie",
-  
-              hoverAnimation: false,
-  
-              radius: ["70%", "65%"],
-  
-              center: ["70%", "50%"],
-  
-              startAngle: 225,
-  
-              labelLine: {
-  
-                normal: {
-  
-                  show: false
-  
-                }
-  
-              },
-  
-              label: {
-  
-                normal: {
-  
-                  position: "center"
-  
-                }
-  
-              },
-  
-              data: [{
-  
-                  value: 75,
-  
-                  itemStyle: {
-  
-                    normal: {
-  
-                      color: new this.$echarts.graphic.LinearGradient(
-  
-                        0,
-  
-                        0,
-  
-                        0,
-  
-                        1, [{
-  
-                            offset: 0,
-  
-                            color: "#4897f6"
-  
-                          },
-  
-                          {
-  
-                            offset: 1,
-  
-                            color: "#9f3edd"
-  
-                          }
-  
-                        ]
-  
-                      )
-  
-                    }
-  
-                  }
-  
-                },
-  
-                {
-  
-                  value: 25,
-  
-                  itemStyle: placeHolderStyle
-  
-                }
-  
-              ]
-  
+    
+            emphasis: {
+    
+              color: "rgba(0,0,0,0)",
+    
+              borderWidth: 0
+    
             }
-  
-          ]
-  
-        };
-  
-        let actTrendOption = {
-  
-          color: ["#37a2da", "#32c5e9", "#9fe6b8", "#ffdb5c", "#ff9f7f"],
-  
-          calculable: true,
-  
-          series: [{
-  
-            type: "pie",
-  
-            radius: [40, 150],
-  
-  
-  
-            roseType: "area",
-  
-            data: [{
-  
-                value: 10,
-  
-                name: "展览"
-  
-              },
-  
-              {
-  
-                value: 5,
-  
-                name: "曲艺"
-  
-              },
-  
-              {
-  
-                value: 15,
-  
-                name: "音乐"
-  
-              },
-  
-              {
-  
-                value: 25,
-  
-                name: "舞蹈"
-  
-              },
-  
-              {
-  
-                value: 20,
-  
-                name: "戏剧"
-  
-              }
-  
-            ]
-  
-          }]
-  
-        };
-  
-        let ageChartOption = {
-  
-          title: [{
-  
-              text: "0-20岁",
-  
-              left: "25%",
-  
-              top: "36%",
-  
-              textAlign: "center",
-  
+    
+          };
+          var dataStyle = {
+    
+            normal: {
+    
+              formatter: "{c}%",
+    
+              position: "center",
+    
+              show: true,
+    
               textStyle: {
-  
+    
+                fontSize: "28",
+    
                 fontWeight: "normal",
-  
-                color: "#fff",
-  
-                fontSize: 15,
-  
-                textAlign: "center"
-  
-              }
-  
-            },
-  
-            {
-  
-              text: "226",
-  
-              left: "25%",
-  
-              top: "42%",
-  
-              textAlign: "center",
-  
-              textStyle: {
-  
-                fontWeight: "normal",
-  
-                color: "#ddea96",
-  
-                fontSize: 16,
-  
-                textAlign: "center"
-  
-              }
-  
-            },
-  
-            {
-  
-              text: "20~40岁",
-  
-              left: "50%",
-  
-              top: "36%",
-  
-              textAlign: "center",
-  
-              textStyle: {
-  
-                fontWeight: "normal",
-  
-                color: "#fff",
-  
-                fontSize: 15,
-  
-                textAlign: "center"
-  
-              }
-  
-            },
-  
-            {
-  
-              text: "155",
-  
-              left: "50%",
-  
-              top: "42%",
-  
-              textAlign: "center",
-  
-              textStyle: {
-  
-                fontWeight: "normal",
-  
-                color: "#ddea96",
-  
-                fontSize: 16,
-  
-                textAlign: "center"
-  
-              }
-  
-            },
-  
-            {
-  
-              text: "20~40岁",
-  
-              left: "75%",
-  
-              top: "36%",
-  
-              textAlign: "center",
-  
-              textStyle: {
-  
-                fontWeight: "normal",
-  
-                color: "#fff",
-  
-                fontSize: 15,
-  
-                textAlign: "center"
-  
-              }
-  
-            },
-  
-            {
-  
-              text: "155",
-  
-              left: "75%",
-  
-              top: "42%",
-  
-              textAlign: "center",
-  
-              textStyle: {
-  
-                fontWeight: "normal",
-  
-                color: "#ddea96",
-  
-                fontSize: 16,
-  
-                textAlign: "center"
-  
-              }
-  
-            },
-  
-            {
-  
-              text: "20~40岁",
-  
-              left: "35%",
-  
-              top: "76%",
-  
-              textAlign: "center",
-  
-              textStyle: {
-  
-                fontWeight: "normal",
-  
-                color: "#fff",
-  
-                fontSize: 15,
-  
-                textAlign: "center"
-  
-              }
-  
-            },
-  
-            {
-  
-              text: "155",
-  
-              left: "35%",
-  
-              top: "82%",
-  
-              textAlign: "center",
-  
-              textStyle: {
-  
-                fontWeight: "normal",
-  
-                color: "#ddea96",
-  
-                fontSize: 16,
-  
-                textAlign: "center"
-  
-              }
-  
-            },
-  
-            {
-  
-              text: "20~40岁",
-  
-              left: "65%",
-  
-              top: "76%",
-  
-              textAlign: "center",
-  
-              textStyle: {
-  
-                fontWeight: "normal",
-  
-                color: "#fff",
-  
-                fontSize: 15,
-  
-                textAlign: "center"
-  
-              }
-  
-            },
-  
-            {
-  
-              text: "155",
-  
-              left: "65%",
-  
-              top: "82%",
-  
-              textAlign: "center",
-  
-              textStyle: {
-  
-                fontWeight: "normal",
-  
-                color: "#ddea96",
-  
-                fontSize: 16,
-  
-                textAlign: "center"
-  
-              }
-  
-            }
-  
-          ],
-  
-          series: [{
-  
-              type: "liquidFill",
-  
-              name: "0~20岁", //series name
-  
-              data: [{
-  
-                name: "data name", //data name
-  
-                value: 0.6
-  
-              }],
-  
-              radius: "20%",
-  
-              // 水球颜色
-  
-              color: ["#db4e8d", "#db4e8d", "#db4e8d"],
-  
-              center: ["25%", "25%"],
-  
-              // outline  外边
-  
-              outline: {
-  
-                // show: false
-  
-                borderDistance: 5,
-  
-                itemStyle: {
-  
-                  borderWidth: 1,
-  
-                  borderColor: "#db4e8d"
-  
-                }
-  
-              },
-  
-              label: {
-  
-                normal: {
-  
-                  // textStyle: {
-  
-                  color: "#fff",
-  
-                  insideColor: "#fff",
-  
-                  fontSize: 22
-  
-                  // }
-  
-                }
-  
-              },
-  
-              // 内图 背景色 边
-  
-              backgroundStyle: {
-  
-                color: "rgba(4,24,74,0.8)"
-  
-                // borderWidth: 5,
-  
-                // borderColor: 'red',
-  
-              }
-  
-            },
-  
-            {
-  
-              type: "liquidFill",
-  
-              data: [0.3],
-  
-              radius: "20%",
-  
-              // 水球颜色
-  
-              color: ["#0070f0", "#0070f0", "#0070f0"],
-  
-              center: ["50%", "25%"],
-  
-              // outline  外边
-  
-              outline: {
-  
-                // show: false
-  
-                borderDistance: 5,
-  
-                itemStyle: {
-  
-                  borderWidth: 1,
-  
-                  borderColor: "#0070f0"
-  
-                }
-  
-              },
-  
-              label: {
-  
-                normal: {
-  
-                  textStyle: {
-  
-                    color: "#fff",
-  
-                    insideColor: "#fff",
-  
-                    fontSize: 20
-  
-                  }
-  
-                }
-  
-              },
-  
-              // 内图 背景色 边
-  
-              backgroundStyle: {
-  
-                color: "rgba(4,24,74,0.8)"
-  
-                // borderWidth: 5,
-  
-                // borderColor: 'red',
-  
-              }
-  
-            },
-  
-            {
-  
-              type: "liquidFill",
-  
-              data: [0.1],
-  
-              radius: "20%",
-  
-              // 水球颜色
-  
-              color: ["#9d4fc2", "#9d4fc2", "#9d4fc2"],
-  
-              center: ["75%", "25%"],
-  
-              // outline  外边
-  
-              outline: {
-  
-                // show: false
-  
-                borderDistance: 5,
-  
-                itemStyle: {
-  
-                  borderWidth: 1,
-  
-                  borderColor: "#9d4fc2"
-  
-                }
-  
-              },
-  
-              label: {
-  
-                normal: {
-  
-                  textStyle: {
-  
-                    color: "#fff",
-  
-                    insideColor: "#fff",
-  
-                    fontSize: 20
-  
-                  }
-  
-                }
-  
-              },
-  
-              // 内图 背景色 边
-  
-              backgroundStyle: {
-  
-                color: "rgba(4,24,74,0.8)"
-  
-                // borderWidth: 5,
-  
-                // borderColor: 'red',
-  
-              }
-  
-            },
-  
-            {
-  
-              type: "liquidFill",
-  
-              //data: [0.6, 0.5, 0.4, 0.3],
-  
-              data: [0.1, 0.05, 0.25],
-  
-              radius: "20%",
-  
-              // 水球颜色
-  
-              color: ["#00ddf0", "#00ddf0", "#00ddf0"],
-  
-              center: ["35%", "65%"],
-  
-              // outline  外边
-  
-              outline: {
-  
-                // show: false
-  
-                borderDistance: 5,
-  
-                itemStyle: {
-  
-                  borderWidth: 1,
-  
-                  borderColor: "#00ddf0"
-  
-                }
-  
-              },
-  
-              label: {
-  
-                normal: {
-  
-                  textStyle: {
-  
-                    color: "#fff",
-  
-                    insideColor: "#fff",
-  
-                    fontSize: 24
-  
-                  }
-  
-                }
-  
-              },
-  
-              // 内图 背景色 边
-  
-              backgroundStyle: {
-  
-                color: "rgba(4,24,74,0.8)"
-  
-                // borderWidth: 5,
-  
-                // borderColor: 'red',
-  
-              }
-  
-            },
-  
-            {
-  
-              type: "liquidFill",
-  
-              //data: [0.6, 0.5, 0.4, 0.3],
-  
-              data: [0.1, 0.05, 0.25],
-  
-              radius: "20%",
-  
-              // 水球颜色
-  
-              color: ["#d0c944", "#d0c944", "#d0c944"],
-  
-              center: ["65%", "65%"],
-  
-              // outline  外边
-  
-              outline: {
-  
-                // show: false
-  
-                borderDistance: 5,
-  
-                itemStyle: {
-  
-                  borderWidth: 1,
-  
-                  borderColor: "#d0c944"
-  
-                }
-  
-              },
-  
-              label: {
-  
-                normal: {
-  
-                  textStyle: {
-  
-                    color: "#fff",
-  
-                    insideColor: "#fff",
-  
-                    fontSize: 22
-  
-                  }
-  
-                }
-  
-              },
-  
-              // 内图 背景色 边
-  
-              backgroundStyle: {
-  
-                color: "rgba(4,24,74,0.8)"
-  
-                // borderWidth: 5,
-  
-                // borderColor: 'red',
-  
-              }
-  
-            }
-  
-          ]
-  
-        };
-  
-        let trendWeekOption = {
-  
-          title: {
-  
-            text: "本周",
-  
-            left: "center",
-  
-            top: 35,
-  
-            textStyle: {
-  
-              color: "#43d8d7"
-  
-            }
-  
-          },
-  
-          grid: {
-  
-            left: "3%",
-  
-            right: "5%",
-  
-            top: "22%",
-  
-            bottom: "20%",
-  
-            containLabel: true
-  
-          },
-  
-          xAxis: [{
-  
-            data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
-  
-            axisLabel: {
-  
-              interval: 0,
-  
-              rotate: 45, //倾斜度 -90 至 90 默认为0
-  
-              margin: 10,
-  
-              textStyle: {
-  
+    
                 color: "#fff"
-  
+    
               }
-  
-            },
-  
-            axisLine: {
-  
-              lineStyle: {
-  
-                type: "solid",
-  
-                color: "#00103e", //左边线的颜色
-  
-                width: "1" //坐标线的宽度
-  
-              }
-  
+    
             }
-  
-          }],
-  
-          yAxis: {
-  
-            nameTextStyle: {
-  
-              color: "#fff",
-  
-              fontSize: 14
-  
-            },
-  
-            axisLine: {
-  
-              lineStyle: {
-  
-                type: "solid",
-  
-                color: "#00103e", //左边线的颜色
-  
-                width: "1" //坐标线的宽度
-  
+    
+          };
+          let orderChartOption = {
+            title: [{
+    
+                text: "预约人数",
+    
+                left: "29.8%",
+    
+                top: "60%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  fontWeight: "normal",
+    
+                  fontSize: "16",
+    
+                  color: "#fff",
+    
+                  textAlign: "center"
+    
+                }
+    
+              },
+    
+              {
+    
+                text: "参与人数",
+    
+                left: "70%",
+    
+                top: "60%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  color: "#fff",
+    
+                  fontWeight: "normal",
+    
+                  fontSize: "16",
+    
+                  textAlign: "center"
+    
+                }
+    
               }
-  
-            },
-  
-            axisLabel: {
-  
-              color: "#fff",
-  
-              fontSize: 14
-  
-            },
-  
-            splitLine: {
-  
-              show: false,
-  
-              lineStyle: {
-  
-                color: "#0177d4"
-  
-              }
-  
-            },
-  
-            interval: 300,
-  
-            max: 1600
-  
-          },
-  
-          series: [{
-  
-            type: "bar",
-  
-            barWidth: 10,
-  
-            itemStyle: {
-  
-              normal: {
-  
-                color: new this.$echarts.graphic.LinearGradient(
-  
-                  0,
-  
-                  0,
-  
-                  0,
-  
-                  1, [{
-  
-                      offset: 0,
-  
-                      color: "#00b0ff"
-  
-                    },
-  
-                    {
-  
-                      offset: 0.8,
-  
-                      color: "#7052f4"
-  
-                    }
-  
-                  ],
-  
-                  false
-  
-                )
-  
-              }
-  
-            },
-  
-            data: [254, 1500, 1300, 1200, 200, 1500, 1211]
-  
-          }]
-  
-        };
-  
-        let trendYearOption = {
-  
-          title: {
-  
-            text: "本年",
-  
-            left: "center",
-  
-            top: 35,
-  
-            textStyle: {
-  
-              color: "#43d8d7"
-  
-            }
-  
-          },
-  
-          grid: {
-  
-            left: "3%",
-  
-            right: "5%",
-  
-            top: "22%",
-  
-            bottom: "20%",
-  
-            containLabel: true
-  
-          },
-  
-          xAxis: {
-  
-            type: "category",
-  
-            boundaryGap: false,
-  
-            data: [
-  
-              "1月",
-  
-              "2月",
-  
-              "3月",
-  
-              "4月",
-  
-              "5月",
-  
-              "6月",
-  
-              "7月",
-  
-              "8月",
-  
-              "9月",
-  
-              "10月",
-  
-              "11月",
-  
-              "12月"
-  
+    
             ],
-  
-            axisLine: {
-  
-              lineStyle: {
-  
-                type: "solid",
-  
-                color: "#4f525e", //左边线的颜色
-  
-                width: "1" //坐标线的宽度
-  
-              }
-  
-            }
-  
-          },
-  
-          yAxis: {
-  
-            type: "value",
-  
-            splitLine: {
-  
-              show: false
-  
-            },
-  
-            min: 0,
-  
-            max: 10000,
-  
-            interval: 2000,
-  
-            axisLine: {
-  
-              lineStyle: {
-  
-                type: "solid",
-  
-                color: "#4f525e", //左边线的颜色
-  
-                width: "1" //坐标线的宽度
-  
-              }
-  
-            }
-  
-          },
-  
-          series: [{
-  
-            color: ["#337ae4"],
-  
-            type: "line",
-  
-            itemStyle: {
-  
-              normal: {
-  
-                lineStyle: {
-  
-                  width: 5 //折线宽度
-  
+    
+            series: [{
+    
+                type: "pie",
+    
+                hoverAnimation: false, //鼠标经过的特效
+    
+                radius: ["70%", "50%"],
+    
+                center: ["30%", "50%"],
+    
+                startAngle: 225,
+    
+                labelLine: {
+    
+                  normal: {
+    
+                    show: false
+    
+                  }
+    
                 },
-  
-                color: new this.$echarts.graphic.LinearGradient(
-  
-                  0,
-  
-                  0,
-  
-                  1,
-  
-                  0, [{
-  
-                      offset: 1,
-  
-                      color: "#f22be6" // 0% 处的颜色
-  
+    
+                label: {
+    
+                  normal: {
+    
+                    position: "center"
+    
+                  }
+    
+                },
+    
+                data: [{
+    
+                    value: 75,
+    
+                    itemStyle: {
+    
+                      normal: {
+    
+                        color: new this.$echarts.graphic.LinearGradient(
+    
+                          0,
+    
+                          0,
+    
+                          0,
+    
+                          1, [{
+    
+                              offset: 0,
+    
+                              color: "#99da69"
+    
+                            },
+    
+                            {
+    
+                              offset: 1,
+    
+                              color: "#01babc"
+    
+                            }
+    
+                          ]
+    
+                        )
+    
+                      }
+    
                     },
-  
-                    {
-  
-                      offset: 0,
-  
-                      color: "#2ba9f2" // 100% 处的颜色
-  
+    
+                    label: dataStyle
+    
+                  },
+    
+                  {
+    
+                    value: 25,
+    
+                    itemStyle: placeHolderStyle
+    
+                  }
+    
+                ]
+    
+              },
+    
+              {
+    
+                type: "pie",
+    
+                hoverAnimation: false,
+    
+                radius: ["70%", "50%"],
+    
+                center: ["70%", "50%"],
+    
+                startAngle: 225,
+    
+                labelLine: {
+    
+                  normal: {
+    
+                    show: false
+    
+                  }
+    
+                },
+    
+                label: {
+    
+                  normal: {
+    
+                    position: "center"
+    
+                  }
+    
+                },
+    
+                data: [{
+    
+                    value: 20,
+    
+                    itemStyle: {
+    
+                      normal: {
+    
+                        color: new this.$echarts.graphic.LinearGradient(
+    
+                          0,
+    
+                          0,
+    
+                          0,
+    
+                          1, [{
+    
+                              offset: 0,
+    
+                              color: "#9f3edd"
+    
+                            },
+    
+                            {
+    
+                              offset: 1,
+    
+                              color: "#4897f6"
+    
+                            }
+    
+                          ]
+    
+                        )
+    
+                      }
+    
+                    },
+    
+                    label: dataStyle
+    
+                  },
+    
+                  {
+    
+                    value: 80,
+    
+                    itemStyle: placeHolderStyle
+    
+                  }
+    
+                ]
+    
+              },
+    
+    
+    
+              //外圈的边框
+    
+              {
+    
+                // name: '总人数',
+    
+                type: "pie",
+    
+                hoverAnimation: false, //鼠标经过的特效
+    
+                radius: ["70%", "65%"],
+    
+                center: ["30%", "50%"],
+    
+                startAngle: 225,
+    
+                labelLine: {
+    
+                  normal: {
+    
+                    show: false
+    
+                  }
+    
+                },
+    
+                label: {
+    
+                  normal: {
+    
+                    position: "center"
+    
+                  }
+    
+                },
+    
+                data: [{
+    
+                    value: 75,
+    
+                    itemStyle: {
+    
+                      normal: {
+    
+                        color: new this.$echarts.graphic.LinearGradient(
+    
+                          0,
+    
+                          0,
+    
+                          0,
+    
+                          1, [{
+    
+                              offset: 0,
+    
+                              color: "#01babc"
+    
+                            },
+    
+                            {
+    
+                              offset: 1,
+    
+                              color: "#99da69"
+    
+                            }
+    
+                          ]
+    
+                        )
+    
+                      }
+    
                     }
-  
-                  ],
-  
-                  false
-  
-                ),
-  
-                opacity: 0.4
-  
+    
+                  },
+    
+                  {
+    
+                    value: 25,
+    
+                    itemStyle: placeHolderStyle
+    
+                  }
+    
+                ]
+    
+              },
+    
+              {
+    
+                type: "pie",
+    
+                hoverAnimation: false,
+    
+                radius: ["70%", "65%"],
+    
+                center: ["70%", "50%"],
+    
+                startAngle: 225,
+    
+                labelLine: {
+    
+                  normal: {
+    
+                    show: false
+    
+                  }
+    
+                },
+    
+                label: {
+    
+                  normal: {
+    
+                    position: "center"
+    
+                  }
+    
+                },
+    
+                data: [{
+    
+                    value: 75,
+    
+                    itemStyle: {
+    
+                      normal: {
+    
+                        color: new this.$echarts.graphic.LinearGradient(
+    
+                          0,
+    
+                          0,
+    
+                          0,
+    
+                          1, [{
+    
+                              offset: 0,
+    
+                              color: "#4897f6"
+    
+                            },
+    
+                            {
+    
+                              offset: 1,
+    
+                              color: "#9f3edd"
+    
+                            }
+    
+                          ]
+    
+                        )
+    
+                      }
+    
+                    }
+    
+                  },
+    
+                  {
+    
+                    value: 25,
+    
+                    itemStyle: placeHolderStyle
+    
+                  }
+    
+                ]
+    
               }
-  
-            },
-  
-            data: [
-  
-              1200,
-  
-              500,
-  
-              8006,
-  
-              4777,
-  
-              4878,
-  
-              3122,
-  
-              1003,
-  
-              600,
-  
-              5808,
-  
-              1002,
-  
-              3076,
-  
-              6005
-  
+    
             ]
-  
-          }]
-  
-        };
-  
-        // 绘制图表
-  
-        orderChart.setOption(orderChartOption);
-  
-        window.addEventListener("resize", () => {
-  
-          orderChart.resize();
-  
-        });
-  
+    
+          };
+          let ageChartOption = {
+            title: [{
+    
+                text: "0-20岁",
+    
+                left: "25%",
+    
+                top: "36%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  fontWeight: "normal",
+    
+                  color: "#fff",
+    
+                  fontSize: 15,
+    
+                  textAlign: "center"
+    
+                }
+    
+              },
+    
+              {
+    
+                text: "226",
+    
+                left: "25%",
+    
+                top: "42%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  fontWeight: "normal",
+    
+                  color: "#ddea96",
+    
+                  fontSize: 16,
+    
+                  textAlign: "center"
+    
+                }
+    
+              },
+    
+              {
+    
+                text: "20~40岁",
+    
+                left: "50%",
+    
+                top: "36%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  fontWeight: "normal",
+    
+                  color: "#fff",
+    
+                  fontSize: 15,
+    
+                  textAlign: "center"
+    
+                }
+    
+              },
+    
+              {
+    
+                text: "155",
+    
+                left: "50%",
+    
+                top: "42%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  fontWeight: "normal",
+    
+                  color: "#ddea96",
+    
+                  fontSize: 16,
+    
+                  textAlign: "center"
+    
+                }
+    
+              },
+    
+              {
+    
+                text: "20~40岁",
+    
+                left: "75%",
+    
+                top: "36%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  fontWeight: "normal",
+    
+                  color: "#fff",
+    
+                  fontSize: 15,
+    
+                  textAlign: "center"
+    
+                }
+    
+              },
+    
+              {
+    
+                text: "155",
+    
+                left: "75%",
+    
+                top: "42%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  fontWeight: "normal",
+    
+                  color: "#ddea96",
+    
+                  fontSize: 16,
+    
+                  textAlign: "center"
+    
+                }
+    
+              },
+    
+              {
+    
+                text: "20~40岁",
+    
+                left: "35%",
+    
+                top: "76%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  fontWeight: "normal",
+    
+                  color: "#fff",
+    
+                  fontSize: 15,
+    
+                  textAlign: "center"
+    
+                }
+    
+              },
+    
+              {
+    
+                text: "155",
+    
+                left: "35%",
+    
+                top: "82%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  fontWeight: "normal",
+    
+                  color: "#ddea96",
+    
+                  fontSize: 16,
+    
+                  textAlign: "center"
+    
+                }
+    
+              },
+    
+              {
+    
+                text: "20~40岁",
+    
+                left: "65%",
+    
+                top: "76%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  fontWeight: "normal",
+    
+                  color: "#fff",
+    
+                  fontSize: 15,
+    
+                  textAlign: "center"
+    
+                }
+    
+              },
+    
+              {
+    
+                text: "155",
+    
+                left: "65%",
+    
+                top: "82%",
+    
+                textAlign: "center",
+    
+                textStyle: {
+    
+                  fontWeight: "normal",
+    
+                  color: "#ddea96",
+    
+                  fontSize: 16,
+    
+                  textAlign: "center"
+    
+                }
+    
+              }
+    
+            ],
+    
+            series: [{
+    
+                type: "liquidFill",
+    
+                name: "0~20岁", //series name
+    
+                data: [{
+    
+                  name: "data name", //data name
+    
+                  value: 0.6
+    
+                }],
+    
+                radius: "20%",
+    
+                // 水球颜色
+    
+                color: ["#db4e8d", "#db4e8d", "#db4e8d"],
+    
+                center: ["25%", "25%"],
+    
+                // outline  外边
+    
+                outline: {
+    
+                  // show: false
+    
+                  borderDistance: 5,
+    
+                  itemStyle: {
+    
+                    borderWidth: 1,
+    
+                    borderColor: "#db4e8d"
+    
+                  }
+    
+                },
+    
+                label: {
+    
+                  normal: {
+    
+                    // textStyle: {
+    
+                    color: "#fff",
+    
+                    insideColor: "#fff",
+    
+                    fontSize: 22
+    
+                    // }
+    
+                  }
+    
+                },
+    
+                // 内图 背景色 边
+    
+                backgroundStyle: {
+    
+                  color: "rgba(4,24,74,0.8)"
+    
+                  // borderWidth: 5,
+    
+                  // borderColor: 'red',
+    
+                }
+    
+              },
+    
+              {
+    
+                type: "liquidFill",
+    
+                data: [0.3],
+    
+                radius: "20%",
+    
+                // 水球颜色
+    
+                color: ["#0070f0", "#0070f0", "#0070f0"],
+    
+                center: ["50%", "25%"],
+    
+                // outline  外边
+    
+                outline: {
+    
+                  // show: false
+    
+                  borderDistance: 5,
+    
+                  itemStyle: {
+    
+                    borderWidth: 1,
+    
+                    borderColor: "#0070f0"
+    
+                  }
+    
+                },
+    
+                label: {
+    
+                  normal: {
+    
+                    textStyle: {
+    
+                      color: "#fff",
+    
+                      insideColor: "#fff",
+    
+                      fontSize: 20
+    
+                    }
+    
+                  }
+    
+                },
+    
+                // 内图 背景色 边
+    
+                backgroundStyle: {
+    
+                  color: "rgba(4,24,74,0.8)"
+    
+                  // borderWidth: 5,
+    
+                  // borderColor: 'red',
+    
+                }
+    
+              },
+    
+              {
+    
+                type: "liquidFill",
+    
+                data: [0.1],
+    
+                radius: "20%",
+    
+                // 水球颜色
+    
+                color: ["#9d4fc2", "#9d4fc2", "#9d4fc2"],
+    
+                center: ["75%", "25%"],
+    
+                // outline  外边
+    
+                outline: {
+    
+                  // show: false
+    
+                  borderDistance: 5,
+    
+                  itemStyle: {
+    
+                    borderWidth: 1,
+    
+                    borderColor: "#9d4fc2"
+    
+                  }
+    
+                },
+    
+                label: {
+    
+                  normal: {
+    
+                    textStyle: {
+    
+                      color: "#fff",
+    
+                      insideColor: "#fff",
+    
+                      fontSize: 20
+    
+                    }
+    
+                  }
+    
+                },
+    
+                // 内图 背景色 边
+    
+                backgroundStyle: {
+    
+                  color: "rgba(4,24,74,0.8)"
+    
+                  // borderWidth: 5,
+    
+                  // borderColor: 'red',
+    
+                }
+    
+              },
+    
+              {
+    
+                type: "liquidFill",
+    
+                //data: [0.6, 0.5, 0.4, 0.3],
+    
+                data: [0.1, 0.05, 0.25],
+    
+                radius: "20%",
+    
+                // 水球颜色
+    
+                color: ["#00ddf0", "#00ddf0", "#00ddf0"],
+    
+                center: ["35%", "65%"],
+    
+                // outline  外边
+    
+                outline: {
+    
+                  // show: false
+    
+                  borderDistance: 5,
+    
+                  itemStyle: {
+    
+                    borderWidth: 1,
+    
+                    borderColor: "#00ddf0"
+    
+                  }
+    
+                },
+    
+                label: {
+    
+                  normal: {
+    
+                    textStyle: {
+    
+                      color: "#fff",
+    
+                      insideColor: "#fff",
+    
+                      fontSize: 24
+    
+                    }
+    
+                  }
+    
+                },
+    
+                // 内图 背景色 边
+    
+                backgroundStyle: {
+    
+                  color: "rgba(4,24,74,0.8)"
+    
+                  // borderWidth: 5,
+    
+                  // borderColor: 'red',
+    
+                }
+    
+              },
+    
+              {
+    
+                type: "liquidFill",
+    
+                //data: [0.6, 0.5, 0.4, 0.3],
+    
+                data: [0.1, 0.05, 0.25],
+    
+                radius: "20%",
+    
+                // 水球颜色
+    
+                color: ["#d0c944", "#d0c944", "#d0c944"],
+    
+                center: ["65%", "65%"],
+    
+                // outline  外边
+    
+                outline: {
+    
+                  // show: false
+    
+                  borderDistance: 5,
+    
+                  itemStyle: {
+    
+                    borderWidth: 1,
+    
+                    borderColor: "#d0c944"
+    
+                  }
+    
+                },
+    
+                label: {
+    
+                  normal: {
+    
+                    textStyle: {
+    
+                      color: "#fff",
+    
+                      insideColor: "#fff",
+    
+                      fontSize: 22
+    
+                    }
+    
+                  }
+    
+                },
+    
+                // 内图 背景色 边
+    
+                backgroundStyle: {
+    
+                  color: "rgba(4,24,74,0.8)"
+    
+                  // borderWidth: 5,
+    
+                  // borderColor: 'red',
+    
+                }
+    
+              }
+    
+            ]
+    
+          };
+          let trendWeekOption = {
+    
+            title: {
+    
+              text: "本周",
+    
+              left: "center",
+    
+              top: 35,
+    
+              textStyle: {
+    
+                color: "#43d8d7"
+    
+              }
+    
+            },
+    
+            grid: {
+    
+              left: "3%",
+    
+              right: "5%",
+    
+              top: "22%",
+    
+              bottom: "20%",
+    
+              containLabel: true
+    
+            },
+    
+            xAxis: [{
+    
+              data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+    
+              axisLabel: {
+    
+                interval: 0,
+    
+                rotate: 45, //倾斜度 -90 至 90 默认为0
+    
+                margin: 10,
+    
+                textStyle: {
+    
+                  color: "#fff"
+    
+                }
+    
+              },
+    
+              axisLine: {
+    
+                lineStyle: {
+    
+                  type: "solid",
+    
+                  color: "#00103e", //左边线的颜色
+    
+                  width: "1" //坐标线的宽度
+    
+                }
+    
+              }
+    
+            }],
+    
+            yAxis: {
+    
+              nameTextStyle: {
+    
+                color: "#fff",
+    
+                fontSize: 14
+    
+              },
+    
+              axisLine: {
+    
+                lineStyle: {
+    
+                  type: "solid",
+    
+                  color: "#00103e", //左边线的颜色
+    
+                  width: "1" //坐标线的宽度
+    
+                }
+    
+              },
+    
+              axisLabel: {
+    
+                color: "#fff",
+    
+                fontSize: 14
+    
+              },
+    
+              splitLine: {
+    
+                show: false,
+    
+                lineStyle: {
+    
+                  color: "#0177d4"
+    
+                }
+    
+              },
+    
+              interval: 300,
+    
+              max: 1600
+    
+            },
+    
+            series: [{
+    
+              type: "bar",
+    
+              barWidth: 10,
+    
+              itemStyle: {
+    
+                normal: {
+    
+                  color: new this.$echarts.graphic.LinearGradient(
+    
+                    0,
+    
+                    0,
+    
+                    0,
+    
+                    1, [{
+    
+                        offset: 0,
+    
+                        color: "#00b0ff"
+    
+                      },
+    
+                      {
+    
+                        offset: 0.8,
+    
+                        color: "#7052f4"
+    
+                      }
+    
+                    ],
+    
+                    false
+    
+                  )
+    
+                }
+    
+              },
+    
+              data: [254, 1500, 1300, 1200, 200, 1500, 1211]
+    
+            }]
+    
+          };
+          let trendYearOption = {
+    
+            title: {
+    
+              text: "本年",
+    
+              left: "center",
+    
+              top: 35,
+    
+              textStyle: {
+    
+                color: "#43d8d7"
+    
+              }
+    
+            },
+    
+            grid: {
+    
+              left: "3%",
+    
+              right: "5%",
+    
+              top: "22%",
+    
+              bottom: "20%",
+    
+              containLabel: true
+    
+            },
+    
+            xAxis: {
+    
+              type: "category",
+    
+              boundaryGap: false,
+    
+              data: [
+    
+                "1月",
+    
+                "2月",
+    
+                "3月",
+    
+                "4月",
+    
+                "5月",
+    
+                "6月",
+    
+                "7月",
+    
+                "8月",
+    
+                "9月",
+    
+                "10月",
+    
+                "11月",
+    
+                "12月"
+    
+              ],
+    
+              axisLine: {
+    
+                lineStyle: {
+    
+                  type: "solid",
+    
+                  color: "#4f525e", //左边线的颜色
+    
+                  width: "1" //坐标线的宽度
+    
+                }
+    
+              }
+    
+            },
+    
+            yAxis: {
+    
+              type: "value",
+    
+              splitLine: {
+    
+                show: false
+    
+              },
+    
+              min: 0,
+    
+              max: 10000,
+    
+              interval: 2000,
+    
+              axisLine: {
+    
+                lineStyle: {
+    
+                  type: "solid",
+    
+                  color: "#4f525e", //左边线的颜色
+    
+                  width: "1" //坐标线的宽度
+    
+                }
+    
+              }
+    
+            },
+    
+            series: [{
+    
+              color: ["#337ae4"],
+    
+              type: "line",
+    
+              itemStyle: {
+    
+                normal: {
+    
+                  lineStyle: {
+    
+                    width: 5 //折线宽度
+    
+                  },
+    
+                  color: new this.$echarts.graphic.LinearGradient(
+    
+                    0,
+    
+                    0,
+    
+                    1,
+    
+                    0, [{
+    
+                        offset: 1,
+    
+                        color: "#f22be6" // 0% 处的颜色
+    
+                      },
+    
+                      {
+    
+                        offset: 0,
+    
+                        color: "#2ba9f2" // 100% 处的颜色
+    
+                      }
+    
+                    ],
+    
+                    false
+    
+                  ),
+    
+                  opacity: 0.4
+    
+                }
+    
+              },
+    
+              data: [
+    
+                1200,
+    
+                500,
+    
+                8006,
+    
+                4777,
+    
+                4878,
+    
+                3122,
+    
+                1003,
+    
+                600,
+    
+                5808,
+    
+                1002,
+    
+                3076,
+    
+                6005
+    
+              ]
+    
+            }]
+    
+          };
+          // 绘制图表
+          orderChart.setOption(orderChartOption);
+          window.addEventListener("resize", () => {
+            orderChart.resize();
+          });
+          ageChart.setOption(ageChartOption);
+          window.addEventListener("resize", () => {
+            ageChart.resize();
+          });
+          trendWeekChart.setOption(trendWeekOption);
+          window.addEventListener("resize", () => {
+            trendWeekChart.resize();
+          });
+          trendYearChart.setOption(trendYearOption);
+          window.addEventListener("resize", () => {
+            trendYearChart.resize();
+          });
+      },
+      drawTotal(){
+        let actTypeChart = this.$echarts.init(
+          document.getElementById("aside-charts")
+        );
+        for(let i in this.act_cat_join_num_lists){
+          let obj = {};
+          obj.name=this.act_cat_join_num_lists[i].filter_name;
+          obj.value=this.act_cat_join_num_lists[i].amount;
+          this.act_cat_join_num_arr.push(obj)
+        }
+        console.log(this.act_cat_join_num_arr)
+        let actTrendOption = {
+            color: ["#37a2da", "#32c5e9", "#9fe6b8", "#ffdb5c", "#ff9f7f"],
+            calculable: true,
+            series: [{
+              type: "pie",
+              radius: [40, 150],
+              roseType: "area",
+              data: this.act_cat_join_num_arr
+            }]
+          };
         actTypeChart.setOption(actTrendOption);
-  
-        window.addEventListener("resize", () => {
-  
+          window.addEventListener("resize", () => {
           actTypeChart.resize();
-  
         });
-  
-        ageChart.setOption(ageChartOption);
-  
-        window.addEventListener("resize", () => {
-  
-          ageChart.resize();
-  
-        });
-  
-        trendWeekChart.setOption(trendWeekOption);
-  
-        window.addEventListener("resize", () => {
-  
-          trendWeekChart.resize();
-  
-        });
-  
-        trendYearChart.setOption(trendYearOption);
-  
-        window.addEventListener("resize", () => {
-  
-          trendYearChart.resize();
-  
-        });
-  
       }
-  
-    }
-  
-  };
+  }
+  }
 </script>
 <style>
   .wrapper {

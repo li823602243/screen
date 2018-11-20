@@ -1,5 +1,5 @@
 <template>
-  <el-carousel :interval="50000" height="100%">
+  <el-carousel :interval="50000" height="100%" v-on:change='changePage'>
     <el-carousel-item>
       <page-one></page-one>
     </el-carousel-item>
@@ -52,6 +52,11 @@ export default {
     pageSeven,
     pageEight,
     pageNine
+  },
+  methods:{
+   changePage:function(e){
+    this.$store.state.pageNum = e;
+   }
   }
 };
 </script>

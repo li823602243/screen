@@ -17,12 +17,12 @@ function handleResults (response) {
             results: []
         }
     }
-    if (remoteResponse.success) {
+    if (remoteResponse.status) {
         result.data.results = remoteResponse.data
         result.data.total = remoteResponse.total
         result.success = true
     }
-    if (!remoteResponse.success) {
+    if (!remoteResponse.status) {
         let code = remoteResponse.errorCode
         if (code === 400) {
             console.log('传参错误')
@@ -94,10 +94,12 @@ export default {
             }
         }).then(
             (result) => {
+                console.log("接口调取成功")
                 response(handleResults(result))
             }
         ).catch(
             (error) => {
+                console.log("接口调取失败")
                 if (exception) {
                     exception(error)
                 } else {

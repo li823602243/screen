@@ -12,7 +12,12 @@
         <div class="pannel right">
           <div class="pannel-title right">活动状态数量统计</div>
           <div class="pannel-content pannel-content--actStatus">
-            <date-choose></date-choose>
+             <div class="date-group">
+                <div class="date" :class="{active:showNums=='day'}"  @click="chooseDateNum('day')">今日</div>
+                <div class="date" :class="{active:showNums=='week'}"  @click="chooseDateNum('week')">本周</div>
+                <div class="date" :class="{active:showNums=='month'}"  @click="chooseDateNum('month')">本月</div>
+                <div class="date" :class="{active:showNums=='all'}"  @click="chooseDateNum('all')">全部</div>
+              </div>
             <div class="echarts-pannel" id="actStatus">
             </div>
           </div>
@@ -30,7 +35,10 @@
         <div class="pannel right">
           <div class="pannel-title right">活动发布走势分析统计</div>
           <div class="pannel-content pannel-content--actStatus">
-            <date-choose></date-choose>
+            <div class="date-group">
+              <div class="date" :class="{active:shows=='week'}"  @click="chooseDate('week')">本周</div>
+              <div class="date" :class="{active:shows=='all'}"  @click="chooseDate('all')">本年</div>
+            </div>
             <div class="echarts-pannel" id="actTrend">
             </div>
           </div>
@@ -42,7 +50,6 @@
 
 <style>
 .wrapper {
-  margin-top: 33px;
   padding: 0 60px;
 }
 .el-col-11 {
@@ -184,6 +191,24 @@
 .pannel-title.right:after {
   transform-origin: bottom right;
 }
+.date-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 20px;
+}
+.date-group .date {
+  color: #175d6f;
+  font-size: 18px;
+  margin: 0 20px;
+  padding: 5px 20px;
+  cursor: pointer;
+}
+.date-group .date.active {
+  color: #fff;
+  border: 1px solid #54ffff;
+  border-radius: 5px;
+}
 </style>
 
 <script>
@@ -195,11 +220,16 @@ export default {
   },
   data() {
     return {
-      msg: "Welcome to Your Vue.js App"
+      ActivityPageData: '',
+      shows:'week',
+      showNums:'day',
+      actTrendBottomData:[],
+      actTrendData:[],
+      actStatusData:[]
     };
   },
   mounted() {
-    this.drawLine();
+    this.getActivityPageData();
   },
   computed: {
       author () {
@@ -207,6 +237,62 @@ export default {
       }
   },
   methods: {
+    getActivityPageData() {
+      this.http.get(this.ports.urls.ActivityPageData,res => {
+          console.log(res.data.results);
+          console.log("00000000000000000000000000000")
+          // this.ActivityPageData = res.data.results;
+          this.act_area_num_lists = res.data.results.act_area_num_lists;
+          this.act_cat_num_lists = res.data.results.act_cat_num_lists;
+          this.act_status_data = res.data.results.act_status_data;
+          this.act_trend_publish = res.data.results.act_trend_publish;
+           this.drawLine();
+      })
+    },
+    chooseDate:function(data){
+      this.shows=data;
+      this.actTrendData= [];
+      if(this.shows == 'week'){
+        this.actTrendBottomData = ['周一','周二','周三','周四','周五','周六','周日'];
+          for(let i in this.act_trend_publish.week){
+          this.actTrendData.push(this.act_trend_publish.week[i]);
+        }
+      }else {
+        this.actTrendBottomData = ['1','2','3','4','5','6','7','8','9','10','11','12'];
+          for(let i in this.act_trend_publish.year){
+          this.actTrendData.push(this.act_trend_publish.year[i]);
+        }
+      }
+      this.drawTrendCharts();
+    },
+    chooseDateNum:function(data){
+      this.showNums=data;
+      this.actStatusData = [];
+      switch(data)
+      {
+      case 'day':
+        for( let i in this.act_status_data.today){
+          this.actStatusData.push(this.act_status_data.today[i].amount)
+        }
+        break;
+      case 'week':
+        for( let i in this.act_status_data.week){
+          this.actStatusData.push(this.act_status_data.week[i].amount)
+        }
+        break;
+      case 'month':
+        for( let i in this.act_status_data.month){
+          this.actStatusData.push(this.act_status_data.month[i].amount)
+        }
+        break;
+      case 'all':
+        for( let i in this.act_status_data.all){
+          this.actStatusData.push(this.act_status_data.all[i].amount)
+        }
+        break;
+      }
+      this.drawActStatusCharts()
+    },
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
       let actPublicChart = this.$echarts.init(
@@ -219,22 +305,41 @@ export default {
       let actTrendChart = this.$echarts.init(
         document.getElementById("actTrend")
       );
+      let actPublicData = [];
+      let actPublicDataLength = this.act_area_num_lists.length;
+      for(let i in this.act_area_num_lists){
+        let actPublicObj = {};
+        actPublicObj.name = this.act_area_num_lists[i].filter_name;
+        actPublicObj.value = this.act_area_num_lists[i].amount;
+        actPublicData.push(actPublicObj);
+      }
+      for (let  j=0; j < 2*actPublicDataLength; j++){
+        if(j > actPublicDataLength){
+          let actPublicObj = {
+            name : 0,
+            value:0,
+            itemStyle:{
+              color:'transparent'
+            }
+          };
+          actPublicData.push(actPublicObj);
+        }
+      }
       let actPublicOption = {
         calculable: true,
         series: [
           {
-            name: "XX线索",
             type: "pie",
             radius: [37, 155],
             avoidLabelOverlap: false,
             startAngle: 0,
-            center: ["50.1%", "34%"],
+            center: ["50%", "34%"],
             roseType: "area",
             selectedMode: "single",
             label: {
               normal: {
                 show: true,
-                formatter: "{c}千万元"
+                formatter: "{b}:{c}"
               },
               emphasis: {
                 show: true
@@ -251,368 +356,25 @@ export default {
                 show: true
               }
             },
-            data: [
-              {
-                value: 600.58,
-                name: "义乌市1",
-                itemStyle: {
-                  normal: {
-                    color: "#f845f1"
-                  }
-                }
-              },
-              {
-                value: 1100.58,
-                name: "义乌市2",
-                itemStyle: {
-                  normal: {
-                    color: "#ad46f3"
-                  }
-                }
-              },
-              {
-                value: 1200.58,
-                name: "义乌市3",
-                itemStyle: {
-                  normal: {
-                    color: "#5045f6"
-                  }
-                }
-              },
-              {
-                value: 1300.58,
-                name: "义乌市4",
-                itemStyle: {
-                  normal: {
-                    color: "#4777f5"
-                  }
-                }
-              },
-              {
-                value: 1400.58,
-                name: "义乌市5",
-                itemStyle: {
-                  normal: {
-                    color: "#44aff0"
-                  }
-                }
-              },
-              {
-                value: 1500.58,
-                name: "义乌市6",
-                itemStyle: {
-                  normal: {
-                    color: "#45dbf7"
-                  }
-                }
-              },
-              {
-                value: 1500.58,
-                name: "义乌市7",
-                itemStyle: {
-                  normal: {
-                    color: "#f6d54a"
-                  }
-                }
-              },
-              {
-                value: 1600.58,
-                name: "义乌市8",
-                itemStyle: {
-                  normal: {
-                    color: "#f69846"
-                  }
-                }
-              },
-              {
-                value: 1800,
-                name: "义乌市9",
-                itemStyle: {
-                  normal: {
-                    color: "#ff4343"
-                  }
-                }
-              },
-              {
-                value: 0,
-                name: "",
-                itemStyle: {
-                  normal: {
-                    color: "transparent",
-                    label: {
-                      show: false
-                    },
-                    labelLine: {
-                      show: false
-                    }
-                  }
-                }
-              },
-              {
-                value: 0,
-                name: "",
-                itemStyle: {
-                  normal: {
-                    color: "transparent",
-                    label: {
-                      opacity: 0
-                    },
-                    labelLine: {
-                      opacity: 0
-                    }
-                  }
-                }
-              },
-              {
-                value: 0,
-                name: "",
-                itemStyle: {
-                  normal: {
-                    color: "transparent",
-                    label: {
-                      opacity: 0
-                    },
-                    labelLine: {
-                      opacity: 0
-                    }
-                  }
-                }
-              },
-              {
-                value: 0,
-                name: "",
-                itemStyle: {
-                  show: false,
-                  normal: {
-                    color: "transparent",
-                    label: {
-                      show: false
-                    },
-                    labelLine: {
-                      show: false
-                    }
-                  }
-                }
-              },
-              {
-                value: 0,
-                name: "",
-                show: false,
-                itemStyle: {
-                  normal: {
-                    color: "transparent",
-                    label: {
-                      show: false
-                    },
-                    labelLine: {
-                      show: false
-                    }
-                  }
-                }
-              },
-              {
-                value: 0,
-                name: "",
-                itemStyle: {
-                  normal: {
-                    color: "transparent",
-                    label: {
-                      show: false
-                    },
-                    labelLine: {
-                      show: false
-                    }
-                  }
-                }
-              },
-              {
-                value: 0,
-                name: "",
-                itemStyle: {
-                  normal: {
-                    color: "transparent",
-                    label: {
-                      show: false
-                    },
-                    labelLine: {
-                      show: false
-                    }
-                  }
-                }
-              },
-              {
-                value: 0,
-                name: "",
-                itemStyle: {
-                  normal: {
-                    color: "transparent",
-                    label: {
-                      show: false
-                    },
-                    labelLine: {
-                      show: false
-                    }
-                  }
-                }
-              },
-              {
-                value: 0,
-                name: "",
-                itemStyle: {
-                  color: "transparent",
-                  normal: {
-                    label: {
-                      show: false
-                    },
-                    labelLine: {
-                      show: false
-                    }
-                  }
-                }
-              }
-            ]
+            data: actPublicData
           }
         ]
       };
-      var valdata = [683, 234, 234, 523];
-      var myColor = ["#f57473", "#54ffff", "#f7b449", "#8a79f4"];
-      let actStatusOption = {
-        xAxis: {
-          show: false
-        },
-        yAxis: [
-          {
-            show: true,
-            data: ["已发布", "正进行", "已结束", "可预约"],
-            inverse: true,
-            axisLine: {
-              show: false
-            },
-            splitLine: {
-              show: false
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              color: "#fff",
-              formatter: function(value, index) {
-                return ["{title|" + value + "} "].join("\n");
-              },
-              rich: {
-                lg: {
-                  backgroundColor: "#339911",
-                  color: "#fff",
-                  borderRadius: 15,
-                  // padding: 5,
-                  align: "center",
-                  width: 15,
-                  height: 15
-                }
-              }
-            }
-          },
-          {
-            show: true,
-            inverse: true,
-            data: valdata,
-            axisLabel: {
-              textStyle: {
-                fontSize: 12,
-                color: "#fff"
-              }
-            },
-            axisLine: {
-              show: false
-            },
-            splitLine: {
-              show: false
-            },
-            axisTick: {
-              show: false
-            }
-          }
-        ],
-        series: [
-          {
-            name: "条",
-            type: "bar",
-            yAxisIndex: 0,
-            data: [70, 34, 60, 78],
-            barWidth: 20,
-            itemStyle: {
-              normal: {
-                barBorderRadius: 30,
-                color: function(params) {
-                  var num = myColor.length;
-                  return myColor[params.dataIndex % num];
-                }
-              }
-            },
-            label: {
-              normal: {
-                show: true,
-                position: "inside",
-                formatter: "{c}%"
-              }
-            }
-          },
-          {
-            name: "框",
-            type: "bar",
-            yAxisIndex: 1,
-            barGap: "-100%",
-            data: [100, 100, 100, 100],
-            barWidth: 24,
-            itemStyle: {
-              normal: {
-                color: "none",
-                borderColor: "#00c1de",
-                borderWidth: 1,
-                barBorderRadius: 15
-              }
-            }
-          }
-        ]
-      };
+      for( let i in this.act_status_data.today){
+         this.actStatusData.push(this.act_status_data.today[i].amount)
+      }
+      this.drawActStatusCharts()
+    
+      let actTypeCharts = []
+      for( let i in this.act_cat_num_lists){
+         let obj = {};
+         obj.month=this.act_cat_num_lists[i].filter_name;
+         obj.value=this.act_cat_num_lists[i].amount;
+         obj.ratio= 12;
+         actTypeCharts.push(obj)
+      }
       let data = {
-        chart: [
-          {
-            month: "1月",
-            value: 138,
-            ratio: 14.89
-          },
-
-          {
-            month: "2月",
-            value: 114,
-            ratio: 79.49
-          },
-
-          {
-            month: "3月",
-            value: 714,
-            ratio: 75.8
-          },
-
-          {
-            month: "4月",
-            value: 442,
-            ratio: 19.8
-          },
-
-          {
-            month: "5月",
-            value: 622,
-            ratio: 44.5
-          },
-
-          {
-            month: "6月",
-            value: 528,
-            ratio: 87.3
-          }
-        ]
+        chart: actTypeCharts
       };
 
       let xAxisMonth = [],
@@ -631,8 +393,6 @@ export default {
       }
 
       let actTypeChartOption = {
-        backgroundColor: "#020d22",
-        title: "",
         grid: {
           top: "24%",
           left: "7%",
@@ -645,15 +405,15 @@ export default {
             type: "none"
           },
           formatter: function(params) {
-            return (
-              params[0]["data"].name +
-              "<br/>" +
-              "训练人次: " +
-              params[1]["data"].value +
-              "<br/>" +
-              "合格率: " +
-              params[0]["data"].value
-            );
+            // return (
+            //   params[0]["data"].name +
+            //   "<br/>" +
+            //   "训练人次: " +
+            //   params[1]["data"].value +
+            //   "<br/>" +
+            //   "合格率: " +
+            //   params[0]["data"].value
+            // );
           }
         },
         xAxis: [
@@ -786,6 +546,10 @@ export default {
           }
         ]
       };
+      for(let i in this.act_trend_publish.week){
+        this.actTrendData.push(this.act_trend_publish.week[i])
+      }
+      this.actTrendBottomData = ['周一','周二','周三','周四','周五','周六','周日'];
       let actTrendOption = {
         tooltip: {
           trigger: "axis",
@@ -800,7 +564,7 @@ export default {
           containLabel: true
         },
         xAxis: {
-          data: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+          data: this.actTrendBottomData,
           axisLabel: {
             show: true //这行代码控制着坐标轴x轴的文字是否显示
           },
@@ -821,20 +585,7 @@ export default {
           {
             name: "数量",
             type: "bar",
-            data: [
-              3100,
-              2142,
-              1218,
-              581,
-              431,
-              383,
-              163,
-              3100,
-              2142,
-              1218,
-              581,
-              431
-            ],
+            data: this.actTrendData,
             barWidth: 20,
             barGap: 10,
             smooth: true,
@@ -859,10 +610,6 @@ export default {
       window.addEventListener("resize", () => {
         actPublicChart.resize();
       });
-      actStatusChart.setOption(actStatusOption);
-      window.addEventListener("resize", () => {
-        actStatusChart.resize();
-      });
       actTypeChart.setOption(actTypeChartOption);
       window.addEventListener("resize", () => {
         actTypeChart.resize();
@@ -870,6 +617,179 @@ export default {
       actTrendChart.setOption(actTrendOption);
       window.addEventListener("resize", () => {
         actTrendChart.resize();
+      });
+    },
+    drawTrendCharts(){
+      let actTrendChart = this.$echarts.init(
+        document.getElementById("actTrend")
+      );
+       let actTrendOption = {
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow"
+          }
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true
+        },
+        xAxis: {
+          data: this.actTrendBottomData,
+          axisLabel: {
+            show: true //这行代码控制着坐标轴x轴的文字是否显示
+          },
+          axisLine: {
+            lineStyle: {
+              color: "#fff", // x坐标轴的轴线颜色
+              width: 0 //这里是坐标轴的宽度,为0就是不显示
+            }
+          },
+          axisTick: {
+            show: false
+          }
+        },
+        yAxis: {
+          show: false
+        },
+        series: [
+          {
+            name: "数量",
+            type: "bar",
+            data: this.actTrendData,
+            barWidth: 20,
+            barGap: 10,
+            smooth: true,
+            itemStyle: {
+              emphasis: {},
+              normal: {
+                barBorderRadius: 7,
+                color:new  this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    offset: 0,
+                    color: '#00ecef'
+                }, {
+                    offset: 0.8,
+                    color: '#0f8ff8'
+                }], false)
+              }
+            }
+          }
+        ]
+      };
+      actTrendChart.setOption(actTrendOption);
+      window.addEventListener("resize", () => {
+        actTrendChart.resize();
+      });
+    },
+    drawActStatusCharts(){
+      let actStatusChart = this.$echarts.init(
+        document.getElementById("actStatus")
+      );
+      var myColor = ["#f57473", "#54ffff", "#f7b449", "#8a79f4"];
+      let actStatusOption = {
+        xAxis: {
+          show: false
+        },
+        yAxis: [
+          {
+            show: true,
+            data: ["已发布", "正进行", "已结束", "可预约"],
+            inverse: true,
+            axisLine: {
+              show: false
+            },
+            splitLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              color: "#fff",
+              formatter: function(value, index) {
+                return ["{title|" + value + "} "].join("\n");
+              },
+              rich: {
+                lg: {
+                  backgroundColor: "#339911",
+                  color: "#fff",
+                  borderRadius: 15,
+                  // padding: 5,
+                  align: "center",
+                  width: 15,
+                  height: 15
+                }
+              }
+            }
+          },
+          {
+            show: true,
+            inverse: true,
+            data: this.actStatusData,
+            axisLabel: {
+              textStyle: {
+                fontSize: 12,
+                color: "#fff"
+              }
+            },
+            axisLine: {
+              show: false
+            },
+            splitLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            }
+          }
+        ],
+        series: [
+          {
+            name: "条",
+            type: "bar",
+            yAxisIndex: 0,
+            data: [70, 34, 60, 78],
+            barWidth: 20,
+            itemStyle: {
+              normal: {
+                barBorderRadius: 30,
+                color: function(params) {
+                  var num = myColor.length;
+                  return myColor[params.dataIndex % num];
+                }
+              }
+            },
+            label: {
+              normal: {
+                show: true,
+                position: "inside",
+                formatter: "{c}%"
+              }
+            }
+          },
+          {
+            name: "框",
+            type: "bar",
+            yAxisIndex: 1,
+            barGap: "-100%",
+            data: [100, 100, 100, 100],
+            barWidth: 24,
+            itemStyle: {
+              normal: {
+                color: "none",
+                borderColor: "#00c1de",
+                borderWidth: 1,
+                barBorderRadius: 15
+              }
+            }
+          }
+        ]
+      };
+      actStatusChart.setOption(actStatusOption);
+      window.addEventListener("resize", () => {
+        actStatusChart.resize();
       });
     }
   }

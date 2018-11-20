@@ -7,19 +7,19 @@
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">活动发布场次</span>
-              <span class="num">23555522</span>
+              <span class="num">{{HomePageData.act_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日新增:32222</span>
+          <span class="tips">昨日新增:{{HomePageData.act_today}}</span>
         </el-col>
         <el-col :span="12">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">活动参与人数</span>
-              <span class="num">23555522</span>
+              <span class="num">{{HomePageData.act_join_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日参与:32222</span>
+          <span class="tips">昨日参与:{{HomePageData.act_join_today}}</span>
         </el-col>
       </el-row>
       <el-row :gutter="24">
@@ -27,26 +27,26 @@
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">直播观看人数</span>
-              <span class="num">23555522</span>
+              <span class="num">{{HomePageData.live_play_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日观看:32222</span>
+          <span class="tips">昨日观看:{{HomePageData.live_play_today}}</span>
         </el-col>
        <el-col :span="12">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">资源点播人数</span>
-              <span class="num">23555522</span>
+              <span class="num">{{HomePageData.video_play_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日观看:32222</span>
+          <span class="tips">昨日观看:{{HomePageData.video_play_today}}</span>
         </el-col>
       </el-row>
     </el-col>
     <el-col :span="6">
       <div class="platform">
         <span class="title">平台访问次数</span>
-        <span class="num">30000</span>
+        <span class="num">{{HomePageData.web_access_total}}</span>
       </div>
       </el-col>
     <el-col :span="9">
@@ -55,19 +55,19 @@
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">场馆预约次数</span>
-              <span class="num">23555522</span>
+              <span class="num">{{HomePageData.venue_booking_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日预约:32222</span>
+          <span class="tips">昨日预约:{{HomePageData.venue_booking_today}}</span>
         </el-col>
        <el-col :span="12">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">入馆服务人数</span>
-              <span class="num">23555522</span>
+              <span class="num">{{HomePageData.agency_service_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日新增:32222</span>
+          <span class="tips">昨日新增:{{HomePageData.agency_service_today}}</span>
         </el-col>
       </el-row>
       <el-row :gutter="24">
@@ -75,19 +75,19 @@
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">微信关注人数</span>
-              <span class="num">23555522</span>
+              <span class="num">{{HomePageData.wx_inviter_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日新增:32222</span>
+          <span class="tips">昨日新增:{{HomePageData.wx_inviter_today}}</span>
         </el-col>
        <el-col :span="12">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">注册用户人数</span>
-              <span class="num">23555522</span>
+              <span class="num">{{HomePageData.register_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日新增:32222</span>
+          <span class="tips">昨日新增:{{HomePageData.register_today}}</span>
         </el-col>
       </el-row>
     </el-col>
@@ -100,25 +100,25 @@ export default {
   name: "hello",
   data() {
     return {
-      msg: "Welcome to Your Vue.js App"
+      msg: "Welcome to Your Vue.js App",
+      HomePageData:''
     };
   },
-  mounted() {
-   this.http.post(this.ports.urls.HomePageData,res => {
-     console.log(res)
-      if (res.success) {
-          // 返回正确的处理
-      } else {
-        // 返回错误的处理 
-      }
-  })
-  },
   computed: {
-      author () {
-        return this.$store.state.author
-      }
+    author() {
+      return this.$store.state.pageNum;
+    }
+  },
+  mounted() {
+    this.getHomePageData();
   },
   methods: {
+    getHomePageData() {
+      this.http.get(this.ports.urls.HomePageData,res => {
+          console.log(res.data.results);
+          this.HomePageData = res.data.results;
+      })
+    }
   }
 };
 </script>
@@ -126,7 +126,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
 .page {
-  background: url('../../static/images/index-bg.jpg');
+  background: url('../../static/images/index-bg.jpg')!important;
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -166,13 +166,13 @@ export default {
 }
 
 .circle-wrapper .num {
-  display: inline-block;
+  display: block;
   font-size: 40px;
   color: #f1ffa3;
   margin: 5px;
 }
 .tips {
-  display: inline-block;
+  display: block;
   margin: 26px auto;
   font-size: 25px;
   color: #55fffe;

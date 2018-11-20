@@ -15,8 +15,8 @@ module.exports = {
         target: 'http://www.jsggwhy.com', //源地址 
         changeOrigin: true, //改变源 
         pathRewrite: { 
-          '^/api': 'http://www.jsggwhy.com' //路径重写 
-          } 
+          '^/api': ''
+        } 
       } 
     },
 
