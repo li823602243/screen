@@ -7,6 +7,8 @@ const store = new Vuex.Store({
   // 定义状态
   state: {
     pageNum: 0,
+    autoplay:true,
+    interval:1000
   },
   mutations: {
     modifyMsg(state, Obj) {

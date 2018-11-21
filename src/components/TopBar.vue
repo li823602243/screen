@@ -1,6 +1,9 @@
 <template>
   <div class="top-bar">
-  <div class="left"><div class="icon-run"></div></div>
+  <div class="left">
+    <div class="icon-run" v-if="buttonStatus" @click="run"></div>
+    <div class="icon-stop" v-else @click="run"></div>
+    </div>
   <div class="right">{{nowTime}}</div>
   </div>
 </template>
@@ -8,8 +11,11 @@
 <script>
 export default {
   name: "HelloWorld",
-  props: {
-    nowTime: ''
+  data() {
+    return {
+     buttonStatus:true,
+     nowTime:''
+    };
   },
   // 挂载完成时
   mounted(){
@@ -31,8 +37,22 @@ export default {
     // 定时器函数
     nowTimes(){
       this.timeFormate(new Date());
-      //setInterval(this.nowTimes,1000);
+      setInterval(this.nowTimes,1000);
     },
+    run:function(){
+     if(this.buttonStatus){
+       this.buttonStatus=false;
+       this.$store.state.autoplay = false;
+     }else{
+       this.buttonStatus=true;
+       this.$store.state.autoplay = true;
+     }
+    //  if(this.runButton){
+    //     this.$store.state.autoplay = false;
+    //  }else{
+    //     this.$store.state.autoplay = true;
+    //  }
+    }
   }
 };
 </script>
@@ -66,6 +86,18 @@ export default {
   background: url('../../static/images/play.png');
   background-size: contain;
   background-repeat: no-repeat;
+  cursor: pointer;
+}
+.icon-stop {
+  position: absolute;
+  top: 19px;
+  left: 30px;
+  height: 62px;
+  width: 62px;
+  background: url('../../static/images/stop.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor: pointer;
 }
 .middle {
   height: 100%;

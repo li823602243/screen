@@ -13,11 +13,14 @@
   name: "hello",
   data() {
     return {
-      msg: "Welcome to Your Vue.js App"
+     pcData:'',
+     phoneData:'',
+     manData:'',
+     womanData:''
     };
   },
   mounted() {
-   this.drawLine();
+   this.getVenuePageData();
   },
   computed: {
       author () {
@@ -25,7 +28,15 @@
       }
   },
   methods: {
-      drawLine() {
+        getVenuePageData() {
+        console.log("获取用户数据");
+        this.http.get(this.ports.urls.userPageData, res => {
+            console.log(res.data.results);
+            this.userData = res.data.results;
+            this.drawLine();
+        });
+        },
+       drawLine() {
         // 基于准备好的dom，初始化echarts实例
         let userSexChart = this.$echarts.init(
           document.getElementById("user-left")
@@ -38,20 +49,19 @@
         );
         var data = [];
         var labelData = [];
-        for (var i = 0; i < 24; ++i) {
-            data.push({
-                value: Math.random() * 10 + 10 - Math.abs(i - 12),
-                name: i + ':00'
-            });
+        for(let i in  this.userData.site_hour_visit_num){
+            let obj = {};
+            obj.value=this.userData.site_hour_visit_num[i].amount;
+            obj.name= i + ':00';
             labelData.push({
                 value: 1,
                 name: i + ':00'
             });
+            data.push(obj)
         }
-
         let userTimeOptions = {
             title: {
-                text: '注册用户性别比例',
+                text: '平台访问量分时统计',
                 left: '50%',
                 textAlign: 'center',
                 top: '2%',
@@ -99,9 +109,15 @@
                 }
             }]
         };
-
-        var manNum = 500;
-        var womanNum = 5000;
+        for(let i in this.userData.sex_user_register_num) {
+            if(this.userData.sex_user_register_num[i].filter_id==0){
+             this.womanData = this.userData.sex_user_register_num[i].amount
+            }else{
+              this.manData = this.userData.sex_user_register_num[i].amount
+            }
+        }
+        var manNum = parseInt( this.manData);
+        var womanNum = parseInt( this.womanData);;
         var rotateAngle = (manNum) / 2 / (manNum + womanNum) * 360 + 180;
         var userTimeData = [{
             value: manNum,
@@ -145,7 +161,7 @@
         }
         let userSexOptions = {
            title: {
-                text: '平台访问量分时统计',
+                text: '注册用户性别比例',
                 left: '50%',
                 textAlign: 'center',
                 top: '15%',
@@ -206,15 +222,21 @@
             animationDuration: 2000,
             animationEasing: 'ExponentialOut'
         };
-        const userPadData = [{
-            value: 50,
+        for(let i in this.userData.site_client_visit_num) {
+            if(this.userData.site_client_visit_num[i].filter_id==1){
+             this.pcData = this.userData.site_client_visit_num[i].amount
+            }else{
+              this.phoneData = this.userData.site_client_visit_num[i].amount
+            }
+        }
+        let userPadData = [{
+            value: this.phoneData,
             name: '移动设备'
         }, {
-            value: 30,
+            value: this.pcData,
             name: 'PC端',
             selected: true
         }]
-
         let userPadOptions = {
             title: {
                 text: '用户终端设备统计',
@@ -227,7 +249,6 @@
                 }
             },
             series: [{
-                name: '业务健康度',
                 type: 'pie',
                 hoverAnimation: false,
                 avoidLabelOverlap: false,
@@ -236,8 +257,9 @@
                 label: {
                     normal: {
                         position: 'inner',
-                        formatter: "{c}\n{b}",
-                        fontSize: 14,
+                        formatter: "{c}\n\n{d}%",
+                        color:'#000733',
+                        fontSize: 24,
                     }
                 },
                 labelLine: {

@@ -7,10 +7,10 @@
             <div class="aside-title">场馆预约数量统计</div>
             <div class="order-num" id="order-total">
               <el-row :gutter="20">
-                 <el-col :span="6"><span class="show-order-num">10004</span><div class="order-day" id="order-day"></div></el-col>
-                 <el-col :span="6"><span class="show-order-num">10004</span><div class="order-day" id="order-week"></div></el-col>
-                 <el-col :span="6"><span class="show-order-num">10004</span><div class="order-day" id="order-month"></div> </el-col>
-                 <el-col :span="6"><span class="show-order-num">10004</span><div class="order-day" id="order-all"></div></el-col>
+                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.today_num}}</span><div class="order-day" id="order-day"></div></el-col>
+                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.week_num}}</span><div class="order-day" id="order-week"></div></el-col>
+                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.month_num}}</span><div class="order-day" id="order-month"></div> </el-col>
+                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.all_num}}</span><div class="order-day" id="order-all"></div></el-col>
               </el-row>
             </div>
           </el-col>
@@ -20,58 +20,31 @@
             <div class="aside-title">按类型TOP10</div>
             <el-row class="order-type">
                 <el-col :span="12" class="order-type--right">
-                  <el-row class="right">
-                    <el-col :span="8">音乐厅</el-col>
-                    <el-col :span="8">225552</el-col>
-                    <el-col :span="8" class="order-type--icon order-type--first"></el-col>
+                  <el-row class="right" v-for="(item,index)  in venue_cat_booking_num" :key="index" v-if='index<=4'>
+                    <el-col :span="8">{{item.filter_name}}</el-col>
+                    <el-col :span="8">{{item.amount}}</el-col>
+                    <el-col :span="8">
+                      <div class="order-type--icon order-type--first" v-if='index==0'>
+                        <span v-if="index >2">{{index+1}}</span>
+                      </div>
+                      <div class="order-type--icon order-type--second"  v-else-if='index==1'>
+                        <span v-if="index >2">{{index+1}}</span>
+                      </div>
+                      <div class="order-type--icon order-type--three"  v-else-if='index==2'>
+                        <span v-if="index >2">{{index+1}}</span>
+                      </div>
+                      <div class="order-type--icon order-type--nomal" v-else>
+                        <span v-if="index >2">{{index+1}}</span>
+                      </div>
+                      </el-col>
                   </el-row> 
-                  <el-row class="right">
-                    <el-col :span="8">舞蹈厅</el-col>
-                    <el-col :span="8">10000</el-col>
-                    <el-col :span="8" class="order-type--icon order-type--second"></el-col>
-                  </el-row>
-                  <el-row class="right">
-                    <el-col :span="8">展厅</el-col>
-                    <el-col :span="8">1222</el-col>
-                    <el-col :span="8" class="order-type--icon order-type--three"></el-col>
-                  </el-row>
-                  <el-row class="right">
-                    <el-col :span="8">展厅</el-col>
-                    <el-col :span="8">10055</el-col>
-                    <el-col :span="8" class="order-type--icon order-type--nomal">4</el-col>
-                  </el-row>
-                  <el-row class="right">
-                    <el-col :span="8">展厅</el-col>
-                    <el-col :span="8">10022</el-col>
-                    <el-col :span="8" class="order-type--icon order-type--nomal">5</el-col>
-                  </el-row>
                 </el-col>
                 <el-col :span="12" class="order-type--right">
-                   <el-row class="right">
-                    <el-col :span="8">音乐厅</el-col>
-                    <el-col :span="8">225552</el-col>
-                    <el-col :span="8" class="order-type--icon order-type--nomal">6</el-col>
+                  <el-row class="right" v-for="(item,index)  in venue_cat_booking_num" :key="item.amount" v-if='index >= 5'>
+                    <el-col :span="8">{{item.filter_name}}</el-col>
+                    <el-col :span="8">{{item.amount}}</el-col>
+                    <el-col :span="8"><div class="order-type--icon order-type--nomal">{{index+1}}</div></el-col>
                   </el-row> 
-                  <el-row class="right">
-                    <el-col :span="8">舞蹈厅</el-col>
-                    <el-col :span="8">10000</el-col>
-                    <el-col :span="8" class="order-type--icon order-type--nomal">7</el-col>
-                  </el-row>
-                  <el-row class="right">
-                    <el-col :span="8">展厅</el-col>
-                    <el-col :span="8">1222</el-col>
-                    <el-col :span="8" class="order-type--icon order-type--nomal">8</el-col>
-                  </el-row>
-                  <el-row class="right">
-                    <el-col :span="8">展厅</el-col>
-                    <el-col :span="8">10055</el-col>
-                    <el-col :span="8" class="order-type--icon order-type--nomal">9</el-col>
-                  </el-row>
-                  <el-row class="right">
-                    <el-col :span="8">展厅</el-col>
-                    <el-col :span="8">10022</el-col>
-                    <el-col :span="8" class="order-type--icon order-type--nomal">10</el-col>
-                  </el-row>
                 </el-col>
             </el-row>
           </el-col>
@@ -104,11 +77,16 @@ export default {
   name: "hello",
   data() {
     return {
-      msg: "Welcome to Your Vue.js App"
+     venue_booking_date_num:{},
+     city_agency_room_num:[],
+     venue_cat_booking_num:[],
+     myCityData:[],
+     agencyAmount:[],
+     venueAmount:[]
     };
   },
   mounted() {
-    this.drawLine();
+    this.getVenuePageData();
   },
   computed: {
     author() {
@@ -116,6 +94,15 @@ export default {
     }
   },
   methods: {
+    getVenuePageData() {
+      this.http.get(this.ports.urls.VenuePageData, res => {
+        console.log(res.data.results);
+        this.venue_booking_date_num = res.data.results.venue_booking_date_num;
+        this.city_agency_room_num = res.data.results.city_agency_room_num;
+        this.venue_cat_booking_num = res.data.results.venue_cat_booking_num;
+        this.drawLine();
+      });
+    },
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
       let orderDayChart = this.$echarts.init(
@@ -244,7 +231,7 @@ export default {
             hoverAnimation: false,
             data: [
               {
-                value: 75,
+                value: 7588,
                 name: "01"
               },
               {
@@ -327,21 +314,16 @@ export default {
           samObject
         ]
       };
-      var myData = [
-        "浙江大华",
-        "家和物联",
-        "海康威视",
-        "杭州消安",
-        "泛海三江",
-        "中辰科技",
-        "汇点科技",
-        "超翔科技"
-      ];
+      for(let i in this.city_agency_room_num){
+        this.myCityData.push(this.city_agency_room_num[i].filter_name);
+        this.agencyAmount.push(this.city_agency_room_num[i].agency_amount);
+        this.venueAmount.push(this.city_agency_room_num[i].venue_amount);
+      }
       var dataFirm = {
-        1: [389, 259, 262, 324, 233, 432, 267, 245]
+        1: this.agencyAmount
       };
       var dataDevice = {
-        1: [121, 388, 233, 309, 432, 345, 675, 245]
+        1: this.venueAmount
       };
       var timeLineData = [1];
       let addressCityTotalOption = {
@@ -437,7 +419,7 @@ export default {
               axisLabel: {
                 show: false
               },
-              data: myData
+              data: this.myCityData
             },
             {
               gridIndex: 1,
@@ -458,7 +440,7 @@ export default {
                   fontSize: 14
                 }
               },
-              data: myData.map(function(value) {
+              data: this.myCityData.map(function(value) {
                 return {
                   value: value,
                   textStyle: {
@@ -481,7 +463,7 @@ export default {
               axisLabel: {
                 show: false
               },
-              data: myData
+              data: this.myCityData
             }
           ],
           series: []
@@ -681,6 +663,7 @@ export default {
 .order-type--right  .el-row {
   display: flex;
   align-items: center;
+  height: 20%;
 }
 .order-type--right  .el-row .el-col{
   font-size: 24px;
@@ -691,6 +674,7 @@ export default {
   height: 50px;
   line-height: 50px;
   width: 50px;
+  margin: 0 auto;
 }
 .order-type--first {
   background-image: url(../../static/images/gold-one.png);

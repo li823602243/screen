@@ -7,8 +7,8 @@
         <div class="map-tab--content">
           <div class="map-icon map-icon--wechat"></div>
           <div class="map-tab-infos">
-           <span class="map-num">231232131</span>
-           <span class="map-title">昨日新增: 1121211</span>
+           <span class="map-num">{{userData.weixin_user_num}}</span>
+           <span class="map-title">昨日新增: {{userData.weixin_user_day_num}}</span>
           </div>
         </div>
       </div>
@@ -17,8 +17,8 @@
         <div class="map-tab--content">
           <div class="map-icon map-icon--sign"></div>
           <div class="map-tab-infos">
-           <span class="map-num">231232131</span>
-           <span class="map-title">昨日新增: 1121211</span>
+           <span class="map-num">{{userData.register_user_num}}</span>
+           <span class="map-title">昨日新增: {{userData.register_user_day_num}}</span>
           </div>
         </div>
       </div>
@@ -26,22 +26,22 @@
     <el-col :span="12" class="echarts-map--bg"><div class="echarts-map" id="echarts"></div></el-col>
     <el-col :span="6">
        <div class="map-tab map-tab--right">
-        <div class="pannel-title right">微信关注人数</div>
+        <div class="pannel-title right">平台访问人数</div>
         <div class="map-tab--content">
           <div class="map-icon map-icon--people"></div>
           <div class="map-tab-infos">
-           <span class="map-num">231232131</span>
-           <span class="map-title">昨日新增: 1121211</span>
+           <span class="map-num">{{userData.site_visit_num}}</span>
+           <span class="map-title">昨日新增: {{userData.site_visit_day_num}}</span>
           </div>
         </div>
       </div>
        <div class="map-tab map-tab--right">
-        <div class="pannel-title right">注册人数</div>
+        <div class="pannel-title right">实名人数</div>
         <div class="map-tab--content">
           <div class="map-icon map-icon--name"></div>
           <div class="map-tab-infos">
-           <span class="map-num">231232131</span>
-           <span class="map-title">昨日新增: 1121211</span>
+           <span class="map-num">{{userData.verified_user_num}}</span>
+           <span class="map-title">昨日新增: {{userData.verified_user_day_num}}</span>
           </div>
         </div>
       </div>
@@ -55,11 +55,12 @@ export default {
   name: "hello",
   data() {
     return {
-      msg: "Welcome to Your Vue.js App"
+      userData: {},
+      userMapData:[]
     };
   },
   mounted() {
-    this.drawLine();
+    this.getVenuePageData();
   },
   computed: {
     author() {
@@ -67,26 +68,34 @@ export default {
     }
   },
   methods: {
+    getVenuePageData() {
+      console.log("获取用户数据");
+      this.http.get(this.ports.urls.userPageData, res => {
+        console.log(res.data.results);
+        this.userData = res.data.results;
+        this.drawLine();
+      });
+    },
     drawLine() {
       let mapChart = this.$echarts.init(document.getElementById("echarts"));
       this.$echarts.extendsMap = function(id, opt) {
         var curGeoJson = {};
         var geoCoordMap = {
-          南京: [118.78, 32.04],
-          常州: [119.95, 31.79],
-          南通: [121.05, 32.08],
-          昆山: [120.95, 31.39],
-          连云港: [119.16, 34.59],
-          淮安: [119.15, 33.5],
-          泰州: [119.9, 32.49],
-          苏州: [120.62, 31.32],
-          镇江: [119.44, 32.2],
-          扬州: [119.42, 32.39],
-          常州: [119.95, 31.79],
-          无锡: [120.29, 31.59],
-          徐州: [117.2, 34.26],
-          宿迁: [118.29, 33.95],
-          盐城: [120.15, 33.38]
+          南京市: [118.78, 32.04],
+          常州市: [119.95, 31.79],
+          南通市: [121.05, 32.08],
+          昆山市: [120.95, 31.39],
+          连云港市: [119.16, 34.59],
+          淮安市: [119.15, 33.5],
+          泰州市: [119.9, 32.49],
+          苏州市: [120.62, 31.32],
+          镇江市: [119.44, 32.2],
+          扬州市: [119.42, 32.39],
+          常州市: [119.95, 31.79],
+          无锡市: [120.29, 31.59],
+          徐州市: [117.2, 34.26],
+          宿迁市: [118.29, 33.95],
+          盐城市: [120.15, 33.38]
         };
         //设置颜色
         var levelColorMap = {
@@ -119,6 +128,15 @@ export default {
         };
 
         var option = {
+          title: {
+            text: "各地市注册人数",
+            left: "center",
+            top: 35,
+            textStyle: {
+              color: "#43d8d7",
+              fontSize:28
+            }
+          },
           geo: {
             map: opt.mapName,
             // roam: true,
@@ -185,7 +203,8 @@ export default {
                   show:true,
                   formatter: '{@[2]}',
                   position:'top',
-                  distance:15
+                  distance:15,
+                  fontSize:24
               },
               itemStyle: {
                 normal: {
@@ -208,6 +227,14 @@ export default {
         return mapChart;
       };
       let geoJson = {};
+      let userMapData= [];
+      for(let i in this.userData.area_user_register_num){
+        let obj = {};
+        obj.name= this.userData.area_user_register_num[i].filter_name;
+        obj.value= this.userData.area_user_register_num[i].amount;;
+        obj.level= 1;
+        userMapData.push(obj)
+      }
       this.$axios.get("../static/geoJson/jiangsu.json").then(response => {
         console.log(response.data);
         this.$echarts.registerMap("江苏", response.data);
@@ -216,33 +243,7 @@ export default {
           mapName: "江苏", // 地图名
           goDown: false, // 是否下钻
           // 数据展示
-          data: [
-            {
-              name: "南京",
-              value: 10,
-              level: 1
-            },
-            {
-              name: "苏州",
-              value: 12,
-              level: 2
-            },
-            {
-              name: "扬州",
-              value: 11,
-              level: 3
-            },
-            {
-              name: "常州",
-              value: 16,
-              level: 2
-            },
-            {
-              name: "盐城",
-              value: 1,
-              level: 1
-            }
-          ]
+          data:  userMapData
         });
       });
     }

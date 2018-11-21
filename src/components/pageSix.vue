@@ -13,17 +13,17 @@
           </el-row>
           <el-row :gutter="20" class="live-num--row">
             <el-col :span="4" class="live-row--th">场次</el-col>
-            <el-col :span="5" class="live-row--td">1323</el-col>
-            <el-col :span="5" class="live-row--td">2321321</el-col>
-            <el-col :span="5" class="live-row--td">434324</el-col>
-            <el-col :span="5" class="live-row--td">434324</el-col>
+            <el-col :span="5" class="live-row--td">{{live_channel_num.today_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_channel_num.week_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_channel_num.month_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_channel_num.all_num}}</el-col>
           </el-row>
           <el-row :gutter="20" class="live-num--row">
             <el-col :span="4" class="live-row--th">观看人数</el-col>
-            <el-col :span="5" class="live-row--td">3213</el-col>
-            <el-col :span="5" class="live-row--td">4534543</el-col>
-            <el-col :span="5" class="live-row--td">56756</el-col>
-            <el-col :span="5" class="live-row--td">56756</el-col>
+            <el-col :span="5" class="live-row--td">{{live_play_times.today_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_play_times.week_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_play_times.month_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_play_times.all_num}}</el-col>
           </el-row>
         </div>
       </el-col>
@@ -45,54 +45,20 @@
       <el-row class="live-ranking--wrapper">
   
         <el-col :span="12" >
-          <div class="live-panel">
-            <div class="live-pannel--title">直播播放次数114次</div>
+          <div class="live-panel" v-for="(item,index) in live_channel_play_rank" :key="index" v-if="index<=2">
+            <div class="live-pannel--title">直播播放次数{{item.amount}}次</div>
             <div class="live-pannel-content">
-              <span class="live-pannel--icon live-pannel-first"></span>
-              第二届高邮文化艺术节 中国民歌之乡盎司伦敦安排收到啦艾玛史东帕斯卡的
-            </div>
-          </div>
-          <div class="live-panel">
-            <div class="live-pannel--title">直播播放次数114次</div>
-            <div class="live-pannel-content">
-              <span class="live-pannel--icon live-pannel-second"></span>
-              第二届高邮文化艺术节 中国民歌之乡盎司伦敦安排收到啦艾玛史东帕斯卡的
-             </div>
-          </div>
-             <div class="live-panel">
-            <div class="live-pannel--title">直播播放次数114次</div>
-            <div class="live-pannel-content">
-              <span class="live-pannel--icon live-pannel-three"></span>
-              第二届高邮文化艺术节 中国民歌之乡盎司伦敦安排收到啦艾玛史东帕斯卡的
+              <span class="live-pannel--icon" :class="{'live-pannel-first':index==0,'live-pannel-second':index==1,'live-pannel-three':index==2}"></span>
+              {{item.filter_name}}
             </div>
           </div>
         </el-col>
   
         <el-col :span="12" class="live-aside">
-          <el-row class="live-aside--row">
-              <el-col :span="16" class="live-aside--infos">中国民歌之乡盎司伦敦安排收到啦艾玛史东帕斯卡的</el-col>
-              <el-col :span="6" class="live-aside--num">21312312312</el-col>
-              <el-col :span="2" class="live-aside--namal">4</el-col>
-          </el-row>
-          <el-row class="live-aside--row">
-              <el-col :span="16" class="live-aside--infos">中国民歌之乡盎司伦敦安排收到啦艾玛史东帕斯卡的中国民歌之乡盎司伦敦安排收到啦艾玛史东帕斯卡的</el-col>
-              <el-col :span="6" class="live-aside--num">213213</el-col>
-              <el-col :span="2" class="live-aside--namal">5</el-col>
-          </el-row>
-          <el-row class="live-aside--row">
-              <el-col :span="16" class="live-aside--infos">中国民歌之乡盎司伦敦安排收到啦艾玛史东帕斯卡的</el-col>
-              <el-col :span="6" class="live-aside--num">324234</el-col>
-              <el-col :span="2" class="live-aside--namal">6</el-col>
-          </el-row>
-          <el-row class="live-aside--row">
-              <el-col :span="16" class="live-aside--infos">中国民歌之乡盎司伦敦安排收到啦艾玛史东帕斯卡的</el-col>
-              <el-col :span="6" class="live-aside--num">234234234</el-col>
-              <el-col :span="2" class="live-aside--namal">7</el-col>
-          </el-row>
-          <el-row class="live-aside--row">
-              <el-col :span="16" class="live-aside--infos">中国民歌之乡盎司伦敦安排收到啦艾玛史东帕斯卡的</el-col>
-              <el-col :span="6" class="live-aside--num">234234234</el-col>
-              <el-col :span="2" class="live-aside--namal">8</el-col>
+          <el-row class="live-aside--row" v-for="(item,index) in live_channel_play_rank" :key="index" v-if="index >2">
+              <el-col :span="16" class="live-aside--infos"> {{item.filter_name}}</el-col>
+              <el-col :span="6" class="live-aside--num">{{item.amount}}</el-col>
+              <el-col :span="2" class="live-aside--namal">{{index+1}}</el-col>
           </el-row>
         </el-col>
   
@@ -111,15 +77,16 @@
     data() {
   
       return {
-  
-        msg: "Welcome to Your Vue.js App"
-  
+        live_play_times:{},
+        live_channel_num:{},
+        live_play_year_trend_data:[],
+        live_channel_play_rank:[]
       };
   
     },
   
     mounted() {
-      this.drawLine();
+      this.getVenuePageData();
     },
   
     computed: {
@@ -132,7 +99,21 @@
   
     },
     methods: {
+      getVenuePageData() {
+        console.log("直播接口")
+      this.http.get(this.ports.urls.LivePageData, res => {
+          console.log(res.data.results);
+          this.live_play_times = res.data.results.live_play_times;
+          this.live_play_year_trend = res.data.results.live_play_year_trend;
+          this.live_channel_num = res.data.results.live_channel_num;
+          this.live_channel_play_rank = res.data.results.live_channel_play_rank;
+          this.drawLine();
+        });
+      },
       drawLine() {
+        for(let i in this.live_play_year_trend){
+           this.live_play_year_trend_data.push(this.live_play_year_trend[i])
+        }
         let trendYearChart = this.$echarts.init(
           document.getElementById("watch-people")
         );
@@ -175,8 +156,8 @@
               show: false
             },
             min: 0,
-            max: 10000,
-            interval: 2000,
+            max: Math.max.apply(null, this.live_play_year_trend_data),
+            interval: Math.max.apply(null, this.live_play_year_trend_data)/5,
             axisLine: {
               lineStyle: {
                 type: "solid",
@@ -211,20 +192,7 @@
                 opacity: 0.4
               }
             },
-            data: [
-              1200,
-              500,
-              8006,
-              4777,
-              4878,
-              3122,
-              1003,
-              600,
-              5808,
-              1002,
-              3076,
-              6005
-            ]
+            data: this.live_play_year_trend_data
           }]
   
         };
@@ -304,6 +272,7 @@
     border: 1px solid#ffcb6f;
     width: 90%;
     margin: 0 auto;
+    text-align: left;
   }
   .live-pannel-content .live-pannel--icon {
     position: absolute;
@@ -361,6 +330,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-align: left;
   }
 </style>
 

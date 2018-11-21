@@ -1,5 +1,5 @@
 <template>
-  <el-carousel :interval="50000" height="100%" v-on:change='changePage'>
+  <el-carousel :interval="this.$store.state.interval" height="100%" v-on:change='changePage'  :autoplay="this.$store.state.autoplay" indicator-position='none'>
     <el-carousel-item>
       <page-one></page-one>
     </el-carousel-item>
