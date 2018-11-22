@@ -37,7 +37,7 @@ export default {
     // 定时器函数
     nowTimes(){
       this.timeFormate(new Date());
-      setInterval(this.nowTimes,1000);
+      setTimeout(this.nowTimes,1000);
     },
     run:function(){
      if(this.buttonStatus){
