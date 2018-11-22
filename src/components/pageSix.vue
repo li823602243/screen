@@ -121,8 +121,8 @@
           grid: {
             left: "3%",
             right: "5%",
-            top: "22%",
-            bottom: "20%",
+            top: "10%",
+            bottom: "10%",
             containLabel: true
           },
           xAxis: {
@@ -145,7 +145,7 @@
             axisLine: {
               lineStyle: {
                 type: "solid",
-                color: "#4f525e", //左边线的颜色
+                color: "#2ba9f2", //左边线的颜色
                 width: "1" //坐标线的宽度
               }
             }
@@ -161,16 +161,23 @@
             axisLine: {
               lineStyle: {
                 type: "solid",
-                color: "#4f525e", //左边线的颜色
+                color: "#2ba9f2", //左边线的颜色
                 width: "1" //坐标线的宽度
               }
             }
           },
           series: [{
-            color: ["#337ae4"],
+            color: "#fff",
             type: "line",
+            symbol:'circle',//拐点样式
+            symbolSize: 15,//拐点大小
             itemStyle: {
               normal: {
+                label : {
+                  show: true,
+                  color:'#2ba9f2',
+                  fontSize:18
+                  },
                 lineStyle: {
                   width: 5 //折线宽度
                 },
@@ -189,7 +196,6 @@
                   ],
                   false
                 ),
-                opacity: 0.4
               }
             },
             data: this.live_play_year_trend_data
@@ -233,7 +239,7 @@
   }
   .live-ranking--wrapper {
     width: 100%;
-    height: 82.5%;
+    height: 100%;
     border: 1px solid #002ac5
   }
   .live-num {
@@ -267,7 +273,7 @@
   .live-pannel-content {
     position: relative;
     font-size: 24px;
-    padding: 25px 20px;
+    padding: 20px 20px;
     color: #fff;
     border: 1px solid#ffcb6f;
     width: 90%;
@@ -287,12 +293,18 @@
   }
   .live-pannel-content .live-pannel-first{
     background: url('../../static/images/gold.png');
+    background-size: contain;
+    background-repeat: no-repeat;
    }
   .live-pannel-content .live-pannel-second{
     background: url('../../static/images/silver.png');
+    background-size: contain;
+    background-repeat: no-repeat;
    }
   .live-pannel-content .live-pannel-three{
-     background: url('../../static/images/bronze.png');
+    background: url('../../static/images/bronze.png');
+    background-size: contain;
+    background-repeat: no-repeat;
    }
   .live-panel {
     padding-top: 20px;
@@ -304,7 +316,7 @@
     padding: 10px;
   }
   .live-aside .live-aside--row{
-    padding: 20px 0;
+    padding: 15px 0;
     border-bottom: 1px dashed #11395c;
   }
   .live-aside .live-aside--row{

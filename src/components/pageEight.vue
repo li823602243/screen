@@ -83,18 +83,18 @@ export default {
         var geoCoordMap = {
           南京市: [118.78, 32.04],
           常州市: [119.95, 31.79],
-          南通市: [121.05, 32.08],
+          南通市: [120.8, 32.08],
           昆山市: [120.95, 31.39],
-          连云港市: [119.16, 34.59],
+          连云港市: [119.16, 34.56],
           淮安市: [119.15, 33.5],
           泰州市: [119.9, 32.49],
-          苏州市: [120.62, 31.32],
-          镇江市: [119.44, 32.2],
+          苏州市: [120.90, 31.32],
+          镇江市: [119.44, 31.9],
           扬州市: [119.42, 32.39],
           常州市: [119.95, 31.79],
           无锡市: [120.29, 31.59],
           徐州市: [117.2, 34.26],
-          宿迁市: [118.29, 33.95],
+          宿迁市: [118.5, 33.5],
           盐城市: [120.15, 33.38]
         };
         //设置颜色
@@ -193,6 +193,19 @@ export default {
               symbolOffset:[0, '-200%'],
               // symbol: 'diamond',
               showEffectOn: "render",
+              symbolSize: function (val) {
+                if(val[2] <= 1000){
+                  return 8;
+                } else if (1000 < val[2] && val[2] <=　2000){
+                  return 10;
+                } else if (2000 < val[2] && val[2] <=　5000){
+                  return 12;
+                } else if (5000 < val[2] && val[2] <=　10000){
+                  return 14;
+                }else{
+                  return 16;
+                }
+              },
               rippleEffect: {
                 period: 8,
                 scale: 4,
@@ -231,8 +244,16 @@ export default {
       for(let i in this.userData.area_user_register_num){
         let obj = {};
         obj.name= this.userData.area_user_register_num[i].filter_name;
-        obj.value= this.userData.area_user_register_num[i].amount;;
-        obj.level= 1;
+        obj.value= this.userData.area_user_register_num[i].amount;
+        let yu =  i%3;
+        console.log(yu)
+        if(yu==0){
+          obj.level= 1;
+        }else if(yu==1){
+          obj.level= 2;
+        }else{
+          obj.level= 3;
+        }
         userMapData.push(obj)
       }
       this.$axios.get("../static/geoJson/jiangsu.json").then(response => {

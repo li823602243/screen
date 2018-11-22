@@ -12,6 +12,8 @@ import store from './store/store'
 import axios from 'axios'
 
 import echarts from 'echarts'
+import utils from '../static/untils.js'    
+Vue.use(utils)
 
 Vue.use(ElementUI) //使用ElementUI
 Vue.use(Vuex)

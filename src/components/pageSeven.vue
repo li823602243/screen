@@ -122,17 +122,11 @@ export default {
 <style>
 .resource-wrapper {
   position: relative;
-
+  padding-bottom: 40px;
   /* display: flex;
-  
-    
-  
-      align-items: flex-start; */
-
+  align-items: flex-start; */
   height: 100%;
-
-  padding: 0 60px;
-
+  padding: 0  60px 40px 60px;
   box-sizing: border-box;
 }
 
@@ -475,9 +469,11 @@ export default {
 
   position: absolute;
 
-  height: 98%;
+  height: 100%;
 
   width: 28%;
+  box-sizing: border-box;
+  padding-bottom: 40px;
 }
 
 .resource-left--content {
@@ -495,8 +491,9 @@ export default {
 
   right: 60px;
 
-  height: 98%;
-
+  height: 100%;
+  box-sizing: border-box;
+  padding-bottom: 40px;
   top: 0;
 
   flex-direction: column;
@@ -582,7 +579,7 @@ export default {
 }
 .resource-pannel {
   position: relative;
-  padding: 30px 35px;
+  padding: 6% 35px;
 }
 .resource-pannel::after {
   position: absolute;

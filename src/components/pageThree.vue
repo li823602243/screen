@@ -181,9 +181,9 @@ export default {
         },
 
         grid: {
-          left: "3%",
+          left: "10%",
 
-          right: "5%",
+          right: "10%",
 
           top: "22%",
 
@@ -355,7 +355,7 @@ export default {
             lineStyle: {
               type: "solid",
 
-              color: "#4f525e", //左边线的颜色
+              color: "#2ba9f2", //左边线的颜色
 
               width: "1" //坐标线的宽度
             }
@@ -379,7 +379,7 @@ export default {
             lineStyle: {
               type: "solid",
 
-              color: "#4f525e", //左边线的颜色
+              color: "#2ba9f2", //左边线的颜色
 
               width: "1" //坐标线的宽度
             }
@@ -389,9 +389,14 @@ export default {
         series: [
           {
             color: ["#337ae4"],
-
+            symbol:'circle',//拐点样式
+            symbolSize: 15,//拐点大小
             type: "line",
-
+            label : {
+              show: true,
+              color:'#2ba9f2',
+              fontSize:18
+            },
             itemStyle: {
               normal: {
                 lineStyle: {
@@ -422,8 +427,6 @@ export default {
 
                   false
                 ),
-
-                opacity: 0.4
               }
             },
 
@@ -1090,7 +1093,7 @@ export default {
 }
 .pageThree > .el-row,
 .pageThree > .el-row > .el-col {
-  height: 97%;
+  height: 100%;
   padding: 0 !important;
 }
 .aside-wrapper {

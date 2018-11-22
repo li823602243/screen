@@ -53,6 +53,8 @@ export default {
     pageEight,
     pageNine
   },
+  mounted() {
+  },
   methods:{
    changePage:function(e){
     this.$store.state.pageNum = e;

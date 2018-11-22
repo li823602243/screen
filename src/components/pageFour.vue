@@ -196,11 +196,11 @@ export default {
             hoverAnimation: false,
             data: [
               {
-                value: 75,
+                value: 100,
                 name: "01"
               },
               {
-                value: 25,
+                value: 0,
                 name: "invisible",
                 itemStyle: placeHolderStyle
               }
@@ -231,11 +231,11 @@ export default {
             hoverAnimation: false,
             data: [
               {
-                value: 7588,
+                value: 100,
                 name: "01"
               },
               {
-                value: 25,
+                value: 0,
                 name: "invisible",
                 itemStyle: placeHolderStyle
               }
@@ -266,11 +266,11 @@ export default {
             hoverAnimation: false,
             data: [
               {
-                value: 75,
+                value: 100,
                 name: "01"
               },
               {
-                value: 25,
+                value: 0,
                 name: "invisible",
                 itemStyle: placeHolderStyle
               }
@@ -347,7 +347,7 @@ export default {
             },
             {
               show: false,
-              left: "52.5%",
+              left: "51%",
               top: 0,
               bottom: 0,
               width: "0%"
@@ -388,7 +388,7 @@ export default {
               gridIndex: 2,
               nameTextStyle: {
                 color: "#50afff",
-                fontSize: 14
+                fontSize: 18
               },
               axisLine: {
                 show: false
@@ -436,8 +436,8 @@ export default {
                 show: true,
                 interval: 0,
                 textStyle: {
-                  color: "#50afff",
-                  fontSize: 14
+                  color: "#fff",
+                  fontSize: 18
                 }
               },
               data: this.myCityData.map(function(value) {
@@ -564,6 +564,7 @@ export default {
   border: 1px solid #032ac6;
 }
 .order-type--content {
+  display: flex;
   flex: 1;
   /* height: 100%; */
 }
@@ -576,7 +577,7 @@ export default {
 .order-type::after{
   position: absolute;
   height: 96%;
-  top:0;
+  top:2%;
   width: 1px;
   background-color: #032ac6;
   left: 50%;
@@ -597,7 +598,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  height: 88%;
+  height: auto;
   margin-top: 30px;
 }
 .wrapper-col--left {
@@ -607,7 +608,7 @@ export default {
 .address-left {
   display: flex;
   flex-direction: column;
-  height: 89%;
+  height: 100%;
   border: 1px solid #032ac6;
 }
 .address-left--bottom {

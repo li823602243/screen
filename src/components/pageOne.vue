@@ -3,7 +3,7 @@
   <el-row :gutter="24" class="wrapper-content">
     <el-col :span="9">
       <el-row :gutter="24">
-        <el-col :span="12">
+        <el-col :span="12" class="circle-content--bottom">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">活动发布场次</span>
@@ -12,7 +12,7 @@
           </div>
           <span class="tips">昨日新增:{{HomePageData.act_today}}</span>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="12" class="circle-content--bottom">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">活动参与人数</span>
@@ -51,7 +51,7 @@
       </el-col>
     <el-col :span="9">
       <el-row :gutter="24">
-       <el-col :span="12">
+       <el-col :span="12" class="circle-content--bottom">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">场馆预约次数</span>
@@ -60,7 +60,7 @@
           </div>
           <span class="tips">昨日预约:{{HomePageData.venue_booking_today}}</span>
         </el-col>
-       <el-col :span="12">
+       <el-col :span="12" class="circle-content--bottom">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">入馆服务人数</span>
@@ -108,9 +108,6 @@ export default {
     author() {
       return this.$store.state.pageNum;
     }
-  },
-  mounted() {
-    this.getHomePageData();
   },
   methods: {
     getHomePageData() {
@@ -160,21 +157,23 @@ export default {
 }
 .circle-wrapper .title {
   display: inline-block;
-  font-size: 25px;
+  font-size: 30px;
   color: #fff;
   margin: 5px;
 }
-
+.circle-content--bottom {
+  margin-bottom: 45px;
+}
 .circle-wrapper .num {
   display: block;
-  font-size: 40px;
+  font-size: 48px;
   color: #f1ffa3;
   margin: 5px;
 }
 .tips {
   display: block;
   margin: 26px auto;
-  font-size: 25px;
+  font-size: 30px;
   color: #55fffe;
 }
 .platform {
@@ -191,13 +190,13 @@ export default {
 }
 .platform .title {
   display: inline-block;
-  font-size: 25px;
+  font-size: 30px;
   color: #fff;
   margin: 5px;
 }
 .platform .num {
   display: inline-block;
-  font-size: 40px;
+  font-size: 48px;
   color: #f1ffa3;
   margin: 5px;
 }

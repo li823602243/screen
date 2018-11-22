@@ -5,7 +5,8 @@
       <el-col :span="11">
         <div class="pannel left">
           <div class="pannel-title left">各地市活动发布数量统计</div>
-          <div class="pannel-content" id="actPublic"></div>
+          <div class="pannel-content" id="actPublic">
+          </div>
         </div>
       </el-col>
       <el-col :span="11">
@@ -28,13 +29,13 @@
       <el-col :span="11">
         <div class="pannel left">
           <div class="pannel-title left">活动类别统计</div>
-          <div class="pannel-content" id="actType"></div>
+          <div class="pannel-content--bottom" id="actType"></div>
         </div>
       </el-col>
       <el-col :span="11">
         <div class="pannel right">
           <div class="pannel-title right">活动发布走势分析统计</div>
-          <div class="pannel-content pannel-content--actStatus">
+          <div class="pannel-content--actStatus">
             <div class="date-group">
               <div class="date" :class="{active:shows=='week'}"  @click="chooseDate('week')">本周</div>
               <div class="date" :class="{active:shows=='all'}"  @click="chooseDate('all')">本年</div>
@@ -50,13 +51,15 @@
 
 <style>
 .wrapper {
-  padding: 0 60px;
+  padding: 0 60px 40px 60px;
+  box-sizing: border-box;
 }
 .el-col-11 {
   width: 48.5%;
 }
 .interval {
-  margin-top: 10px;
+  margin-top: 30px;
+  flex: 1;
 }
 .actStatus {
   color: #fff;
@@ -68,6 +71,16 @@
 }
 .pannel-content--actStatus .echarts-pannel {
   flex: 1;
+}
+.pannel-content--actStatus {
+  height: 100%;
+  width: 100%;
+  border: 1px solid #032ac6
+}
+.pannel-content--bottom {
+  height: 100%;
+  width: 100%;
+  border: 1px solid #032ac6
 }
 .actStatus-process {
   background-color: transparent;
@@ -159,8 +172,13 @@
 .pannel-content {
   width: 100%;
   /* width: 880px; */
-  height: 380px;
+  height: 380px; 
   border: 1px solid #032ac6;
+}
+.pannel-content--infos {
+  height: 100%;
+  width: 100%;
+  transform: scale(1.5)
 }
 .pannel-title {
   position: relative;
@@ -209,6 +227,9 @@
   border: 1px solid #54ffff;
   border-radius: 5px;
 }
+.pannel  {
+  height: 100%;
+}
 </style>
 
 <script>
@@ -225,7 +246,8 @@ export default {
       showNums:'day',
       actTrendBottomData:[],
       actTrendData:[],
-      actStatusData:[]
+      actStatusData:[],
+      maxActStatus:[]
     };
   },
   mounted() {
@@ -239,14 +261,11 @@ export default {
   methods: {
     getActivityPageData() {
       this.http.get(this.ports.urls.ActivityPageData,res => {
-          console.log(res.data.results);
-          console.log("00000000000000000000000000000")
-          // this.ActivityPageData = res.data.results;
           this.act_area_num_lists = res.data.results.act_area_num_lists;
           this.act_cat_num_lists = res.data.results.act_cat_num_lists;
           this.act_status_data = res.data.results.act_status_data;
           this.act_trend_publish = res.data.results.act_trend_publish;
-           this.drawLine();
+          this.drawLine();
       })
     },
     chooseDate:function(data){
@@ -268,6 +287,7 @@ export default {
     chooseDateNum:function(data){
       this.showNums=data;
       this.actStatusData = [];
+      this.maxActStatus =[];
       switch(data)
       {
       case 'day':
@@ -290,6 +310,9 @@ export default {
           this.actStatusData.push(this.act_status_data.all[i].amount)
         }
         break;
+      }
+      for(let i in  this.actStatusData){
+        this.maxActStatus.push(1.1*Math.max.apply(null, this.actStatusData))
       }
       this.drawActStatusCharts()
     },
@@ -330,16 +353,18 @@ export default {
         series: [
           {
             type: "pie",
-            radius: [37, 155],
+            radius: [37, 250],
             avoidLabelOverlap: false,
             startAngle: 0,
-            center: ["50%", "34%"],
+            center: ["50%", "10%"],
             roseType: "area",
+            // radius : '100%',
             selectedMode: "single",
             label: {
               normal: {
                 show: true,
-                formatter: "{b}:{c}"
+                formatter: "{b}:{c}",
+                fontSize:18
               },
               emphasis: {
                 show: true
@@ -362,6 +387,9 @@ export default {
       };
       for( let i in this.act_status_data.today){
          this.actStatusData.push(this.act_status_data.today[i].amount)
+      }
+      for(let i in  this.actStatusData){
+        this.maxActStatus.push(1.1*Math.max.apply(null, this.actStatusData))
       }
       this.drawActStatusCharts()
     
@@ -394,9 +422,8 @@ export default {
 
       let actTypeChartOption = {
         grid: {
-          top: "24%",
-          left: "7%",
-          bottom: "6%",
+          left: "10%",
+          bottom: 0,
           containLabel: true
         },
         tooltip: {
@@ -405,22 +432,19 @@ export default {
             type: "none"
           },
           formatter: function(params) {
-            // return (
-            //   params[0]["data"].name +
-            //   "<br/>" +
-            //   "训练人次: " +
-            //   params[1]["data"].value +
-            //   "<br/>" +
-            //   "合格率: " +
-            //   params[0]["data"].value
-            // );
+             return (
+               params[0]["data"].name +
+               "<br/>" +
+               "活动场次: " +
+               params[1]["data"].value 
+            );
           }
         },
         xAxis: [
           {
             type: "category",
             show: false,
-            data: ["3月", "4月", "5月", "6月", "7月", "8月"],
+            data: xAxisMonth,
             axisLabel: {
               textStyle: {
                 color: "#b6b5ab"
@@ -452,19 +476,17 @@ export default {
             offset: 52,
             splitLine: {
               show: false,
-              lineStyle: {
-                color: "rgba(255,255,255,0.2)"
-              }
             },
             axisTick: {
               show: false
             },
             axisLine: {
-              show: true
+              show: false
             },
             axisLabel: {
               show: true,
-              color: "#b6b5ab"
+              color: "#fff",
+              fontSize:18
             }
           },
           {
@@ -491,7 +513,7 @@ export default {
         color: ["#e54035"],
         series: [
           {
-            name: "训练人次",
+            name: "活动场次",
             type: "pictorialBar",
             xAxisIndex: 1,
             barCategoryGap: "-80%",
@@ -518,29 +540,15 @@ export default {
             data: barData
           },
           {
-            symbol:
-              "image://data:image/png;base64,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",
-            symbolSize: 42,
+            symbolSize: 0,
             name: "完成率",
             type: "line",
             yAxisIndex: 1,
             data: lineData,
             itemStyle: {
               normal: {
-                borderWidth: 5,
-                color: {
-                  colorStops: [
-                    {
-                      offset: 0,
-                      color: "#821eff"
-                    },
-
-                    {
-                      offset: 1,
-                      color: "#204fff"
-                    }
-                  ]
-                }
+                borderWidth: 0,
+                color: "transparent"
               }
             }
           }
@@ -558,9 +566,8 @@ export default {
           }
         },
         grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
+          left: "7%",
+          bottom: "8%",
           containLabel: true
         },
         xAxis: {
@@ -711,6 +718,7 @@ export default {
               formatter: function(value, index) {
                 return ["{title|" + value + "} "].join("\n");
               },
+              fontSize:20,
               rich: {
                 lg: {
                   backgroundColor: "#339911",
@@ -730,7 +738,7 @@ export default {
             data: this.actStatusData,
             axisLabel: {
               textStyle: {
-                fontSize: 12,
+                fontSize: 20,
                 color: "#fff"
               }
             },
@@ -750,7 +758,7 @@ export default {
             name: "条",
             type: "bar",
             yAxisIndex: 0,
-            data: [70, 34, 60, 78],
+            data: this.actStatusData,
             barWidth: 20,
             itemStyle: {
               normal: {
@@ -763,7 +771,7 @@ export default {
             },
             label: {
               normal: {
-                show: true,
+                show: false,
                 position: "inside",
                 formatter: "{c}%"
               }
@@ -774,7 +782,7 @@ export default {
             type: "bar",
             yAxisIndex: 1,
             barGap: "-100%",
-            data: [100, 100, 100, 100],
+            data:  this.maxActStatus,
             barWidth: 24,
             itemStyle: {
               normal: {
