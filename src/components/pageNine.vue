@@ -20,7 +20,11 @@
     };
   },
   mounted() {
+    let that = this; 
    this.getVenuePageData();
+   const pageNine = setInterval(() =>{                    
+      that.getVenuePageData();          
+    }, this.$store.state.intervalTime); 
   },
   computed: {
       author () {
@@ -29,9 +33,8 @@
   },
   methods: {
         getVenuePageData() {
-        console.log("获取用户数据");
         this.http.get(this.ports.urls.userPageData, res => {
-            console.log(res.data.results);
+            console.log("第九页调用");
             this.userData = res.data.results;
             this.drawLine();
         });

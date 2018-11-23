@@ -13,7 +13,7 @@ export default {
   name: "HelloWorld",
   data() {
     return {
-     buttonStatus:true,
+     buttonStatus:false,
      nowTime:''
     };
   },
@@ -42,16 +42,11 @@ export default {
     run:function(){
      if(this.buttonStatus){
        this.buttonStatus=false;
-       this.$store.state.autoplay = false;
+       this.$store.state.autoplay = true;
      }else{
        this.buttonStatus=true;
-       this.$store.state.autoplay = true;
+       this.$store.state.autoplay = false;
      }
-    //  if(this.runButton){
-    //     this.$store.state.autoplay = false;
-    //  }else{
-    //     this.$store.state.autoplay = true;
-    //  }
     }
   }
 };

@@ -8,7 +8,8 @@ const store = new Vuex.Store({
   state: {
     pageNum: 0,
     autoplay:true,
-    interval:1000
+    interval:5000,
+    intervalTime:20000
   },
   mutations: {
     modifyMsg(state, Obj) {

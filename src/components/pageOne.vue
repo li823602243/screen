@@ -104,6 +104,12 @@ export default {
       HomePageData:''
     };
   },
+  mounted() {
+    this.getHomePageData();
+    const pageOne = setInterval(() =>{                    
+         this.getHomePageData();          
+    }, this.$store.state.intervalTime);      
+  },
   computed: {
     author() {
       return this.$store.state.pageNum;
@@ -112,7 +118,7 @@ export default {
   methods: {
     getHomePageData() {
       this.http.get(this.ports.urls.HomePageData,res => {
-          console.log(res.data.results);
+          console.log("第一页调用");
           this.HomePageData = res.data.results;
       })
     }

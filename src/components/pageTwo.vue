@@ -251,7 +251,18 @@ export default {
     };
   },
   mounted() {
+    let that = this;
     this.getActivityPageData();
+    const pageTwo = setInterval(() =>{
+        this.ActivityPageData= '',
+        this.shows='week',
+        this.showNums='day',
+        this.actTrendBottomData=[],
+        this.actTrendData=[],
+        this.actStatusData=[],
+        this.maxActStatus=[]               
+        that.getActivityPageData();          
+    }, this.$store.state.intervalTime); 
   },
   computed: {
       author () {
@@ -261,6 +272,7 @@ export default {
   methods: {
     getActivityPageData() {
       this.http.get(this.ports.urls.ActivityPageData,res => {
+          console.log("第二页调用");
           this.act_area_num_lists = res.data.results.act_area_num_lists;
           this.act_cat_num_lists = res.data.results.act_cat_num_lists;
           this.act_status_data = res.data.results.act_status_data;

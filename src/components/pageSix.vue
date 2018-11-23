@@ -86,7 +86,11 @@
     },
   
     mounted() {
+      let that  =  this;
       this.getVenuePageData();
+      const pageFour = setInterval(() =>{                    
+         that.getVenuePageData();          
+      }, this.$store.state.intervalTime); 
     },
   
     computed: {
@@ -100,9 +104,8 @@
     },
     methods: {
       getVenuePageData() {
-        console.log("直播接口")
       this.http.get(this.ports.urls.LivePageData, res => {
-          console.log(res.data.results);
+          console.log("第六页调用");
           this.live_play_times = res.data.results.live_play_times;
           this.live_play_year_trend = res.data.results.live_play_year_trend;
           this.live_channel_num = res.data.results.live_channel_num;
@@ -337,6 +340,8 @@
     text-align: center;
     background-image: url(../../static/images/gold-other.png);
     background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
   }
   .live-aside--infos {
     overflow: hidden;

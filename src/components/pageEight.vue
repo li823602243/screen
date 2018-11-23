@@ -60,7 +60,11 @@ export default {
     };
   },
   mounted() {
+    let that = this;
     this.getVenuePageData();
+    const pageEight = setInterval(() =>{                    
+      that.getVenuePageData();          
+    }, this.$store.state.intervalTime); 
   },
   computed: {
     author() {
@@ -69,9 +73,8 @@ export default {
   },
   methods: {
     getVenuePageData() {
-      console.log("获取用户数据");
       this.http.get(this.ports.urls.userPageData, res => {
-        console.log(res.data.results);
+         console.log("第八页调用");
         this.userData = res.data.results;
         this.drawLine();
       });
@@ -88,14 +91,16 @@ export default {
           连云港市: [119.16, 34.56],
           淮安市: [119.15, 33.5],
           泰州市: [119.9, 32.49],
-          苏州市: [120.90, 31.32],
+          苏州市: [120.590229,31.124587],
           镇江市: [119.44, 31.9],
           扬州市: [119.42, 32.39],
           常州市: [119.95, 31.79],
           无锡市: [120.29, 31.59],
           徐州市: [117.2, 34.26],
           宿迁市: [118.5, 33.5],
-          盐城市: [120.15, 33.38]
+          盐城市: [120.15, 33.38],
+          昆山市: [121.02544,31.390804],
+          沭阳县:[118.785696,34.09952]
         };
         //设置颜色
         var levelColorMap = {
@@ -121,7 +126,6 @@ export default {
                 });
               }
             }
-            console.log(temp)
             return temp;
           },
 
@@ -246,7 +250,6 @@ export default {
         obj.name= this.userData.area_user_register_num[i].filter_name;
         obj.value= this.userData.area_user_register_num[i].amount;
         let yu =  i%3;
-        console.log(yu)
         if(yu==0){
           obj.level= 1;
         }else if(yu==1){
@@ -256,8 +259,7 @@ export default {
         }
         userMapData.push(obj)
       }
-      this.$axios.get("../static/geoJson/jiangsu.json").then(response => {
-        console.log(response.data);
+      this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
         this.$echarts.registerMap("江苏", response.data);
         var myChart = this.$echarts.extendsMap("chart-panel", {
           bgColor: "#0f6ab8", // 画布背景色

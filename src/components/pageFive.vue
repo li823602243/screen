@@ -2,11 +2,9 @@
   <div class="wrapper entrance-wrapper">
     <el-row class="entrance-people">
       <div class="flag"><span class="flag-content">入馆服务人数</span></div>
-      <el-col :span="4" class="wrapper-col">1</el-col>
-      <el-col :span="4" class="wrapper-col">2</el-col>
+      <el-col :span="8" class="wrapper-col" id="today-service--num">1</el-col>
       <el-col :span="8" class="wrapper-col" id="aggregate-people">3</el-col>
-      <el-col :span="4" class="wrapper-col">4</el-col>
-      <el-col :span="4" class="wrapper-col">4</el-col>
+      <el-col :span="8" class="wrapper-col" id="library-people">4</el-col>
     </el-row>
     <el-row class="entrance-bottom" :gutter="20">
       <el-col :span="16" class="wrapper-col">
@@ -26,11 +24,19 @@ export default {
   name: "hello",
   data() {
     return {
+      dataBoxArr:[],
+      YearDataArr:[100,200,214,100,254,211,214,100,455,522,122,255,852],
       msg: "Welcome to Your Vue.js App"
     };
   },
   mounted() {
+    let that = this;
     this.drawLine();
+    const pageFive = setInterval(() =>{
+      that.yearDataArr();
+      that.dataBoxArr=[]                    
+      that.drawLine();          
+    }, 1000); 
   },
   computed: {
     author() {
@@ -40,11 +46,14 @@ export default {
   methods: {
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
+      let todayServiceNum = this.$echarts.init(
+        document.getElementById("today-service--num")
+      );
+      let libraryNum = this.$echarts.init(
+        document.getElementById("library-people")
+      );
       let aggregateChart = this.$echarts.init(
         document.getElementById("aggregate-people")
-      );
-      let entranceNowNumChart = this.$echarts.init(
-        document.getElementById("entrance-now-num")
       );
       let entranceNowTotalChart = this.$echarts.init(
         document.getElementById("entrance-now-total")
@@ -126,55 +135,429 @@ export default {
           yData.push(a.value);
         }
       });
+      for (let i=0;i<=12;i++)
+        {
+          this.dataBoxArr.push(5*i)
+        }
+      this.drwaEntranceNow();
+      let entranceNowTotalOption = {
+        grid: {
+          left: "10%",
+          right: "10%",
+          bottom: "5%",
+          top: "7%",
+          height: "85%",
+          containLabel: true,
+          z: 22
+        },
+        xAxis: [
+          {
+            type: "category",
+            gridIndex: 0,
+            data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+            tickWidth: 0, //去掉刻度
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: "#0c3b71"
+              }
+            },
+            axisLabel: {
+              show: true,
+              color: "#fff",
+              fontSize: 16
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: "value",
+            gridIndex: 0,
+            splitLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            min: min,
+            max: 100,
+            axisLine: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+            }
+          },
+          {
+            type: "value",
+            gridIndex: 0,
+            min: min,
+            max: 100,
+            splitNumber: 12,
+            splitLine: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              show: false
+            }
+          }
+        ],
+        series: [
+          {
+            type: "bar",
+            barWidth: "20%",
+            xAxisIndex: 0,
+            yAxisIndex: 0,
+            itemStyle: {
+              normal: {
+                barBorderRadius: 30,
+                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 0,
+                    color: "#00feff"
+                  },
+                  {
+                    offset: 0.5,
+                    color: "#027eff"
+                  },
+                  {
+                    offset: 1,
+                    color: "#0286ff"
+                  }
+                ])
+              }
+            },
+            data: yData,
+            zlevel: 11
+          }
+        ]
+      };
+      let todayServiceOption = {
+        series: [
+          {
+            name: "今日服务人数",
+            type: "pie",
+            radius: ["50%", "60%"],
+            center: ["30%", "50%"],
+            startAngle: 225,
+            color: [
+              new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#00a2ff"
+                },
+                {
+                  offset: 1,
+                  color: "#70ffac"
+                }
+              ]),
+              "transparent"
+            ],
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            label: {
+              normal: {
+                position: "center"
+              }
+            },
+            data: [
+              {
+                value: 75,
+                name: "今日服务人数",
+                label: {
+                  normal: {
+                    formatter: "今日",
+                    textStyle: {
+                      color: "#55FFF",
+                      fontSize: 24
+                    }
+                  }
+                }
+              },
+              {
+                value: 25,
+                name: "%",
+                label: {
+                  normal: {
+                    formatter: "\n35",
+                    textStyle: {
+                      color: "#007ac6",
+                      fontSize: 30
+                    }
+                  }
+                }
+              },
+              {
+                value: 0,
+                name: "%",
+                label: {
+                  normal: {
+                    formatter: "服务人数",
+                    textStyle: {
+                      color: "#55FFF",
+                      fontSize: 24
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            name: "昨日服务人数",
+            type: "pie",
+            radius: ["50%", "60%"],
+            center: ["80%", "50%"],
+            startAngle: 225,
+            color: [
+              new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#00a2ff"
+                },
+                {
+                  offset: 1,
+                  color: "#70ffac"
+                }
+              ]),
+              "transparent"
+            ],
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            label: {
+              normal: {
+                position: "center"
+              }
+            },
+            data: [
+              {
+                value: 75,
+                name: "昨日服务人数",
+                label: {
+                  normal: {
+                    formatter: "昨日",
+                    textStyle: {
+                      color: "#55FFF",
+                      fontSize: 24
+                    }
+                  }
+                }
+              },
+              {
+                value: 25,
+                name: "%",
+                label: {
+                  normal: {
+                    formatter: "\n3534",
+                    textStyle: {
+                      color: "#007ac6",
+                      fontSize: 30
+                    }
+                  }
+                }
+              },
+              {
+                value: 0,
+                name: "%",
+                label: {
+                  normal: {
+                    formatter: "服务人数",
+                    textStyle: {
+                      color: "#55FFF",
+                      fontSize: 24
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      };
+      let libraryNumOption = {
+        series: [
+          {
+            name: "在馆人数",
+            type: "pie",
+            radius: ["50%", "60%"],
+            center: ["20%", "50%"],
+            startAngle: 225,
+            color: [
+              new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#f125ff"
+                },
+                {
+                  offset: 1,
+                  color: "#2dcbff"
+                }
+              ]),
+              "transparent"
+            ],
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            label: {
+              normal: {
+                position: "center"
+              }
+            },
+            data: [
+              {
+                value: 75,
+                name: "昨日服务人数",
+                label: {
+                  normal: {
+                    formatter: "昨日",
+                    textStyle: {
+                      color: "#55FFF",
+                      fontSize: 24
+                    }
+                  }
+                }
+              },
+              {
+                value: 25,
+                name: "%",
+                label: {
+                  normal: {
+                    formatter: "\n3534",
+                    textStyle: {
+                      color: "#007ac6",
+                      fontSize: 30
+                    }
+                  }
+                }
+              },
+              {
+                value: 0,
+                name: "%",
+                label: {
+                  normal: {
+                    formatter: "服务人数",
+                    textStyle: {
+                      color: "#55FFF",
+                      fontSize: 24
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            name: "昨日服务人数",
+            type: "pie",
+            radius: ["50%", "60%"],
+            center: ["70%", "50%"],
+            startAngle: 225,
+            color: [
+              new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                {
+                  offset: 0,
+                  color: "#00a2ff"
+                },
+                {
+                  offset: 1,
+                  color: "#70ffac"
+                }
+              ]),
+              "transparent"
+            ],
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            label: {
+              normal: {
+                position: "center"
+              }
+            },
+            data: [
+              {
+                value: 75,
+                name: "昨日服务人数",
+                label: {
+                  normal: {
+                    formatter: "昨日",
+                    textStyle: {
+                      color: "#55FFF",
+                      fontSize: 24
+                    }
+                  }
+                }
+              },
+              {
+                value: 25,
+                name: "%",
+                label: {
+                  normal: {
+                    formatter: "\n3534",
+                    textStyle: {
+                      color: "#007ac6",
+                      fontSize: 30
+                    }
+                  }
+                }
+              },
+              {
+                value: 0,
+                name: "%",
+                label: {
+                  normal: {
+                    formatter: "服务人数",
+                    textStyle: {
+                      color: "#55FFF",
+                      fontSize: 24
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      };
+      aggregateChart.setOption(aggregateOption);
+      window.addEventListener("resize", () => {
+        aggregateChart.resize();
+      });
+      entranceNowTotalChart.setOption(entranceNowTotalOption);
+      window.addEventListener("resize", () => {
+        entranceNowTotalChart.resize();
+      });
+      todayServiceNum.setOption(todayServiceOption);
+      window.addEventListener("resize", () => {
+        todayServiceNum.resize();
+      });
+      libraryNum.setOption(libraryNumOption);
+      window.addEventListener("resize", () => {
+        libraryNum.resize();
+      });
+    },
+    drwaEntranceNow(){
+      let entranceNowNumChart = this.$echarts.init(
+        document.getElementById("entrance-now-num")
+      );
       let entranceNowNumOption = {
         baseOption: {
           timeline: {
-            show: true,
-            type: "slider",
-            axisType: "category",
-            bottom: "10",
-            currentIndex: 0, //0 时表示当前选中项为 timeline.data[0]（即使用 options[0]
-            autoPlay: true, //是否自动播放
-            loop: true,
-            realtime: true, //拖动圆点的时候，是否实时更新视图。
-            controlPosition: "left",
-            label: {
-              normal: {
-                color: "#2998ff"
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: "#fff",
-                borderColor: "#2998ff",
-                borderWidth: 2
-              }
-            },
-            checkpointStyle: {
-              //『当前项』（checkpoint）的图形样式
-              color: "rgb(215, 0, 0)"
-            },
-            lineStyle: {
-              show: true, //false 不显示轴线
-              color: "#2998ff"
-            },
-            controlStyle: {
-              //控制按钮的样式
-              show: true,
-              showPrevBtn: false,
-              showNextBtn: false,
-              itemGap: 50,
-              itemSize: 36,
-              normal: {
-                color: "rgb(215, 0, 0)",
-                borderColor: "rgb(215, 0, 0)"
-              },
-              emphasis: {
-                color: "rgb(215, 0, 0)",
-                borderColor: "rgb(215, 0, 0)"
-              }
-            },
-            data: ["区域人数", "流入人数", "流出人数"]
+            show:false
           },
           tooltip: {
             //提示框组件
@@ -196,14 +579,14 @@ export default {
           grid: {
             left: 10,
             right: 35,
-            bottom: 70,
+            bottom: 10,
             top: 60,
             containLabel: true
           },
           legend: {
             //图例组件，颜色和名字
-            left: 0,
-            top: 0,
+            left: 10,
+            top: 10,
             itemGap: 16,
             itemWidth: 20,
             itemHeight: 14,
@@ -373,20 +756,7 @@ export default {
           {
             xAxis: [
               {
-                data: [
-                  "00:00",
-                  "01:00",
-                  "02:00",
-                  "03:00",
-                  "04:00",
-                  "05:00",
-                  "06:00",
-                  "07:00",
-                  "08:00",
-                  "09:00",
-                  "10:00",
-                  "11:00"
-                ]
+                data: this.dataBoxArr
               }
             ],
             series: [
@@ -394,255 +764,35 @@ export default {
                 data: [
                   156,
                   235,
-                  349,
-                  546,
-                  452,
-                  370,
-                  542,
-                  638,
-                  774,
-                  702,
-                  609,
-                  456
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0,
+                  0
                 ]
               },
               {
-                data: [
-                  352,
-                  286,
-                  315,
-                  429,
-                  566,
-                  486,
-                  399,
-                  562,
-                  658,
-                  794,
-                  702,
-                  629
-                ]
-              }
-            ]
-          },
-          {
-            xAxis: [
-              {
-                data: [
-                  "01:00",
-                  "02:00",
-                  "03:00",
-                  "04:00",
-                  "05:00",
-                  "06:00",
-                  "07:00",
-                  "08:00",
-                  "09:00",
-                  "10:00",
-                  "11:00"
-                ]
-              }
-            ],
-            series: [
-              {
-                data: [
-                  546,
-                  452,
-                  370,
-                  542,
-                  638,
-                  774,
-                  702,
-                  609,
-                  456,
-                  420,
-                  398,
-                  326
-                ]
-              },
-              {
-                data: [
-                  429,
-                  566,
-                  486,
-                  399,
-                  562,
-                  658,
-                  794,
-                  702,
-                  629,
-                  610,
-                  568,
-                  425
-                ]
-              }
-            ]
-          },
-          {
-            xAxis: [
-              {
-                data: [
-                  "03:00",
-                  "04:00",
-                  "05:00",
-                  "06:00",
-                  "07:00",
-                  "08:00",
-                  "09:00",
-                  "10:00",
-                  "11:00"
-                ]
-              }
-            ],
-            series: [
-              {
-                data: [
-                  156,
-                  235,
-                  349,
-                  546,
-                  452,
-                  370,
-                  542,
-                  638,
-                  774,
-                  702,
-                  609,
-                  456
-                ]
-              },
-              {
-                data: [
-                  352,
-                  286,
-                  315,
-                  429,
-                  566,
-                  486,
-                  399,
-                  562,
-                  658,
-                  794,
-                  702,
-                  629
-                ]
+                data: this.YearDataArr
               }
             ]
           }
         ]
       };
-      let entranceNowTotalOption = {
-        grid: {
-          left: "10%",
-          right: "10%",
-          bottom: "5%",
-          top: "7%",
-          height: "85%",
-          containLabel: true,
-          z: 22
-        },
-        xAxis: [
-          {
-            type: "category",
-            gridIndex: 0,
-            data: ["周一",'周二',"周三","周四","周五","周六","周日"],
-            tickWidth:0,//去掉刻度
-            axisTick: {
-              show:false
-            },
-            axisLine: {
-              show:false,
-              lineStyle: {
-                color: "#0c3b71"
-              }
-            },
-            axisLabel: {
-              show: true,
-              color: "#fff",
-              fontSize: 16
-            }
-          }
-        ],
-        yAxis: [
-          {
-            type: "value",
-            gridIndex: 0,
-            splitLine: {
-              show: false
-            },
-            axisTick: {
-              show: false
-            },
-            min: min,
-            max: 100,
-            axisLine: {
-              show:false
-            },
-            axisLabel: {
-              show:false
-            }
-          },
-          {
-            type: "value",
-            gridIndex: 0,
-            min: min,
-            max: 100,
-            splitNumber: 12,
-            splitLine: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisTick: {
-              show: false
-            },
-            axisLabel: {
-              show: false
-            },
-          }
-        ],
-        series: [
-          {
-            type: "bar",
-            barWidth: "20%",
-            xAxisIndex: 0,
-            yAxisIndex: 0,
-            itemStyle: {
-              normal: {
-                barBorderRadius: 30,
-                color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  {
-                    offset: 0,
-                    color: "#00feff"
-                  },
-                  {
-                    offset: 0.5,
-                    color: "#027eff"
-                  },
-                  {
-                    offset: 1,
-                    color: "#0286ff"
-                  }
-                ])
-              }
-            },
-            data: yData,
-            zlevel: 11
-          }
-        ]
-      };
-      aggregateChart.setOption(aggregateOption);
-      window.addEventListener("resize", () => {
-        aggregateChart.resize();
-      });
       entranceNowNumChart.setOption(entranceNowNumOption);
       window.addEventListener("resize", () => {
         entranceNowNumChart.resize();
       });
-      entranceNowTotalChart.setOption(entranceNowTotalOption);
-      window.addEventListener("resize", () => {
-        entranceNowTotalChart.resize();
-      });
+    },
+    yearDataArr(){
+      this.YearDataArr=[];
+      for(let i = 0; i < 15;i++){
+        this.YearDataArr.push(Math.floor(Math.random()*40)+200)
+      }
     }
   }
 };

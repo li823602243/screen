@@ -104,7 +104,18 @@ export default {
     DateChoose
   },
   mounted() {
+    let that = this;
     this.getServicePageData();
+    const pageThree = setInterval(() =>{
+          this.showNums= "day",
+          this.act_cat_join_num_lists= "",
+          this.act_cat_join_num_arr= [],
+          this.bookPeopleNum= "",
+          this.joinPeopleNum= "",
+          this.trendWeekData=[],
+          this.trendYearData=[]                  
+         that.getServicePageData();          
+    }, this.$store.state.intervalTime); 
   },
   computed: {
     author() {
@@ -138,7 +149,7 @@ export default {
     },
     getServicePageData() {
       this.http.get(this.ports.urls.ServicePageData, res => {
-        console.log(res.data.results);
+        console.log("第三页调用")
         this.act_cat_join_num_lists = res.data.results.act_cat_join_num_lists;
         this.act_register_date_num = res.data.results.act_register_date_num;
         this.act_sign_date_num = res.data.results.act_sign_date_num;
@@ -453,7 +464,6 @@ export default {
         obj.value = this.act_cat_join_num_lists[i].amount;
         this.act_cat_join_num_arr.push(obj);
       }
-      console.log(this.act_cat_join_num_arr);
       let actTrendOption = {
         color: ["#37a2da", "#32c5e9", "#9fe6b8", "#ffdb5c", "#ff9f7f"],
         calculable: true,

@@ -97,7 +97,11 @@ export default {
     };
   },
   mounted() {
+    let that = this;
     this.getVenuePageData();
+    const pageSeven = setInterval(() =>{                    
+      that.getVenuePageData();          
+    }, this.$store.state.intervalTime); 
   },
   computed: {
     author() {
@@ -106,9 +110,8 @@ export default {
   },
   methods: {
     getVenuePageData() {
-      console.log("资源鉴赏接口");
       this.http.get(this.ports.urls.ResourcePageData, res => {
-        console.log(res.data.results);
+        console.log("第七页调用");
         this.resource_total = res.data.results.resource_total;
         this.resource_play_total = res.data.results.resource_play_total;
         this.resource_cat_play_rank = res.data.results.resource_cat_play_rank;

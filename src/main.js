@@ -10,11 +10,9 @@ import ports from './api/ports'
 import Vuex from 'vuex'
 import store from './store/store'
 import axios from 'axios'
-
+import utils from './utils/utils.js'
 import echarts from 'echarts'
-import utils from '../static/untils.js'    
-Vue.use(utils)
-
+    
 Vue.use(ElementUI) //使用ElementUI
 Vue.use(Vuex)
 Vue.config.productionTip = false
@@ -22,7 +20,7 @@ Vue.prototype.$axios = axios
 Vue.prototype.http = http
 Vue.prototype.ports = ports
 Vue.prototype.$echarts = echarts 
-
+Vue.prototype.utils = utils 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
