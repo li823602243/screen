@@ -65,17 +65,17 @@ export default {
 
 <style>
 #app {
+  display: flex;
+  flex-direction: column;
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
 }
-
 .el-carousel {
-  height: 88%;
+  flex: 1;
 }
-
 .el-carousel__item h3 {
   color: #475669;
   font-size: 18px;

@@ -256,7 +256,7 @@
                 label: {
                     normal: {
                         position: 'inner',
-                        formatter: "{c}\n\n{d}%",
+                        formatter: "{b}\n\n{d}%",
                         color:'#000733',
                         fontSize: 24,
                     }

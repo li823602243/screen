@@ -7,7 +7,7 @@ const store = new Vuex.Store({
   // 定义状态
   state: {
     pageNum: 0,
-    autoplay:true,
+    autoplay:false,
     interval:5000,
     intervalTime:20000
   },

@@ -4,7 +4,15 @@
       <div class="flag"><span class="flag-content">入馆服务人数</span></div>
       <el-col :span="8" class="wrapper-col" id="today-service--num">1</el-col>
       <el-col :span="8" class="wrapper-col" id="aggregate-people">3</el-col>
-      <el-col :span="8" class="wrapper-col" id="library-people">4</el-col>
+      <el-col :span="8" class="wrapper-col">
+        <span class="entrance-num--now">在馆人数</span>
+        <span class="entrance-people--now">{{allCurrentVisitorData}}人</span>
+        <span class="entrance-top--title">最高</span>
+        <span class="entrance-top--num">在馆人数</span>
+        <span class="entrance-top--people">{{allTopInData}}人</span>
+        <div id="library-people">
+        </div>
+        </el-col>
     </el-row>
     <el-row class="entrance-bottom" :gutter="20">
       <el-col :span="16" class="wrapper-col">
@@ -24,19 +32,21 @@ export default {
   name: "hello",
   data() {
     return {
-      dataBoxArr:[],
-      YearDataArr:[100,200,214,100,254,211,214,100,455,522,122,255,852],
+      dataBoxArr:[0,5,10,15,20,25,30,35,40,45,50,55],
+      TodayDataArr:[],
+      YearDataArr:[],
+      allCurrentVisitorData:'',
+      allTopInData:'',
+      WeekInData:'',
       msg: "Welcome to Your Vue.js App"
     };
   },
   mounted() {
     let that = this;
-    this.drawLine();
+    this.pageFiveData();
     const pageFive = setInterval(() =>{
-      that.yearDataArr();
-      that.dataBoxArr=[]                    
-      that.drawLine();          
-    }, 1000); 
+      this.getCurrentEnterNum()                   
+    }, 5000); 
   },
   computed: {
     author() {
@@ -44,6 +54,45 @@ export default {
     }
   },
   methods: {
+    pageFiveData(){
+      this.http.get(this.ports.urls.allCurrentVisitorData, res => {
+        this.allCurrentVisitorData = res.data.results.in_num;
+      });
+      this.http.get(this.ports.urls.allTopInData, res => {
+        this.allTopInData = res.data.results.num;
+      });
+      this.http.get(this.ports.urls.currentEnterNum, res => {
+       console.log(res)
+       this.TodayDataArr = res.data.results.today;
+       this.YearDataArr = res.data.results.yesterday;
+        // this.drawLine();
+      });
+      this.http.get(this.ports.urls.getWeekInData, res => {
+        this.WeekInData = res.data.results;
+        this.drawLine();
+      });
+    },
+    getCurrentEnterNum(){
+       this.http.get(this.ports.urls.currentEnterNum, res => {
+       this.TodayDataArr = res.data.results.today;
+       this.YearDataArr = res.data.results.yesterday;
+       this.drwaEntranceNow();
+      });
+    },
+    getAllCurrentVisitorData:function(){
+      new Promise((resolve,reject)=>{
+        this.http.get(this.ports.urls.allCurrentVisitorData, res => {
+           resolve(res)
+        });
+      });
+    },
+    getAllTopInData:function(){
+        new Promise((resolve,reject)=>{
+          this.http.get(this.ports.urls.allTopInData, res => {
+           resolve(res)
+        });
+      });
+    },
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
       let todayServiceNum = this.$echarts.init(
@@ -124,22 +173,8 @@ export default {
           value: 80
         }
       ];
-      var xData = [],
-        yData = [];
-      var min = 50;
-      data.map(function(a, b) {
-        xData.push(a.name);
-        if (a.value === 0) {
-          yData.push(a.value + min);
-        } else {
-          yData.push(a.value);
-        }
-      });
-      for (let i=0;i<=12;i++)
-        {
-          this.dataBoxArr.push(5*i)
-        }
       this.drwaEntranceNow();
+      console.log(this.WeekInData)
       let entranceNowTotalOption = {
         grid: {
           left: "10%",
@@ -182,8 +217,6 @@ export default {
             axisTick: {
               show: false
             },
-            min: min,
-            max: 100,
             axisLine: {
               show: false
             },
@@ -194,8 +227,6 @@ export default {
           {
             type: "value",
             gridIndex: 0,
-            min: min,
-            max: 100,
             splitNumber: 12,
             splitLine: {
               show: false
@@ -236,8 +267,7 @@ export default {
                 ])
               }
             },
-            data: yData,
-            zlevel: 11
+            data: this.WeekInData,
           }
         ]
       };
@@ -392,6 +422,8 @@ export default {
           {
             name: "在馆人数",
             type: "pie",
+            legendHoverLink: false,
+            hoverAnimation:false,
             radius: ["50%", "60%"],
             center: ["20%", "50%"],
             startAngle: 225,
@@ -415,16 +447,17 @@ export default {
             },
             label: {
               normal: {
+                show:false,
                 position: "center"
               }
             },
             data: [
               {
                 value: 75,
-                name: "昨日服务人数",
+                name: "在馆人数",
                 label: {
                   normal: {
-                    formatter: "昨日",
+                    // formatter: "最高",
                     textStyle: {
                       color: "#55FFF",
                       fontSize: 24
@@ -437,7 +470,7 @@ export default {
                 name: "%",
                 label: {
                   normal: {
-                    formatter: "\n3534",
+                    formatter: this.allCurrentVisitorData,
                     textStyle: {
                       color: "#007ac6",
                       fontSize: 30
@@ -450,7 +483,7 @@ export default {
                 name: "%",
                 label: {
                   normal: {
-                    formatter: "服务人数",
+                    formatter: "在馆人数",
                     textStyle: {
                       color: "#55FFF",
                       fontSize: 24
@@ -461,8 +494,11 @@ export default {
             ]
           },
           {
-            name: "昨日服务人数",
+            name: "最高在馆人数",
             type: "pie",
+            legendHoverLink: false,
+            hoverAnimation:false,
+            animation:false,
             radius: ["50%", "60%"],
             center: ["70%", "50%"],
             startAngle: 225,
@@ -486,48 +522,22 @@ export default {
             },
             label: {
               normal: {
+                show:false,
                 position: "center"
               }
             },
             data: [
               {
                 value: 75,
-                name: "昨日服务人数",
-                label: {
-                  normal: {
-                    formatter: "昨日",
-                    textStyle: {
-                      color: "#55FFF",
-                      fontSize: 24
-                    }
-                  }
-                }
+                name: "在馆人数",
               },
               {
                 value: 25,
                 name: "%",
-                label: {
-                  normal: {
-                    formatter: "\n3534",
-                    textStyle: {
-                      color: "#007ac6",
-                      fontSize: 30
-                    }
-                  }
-                }
               },
               {
                 value: 0,
                 name: "%",
-                label: {
-                  normal: {
-                    formatter: "服务人数",
-                    textStyle: {
-                      color: "#55FFF",
-                      fontSize: 24
-                    }
-                  }
-                }
               }
             ]
           }
@@ -551,6 +561,12 @@ export default {
       });
     },
     drwaEntranceNow(){
+      console.log(this.dataBoxArr)
+      console.log("asdsadasd")
+      this.dataBoxArr.shift();
+      console.log(this.dataBoxArr)
+      this.dataBoxArr.push(this.getNowTime()*5);
+      console.log(this.dataBoxArr)
       let entranceNowNumChart = this.$echarts.init(
         document.getElementById("entrance-now-num")
       );
@@ -761,29 +777,17 @@ export default {
             ],
             series: [
               {
-                data: [
-                  156,
-                  235,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
-                ]
+                data: this.YearDataArr
               },
               {
-                data: this.YearDataArr
+                // data: this.TodayDataArr,
+                data: this.TodayDataArr.slice(0,this.getNowTime()+1)
               }
             ]
           }
         ]
       };
-      entranceNowNumChart.setOption(entranceNowNumOption);
+      entranceNowNumChart.setOption(entranceNowNumOption,true);
       window.addEventListener("resize", () => {
         entranceNowNumChart.resize();
       });
@@ -793,6 +797,13 @@ export default {
       for(let i = 0; i < 15;i++){
         this.YearDataArr.push(Math.floor(Math.random()*40)+200)
       }
+    },
+    //获取当前系统秒数
+    getNowTime(){
+      let myDate = new Date();
+      let nowSecond =  myDate.getSeconds();
+      let intSecond = parseInt(nowSecond/5);
+      return intSecond;
     }
   }
 };
@@ -823,6 +834,10 @@ export default {
 .entrance-wrapper .entrance-bottom {
   flex: 1;
 }
+#library-people{
+  height: 100%;
+  width: 100%;
+}
 .title-flag {
   position: relative;
   text-decoration: none;
@@ -852,7 +867,11 @@ export default {
 .title-flag.right:after {
   transform-origin: bottom right;
 }
+.wrapper-col {
+  position: relative;
+}
 .entrance-bottom .wrapper-col {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -872,6 +891,41 @@ export default {
 }
 .entrance-bottom {
   margin-top: 30px;
+}
+.entrance-top--title {
+  position: absolute;
+  right: 26%;
+  top: 35%;
+  color: #55ffff;
+  font-size: 24px;
+}
+.entrance-top--num {
+  position: absolute;
+  right: 22%;
+  top: 47%;
+  color: #55ffff;
+  font-size: 24px;
+}
+.entrance-top--people {
+  position: absolute;
+  color: #fff;
+  font-size: 24px;
+  bottom: 15%;
+  right: 23%;
+}
+.entrance-num--now {
+  position: absolute;
+  left: 12%;
+  top: 42%;
+  color: #55ffff;
+  font-size: 24px;
+}
+.entrance-people--now {
+  position: absolute;
+  color: #fff;
+  font-size: 24px;
+  bottom: 15%;
+  left: 16%;
 }
 </style>
 

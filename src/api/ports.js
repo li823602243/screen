@@ -1,12 +1,17 @@
 export default {
     urls: {
-        HomePageData: '/getHomePageData', // 大屏首界面数据获取
-        ActivityPageData: '/getActivityAreaCatStaData', // 获取活动发布相关统计数据
-        ServicePageData: '/getActivityServiceStaData', // 获取活动参与人次数据
-        VenuePageData: '/getVenueBookingStaData', // 活动室预约数据接口
-        LivePageData: '/getLiveStaData', // 获取直播频道数据
-        ResourcePageData: '/getVideoResourceStaData', // 获取点播资源数据
-        userPageData: '/getUserStaData', // 获取用户相关数据
+        HomePageData: '/Api/Statistic/getHomePageData', // 大屏首界面数据获取
+        ActivityPageData: '/Api/Statistic/getActivityAreaCatStaData', // 获取活动发布相关统计数据
+        ServicePageData: '/Api/Statistic/getActivityServiceStaData', // 获取活动参与人次数据
+        VenuePageData: '/Api/Statistic/getVenueBookingStaData', // 活动室预约数据接口
+        LivePageData: '/Api/Statistic/getLiveStaData', // 获取直播频道数据
+        ResourcePageData: '/Api/Statistic/getVideoResourceStaData', // 获取点播资源数据
+        userPageData: '/Api/Statistic/getUserStaData', // 获取用户相关数据
+
+        allCurrentVisitorData: '?s=Home/VisitorStat/all_current_visitor_data', // 今天总在馆人数
+        allTopInData: '?s=Home/VisitorStat/all_top_in_data', // 所有机构今天总在馆人数
+        getWeekInData: '?s=Home/VisitorStat/get_week_in_data', // 所有机构一周入馆人数
+        currentEnterNum: '?s=Home/VisitorStat/current_enter_num', // 当前一分钟入馆人数
     }
 }
 
