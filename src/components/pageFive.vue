@@ -2,8 +2,17 @@
   <div class="wrapper entrance-wrapper">
     <el-row class="entrance-people">
       <div class="flag"><span class="flag-content">入馆服务人数</span></div>
-      <el-col :span="8" class="wrapper-col" id="today-service--num">1</el-col>
-      <el-col :span="8" class="wrapper-col" id="aggregate-people">3</el-col>
+      <el-col :span="8" class="wrapper-col" >
+         <div class="today-service--contnet"><span>今日</span><span>服务人数</span></div>
+         <div class="today-service--num">{{enterNum}}人</div>
+         <div class="yester-service--contnet"><span>昨日</span><span>服务人数</span></div>
+         <div class="yester-service--num">{{allYesterDay}}人</div>
+        <div id="today-service--num"></div>
+      </el-col>
+      <el-col :span="8" class="wrapper-col" >
+        <div class="aggregate-people--num">累计服务人数</div>
+        <div id="aggregate-people"></div>
+        </el-col>
       <el-col :span="8" class="wrapper-col">
         <span class="entrance-num--now">在馆人数</span>
         <span class="entrance-people--now">{{allCurrentVisitorData}}人</span>
@@ -32,18 +41,24 @@ export default {
   name: "hello",
   data() {
     return {
-      dataBoxArr:[0,5,10,15,20,25,30,35,40,45,50,55],
+      dataBoxArr:[],
       TodayDataArr:[],
       YearDataArr:[],
       allCurrentVisitorData:'',
       allTopInData:'',
       WeekInData:'',
+      allYesterDay:'',
+      enterNum:"",
       msg: "Welcome to Your Vue.js App"
     };
   },
   mounted() {
     let that = this;
     this.pageFiveData();
+    this.getCurrentEnterNum(); 
+    const pageFivePre = setInterval(() =>{
+      this.drawLine()                   
+    }, this.$store.state.intervalTime); 
     const pageFive = setInterval(() =>{
       this.getCurrentEnterNum()                   
     }, 5000); 
@@ -56,41 +71,47 @@ export default {
   methods: {
     pageFiveData(){
       this.http.get(this.ports.urls.allCurrentVisitorData, res => {
+        console.log(res)
         this.allCurrentVisitorData = res.data.results.in_num;
+        this.enterNum = res.data.results.enter_num;
       });
       this.http.get(this.ports.urls.allTopInData, res => {
         this.allTopInData = res.data.results.num;
       });
       this.http.get(this.ports.urls.currentEnterNum, res => {
-       console.log(res)
        this.TodayDataArr = res.data.results.today;
        this.YearDataArr = res.data.results.yesterday;
         // this.drawLine();
       });
       this.http.get(this.ports.urls.getWeekInData, res => {
         this.WeekInData = res.data.results;
+      });
+
+      this.http.get(this.ports.urls.allYesterDay, res => {
+         this.allYesterDay = res.data.results;
+      });
+
+      this.http.get(this.ports.urls.allTotalEnterNum, res => {
+        console.log(res)
+        this.allTotalEnterNum = res.data.results;
         this.drawLine();
       });
     },
     getCurrentEnterNum(){
+       let myDate = new Date();
+       let nowTime = myDate.getMinutes();
        this.http.get(this.ports.urls.currentEnterNum, res => {
-       this.TodayDataArr = res.data.results.today;
-       this.YearDataArr = res.data.results.yesterday;
+       if(nowTime != this.$store.state.nowTimeTips){
+        this.$store.state.nowTimeTips = myDate.getMinutes();// 最新数据
+        this.$store.state.TodayDataArrPre = this.TodayDataArr;// 最新数据
+        this.$store.state.YearDataArrPre = this.YearDataArr;// 最新数据
+       }else{
+        this.TodayDataArr = res.data.results.today;//
+        this.YearDataArr = res.data.results.yesterday;
+       }
+       //console.log(this.YearDataArr)
+       //console.log(this.$store.state.YearDataArrPre)
        this.drwaEntranceNow();
-      });
-    },
-    getAllCurrentVisitorData:function(){
-      new Promise((resolve,reject)=>{
-        this.http.get(this.ports.urls.allCurrentVisitorData, res => {
-           resolve(res)
-        });
-      });
-    },
-    getAllTopInData:function(){
-        new Promise((resolve,reject)=>{
-          this.http.get(this.ports.urls.allTopInData, res => {
-           resolve(res)
-        });
       });
     },
     drawLine() {
@@ -108,15 +129,18 @@ export default {
         document.getElementById("entrance-now-total")
       );
       let aggregateOption = {
+        name:'dasda',
+        title:{
+          show:true,
+          offsetCenter:['-50%' , '-50%'],
+          color:'#fff'
+        },
         series: [
           {
             name: "业务指标",
             type: "gauge",
-            detail: {
-              formatter: "{value}%"
-            },
             min: 0,
-            max: 40,
+            max: 200000,
             splitNumber: 5,
             pointer: {
               length: "60%",
@@ -131,50 +155,22 @@ export default {
               }
             },
             detail: {
+              formatter: "{value}人",
               color: "#fff",
-              offsetCenter: [0, "100%"]
+              offsetCenter: [0, "100%"],
+              rich:{
+                color:'#fff'
+              }
             },
             data: [
               {
-                value: 10,
-                name: "累计服务人数"
+                value: this.allTotalEnterNum,
+                // name: "累计服务人数"
               }
             ]
           }
         ]
       };
-      var data = [
-        {
-          name: "一月",
-          value: 80
-        },
-        {
-          name: "二月",
-          value: 87.8
-        },
-        {
-          name: "三月",
-          value: 71
-        },
-        {
-          name: "四月",
-          value: 80
-        },
-        {
-          name: "五月",
-          value: 66
-        },
-        {
-          name: "六月",
-          value: 80
-        },
-        {
-          name: "七月",
-          value: 80
-        }
-      ];
-      this.drwaEntranceNow();
-      console.log(this.WeekInData)
       let entranceNowTotalOption = {
         grid: {
           left: "10%",
@@ -299,6 +295,7 @@ export default {
             },
             label: {
               normal: {
+                show:false,
                 position: "center"
               }
             },
@@ -370,6 +367,7 @@ export default {
             },
             label: {
               normal: {
+                show:false,
                 position: "center"
               }
             },
@@ -561,12 +559,8 @@ export default {
       });
     },
     drwaEntranceNow(){
-      console.log(this.dataBoxArr)
-      console.log("asdsadasd")
       this.dataBoxArr.shift();
-      console.log(this.dataBoxArr)
-      this.dataBoxArr.push(this.getNowTime()*5);
-      console.log(this.dataBoxArr)
+      this.dataBoxArr.push(this.getNowMin()+':'+this.getNowTime()*5);
       let entranceNowNumChart = this.$echarts.init(
         document.getElementById("entrance-now-num")
       );
@@ -589,7 +583,7 @@ export default {
               color: "#fff",
               fontStyle: "normal",
               fontFamily: "微软雅黑",
-              fontSize: 12
+              fontSize: 14
             }
           },
           grid: {
@@ -608,11 +602,11 @@ export default {
             itemHeight: 14,
             data: [
               {
-                name: "2017-08-05 至 2017-08-05",
+                name: this.getPreData(),
                 icon: "rect"
               },
               {
-                name: "2017-08-06 至 2017-08-06",
+                name: this.getNowDate(),
                 icon: "rect"
               }
             ],
@@ -620,7 +614,7 @@ export default {
               color: "#a8aab0",
               fontStyle: "normal",
               fontFamily: "微软雅黑",
-              fontSize: 12
+              fontSize: 14
             }
           },
           xAxis: [
@@ -636,7 +630,7 @@ export default {
                   color: "#078ceb",
                   fontStyle: "normal",
                   fontFamily: "微软雅黑",
-                  fontSize: 12
+                  fontSize: 16
                 }
               },
               splitLine: {
@@ -666,7 +660,7 @@ export default {
                   color: "#333",
                   fontStyle: "normal",
                   fontFamily: "微软雅黑",
-                  fontSize: 12
+                  fontSize: 16
                 }
               },
               axisLine: {
@@ -687,7 +681,7 @@ export default {
           ],
           series: [
             {
-              name: "2017-08-05 至 2017-08-05",
+              name: this.getPreData(),
               type: "line",
               symbol: "circle",
               symbolSize: 6, //空心标记的大小
@@ -702,7 +696,7 @@ export default {
                     color: "#018ada",
                     fontStyle: "normal",
                     fontFamily: "微软雅黑",
-                    fontSize: 12
+                    fontSize: 14
                   }
                 }
               },
@@ -724,7 +718,7 @@ export default {
               }
             },
             {
-              name: "2017-08-06 至 2017-08-06",
+              name: this.getNowDate(),
               type: "line",
               symbol: "circle",
               symbolSize: 6, //空心标记的大小
@@ -739,7 +733,7 @@ export default {
                     color: "#f6a436",
                     fontStyle: "normal",
                     fontFamily: "微软雅黑",
-                    fontSize: 12
+                    fontSize: 14
                   }
                 }
               },
@@ -772,16 +766,27 @@ export default {
           {
             xAxis: [
               {
-                data: this.dataBoxArr
+               data: (function () {
+                // 加载10项时间数据，每项相隔20秒
+                var now = new Date();
+                var res = [];
+                var len = 12;
+                while (len--) {
+                  // 格式化时间
+                  res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''));
+                  now = new Date(now - 5000);
+                }
+                return res;
+              })()
               }
             ],
             series: [
               {
-                data: this.YearDataArr
+                data: this.getYearData()
               },
               {
                 // data: this.TodayDataArr,
-                data: this.TodayDataArr.slice(0,this.getNowTime()+1)
+                data: this.getDayData()
               }
             ]
           }
@@ -792,18 +797,64 @@ export default {
         entranceNowNumChart.resize();
       });
     },
-    yearDataArr(){
-      this.YearDataArr=[];
-      for(let i = 0; i < 15;i++){
-        this.YearDataArr.push(Math.floor(Math.random()*40)+200)
-      }
-    },
     //获取当前系统秒数
     getNowTime(){
       let myDate = new Date();
       let nowSecond =  myDate.getSeconds();
       let intSecond = parseInt(nowSecond/5);
       return intSecond;
+    },
+    //获取当前系统秒数
+    getNowMin(){
+      let myDate = new Date();
+      let hour =  myDate.getHours();
+      let min =  myDate.getMinutes();
+      return hour +':'+ min;
+    },
+    //操作昨日时间
+    getYearData(){
+      let num = this.getNowTime();
+      let nomalNewData = this.$store.state.YearDataArrPre;
+      let newYearData =  nomalNewData.slice(num,12);
+      let newYearDataArr =  this.YearDataArr.slice(0,num);
+      return  newYearData.concat(newYearDataArr)
+    },//操作昨日时间
+    getDayData(){
+      let num = this.getNowTime();
+      let nomalNewTodayData = this.$store.state.TodayDataArrPre;
+      let newTodayData =  nomalNewTodayData.slice(num,12);
+      let newTodayDataArr =  this.TodayDataArr.slice(0,num);
+      return  newTodayData.concat(newTodayDataArr)
+    },
+    getNowDate(){
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    },
+    getPreData(){
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate()-1;
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
     }
   }
 };
@@ -830,6 +881,8 @@ export default {
 .entrance-wrapper {
   display: flex;
   flex-direction: column;
+  margin-top: 40px;
+  padding-bottom: 60px;
 }
 .entrance-wrapper .entrance-bottom {
   flex: 1;
@@ -847,6 +900,10 @@ export default {
   padding: 0 30px;
   font-size: 25px;
   color: #55fffc;
+}
+#today-service--num {
+  height: 100%;
+  width: 100%;
 }
 .title-flag:after {
   content: "";
@@ -926,6 +983,56 @@ export default {
   font-size: 24px;
   bottom: 15%;
   left: 16%;
+}
+.today-service--contnet {
+  position: absolute;
+  top: 35%;
+  left: 22%;
+  color: #55ffff;
+  font-size: 24px;
+}
+.today-service--contnet span {
+  display: block;
+  margin: 10px auto;
+}
+.yester-service--contnet span {
+  display: block;
+  margin: 10px auto;
+}
+.yester-service--contnet {
+  position: absolute;
+  top: 35%;
+  right: 12%;
+  color: #55ffff;
+  font-size: 24px;
+}
+.yester-service--num {
+  position: absolute;
+  color: #fff;
+  font-size: 24px;
+  bottom: 15%;
+  left: 22%;
+}
+.today-service--num {
+  position: absolute;
+  color: #fff;
+  font-size: 24px;
+  bottom: 15%;
+  right: 13%;
+}
+#aggregate-people {
+  height: 100%;
+  width: 100%;
+}
+.aggregate-people--num {
+  position: absolute;
+  color: #55FFFF;
+  font-size: 20px;
+  top:35%;
+  left:50%;
+  -webkit-transform: translate(-50%,-50%);
+  -moz-transform: translate(-50%,-50%);
+  transform:translate(-50%,-50%);
 }
 </style>
 

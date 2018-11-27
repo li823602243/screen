@@ -106,7 +106,7 @@ export default {
   methods: {
     getVenuePageData() {
       this.http.get(this.ports.urls.VenuePageData, res => {
-        console.log("第四页调用");
+        //console.log("第四页调用");
         this.venue_booking_date_num = res.data.results.venue_booking_date_num;
         this.city_agency_room_num = res.data.results.city_agency_room_num;
         this.venue_cat_booking_num = res.data.results.venue_cat_booking_num;

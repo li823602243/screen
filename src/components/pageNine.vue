@@ -34,7 +34,7 @@
   methods: {
         getVenuePageData() {
         this.http.get(this.ports.urls.userPageData, res => {
-            console.log("第九页调用");
+            //console.log("第九页调用");
             this.userData = res.data.results;
             this.drawLine();
         });

@@ -9,7 +9,8 @@ const store = new Vuex.Store({
     pageNum: 0,
     autoplay:false,
     interval:5000,
-    intervalTime:20000
+    intervalTime:20000,
+    YearDataArrPre:[]
   },
   mutations: {
     modifyMsg(state, Obj) {

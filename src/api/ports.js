@@ -12,6 +12,8 @@ export default {
         allTopInData: '?s=Home/VisitorStat/all_top_in_data', // 所有机构今天总在馆人数
         getWeekInData: '?s=Home/VisitorStat/get_week_in_data', // 所有机构一周入馆人数
         currentEnterNum: '?s=Home/VisitorStat/current_enter_num', // 当前一分钟入馆人数
+        allYesterDay: '?s=Home/VisitorStat/get_all_yesterday_enter_num', // 昨日在馆人数
+        allTotalEnterNum: '?s=Home/VisitorStat/get_total_enter_num', // 当前一分钟入馆人数
     }
 }
 

@@ -1,7 +1,7 @@
 <template>
   <!-- <div id="myChart" :style="{width: '300px', height: '300px'}"></div> -->
   <div class="wrapper">
-    <el-row type="flex"  justify="space-between">
+    <el-row type="flex"  justify="space-between" class="page-two">
       <el-col :span="11">
         <div class="pannel left">
           <div class="pannel-title left">各地市活动发布数量统计</div>
@@ -25,7 +25,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-row class='interval' type="flex"  justify="space-between">
+    <el-row class='interval page-two' type="flex"  justify="space-between">
       <el-col :span="11">
         <div class="pannel left">
           <div class="pannel-title left">活动类别统计</div>
@@ -54,8 +54,8 @@
   padding: 0 60px 40px 60px;
   box-sizing: border-box;
 }
-.el-col-11 {
-  width: 48.5%;
+.page-two > .el-col-11 {
+  width: 48.5%!important;
 }
 .interval {
   margin-top: 30px;
@@ -272,7 +272,7 @@ export default {
   methods: {
     getActivityPageData() {
       this.http.get(this.ports.urls.ActivityPageData,res => {
-          console.log("第二页调用");
+          //console.log("第二页调用");
           this.act_area_num_lists = res.data.results.act_area_num_lists;
           this.act_cat_num_lists = res.data.results.act_cat_num_lists;
           this.act_status_data = res.data.results.act_status_data;

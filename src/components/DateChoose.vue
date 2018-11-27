@@ -16,7 +16,6 @@ export default {
   },
   methods:{
     chooseDate: function (value) {
-      console.log(value)
      this.shows=value
     }
   }

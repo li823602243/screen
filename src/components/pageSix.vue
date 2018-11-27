@@ -105,7 +105,7 @@
     methods: {
       getVenuePageData() {
       this.http.get(this.ports.urls.LivePageData, res => {
-          console.log("第六页调用");
+         // console.log("第六页调用");
           this.live_play_times = res.data.results.live_play_times;
           this.live_play_year_trend = res.data.results.live_play_year_trend;
           this.live_channel_num = res.data.results.live_channel_num;

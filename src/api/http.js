@@ -73,7 +73,7 @@ export default {
                 if (exception) {
                     exception(error)
                 } else {
-                    console.log(error)
+                    //console.log(error)
                 }
             }
         )
@@ -94,16 +94,16 @@ export default {
             }
         }).then(
             (result) => {
-                console.log("接口调取成功")
+                //console.log("接口调取成功")
                 response(handleResults(result))
             }
         ).catch(
             (error) => {
-                console.log("接口调取失败")
+                //console.log("接口调取失败")
                 if (exception) {
                     exception(error)
                 } else {
-                    console.log(error)
+                    //console.log(error)
                 }
             }
         )

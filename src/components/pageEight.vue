@@ -74,7 +74,7 @@ export default {
   methods: {
     getVenuePageData() {
       this.http.get(this.ports.urls.userPageData, res => {
-         console.log("第八页调用");
+         //console.log("第八页调用");
         this.userData = res.data.results;
         this.drawLine();
       });
@@ -259,7 +259,8 @@ export default {
         }
         userMapData.push(obj)
       }
-      this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
+      this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
+      // this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
         this.$echarts.registerMap("江苏", response.data);
         var myChart = this.$echarts.extendsMap("chart-panel", {
           bgColor: "#0f6ab8", // 画布背景色

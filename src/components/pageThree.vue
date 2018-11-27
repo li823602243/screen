@@ -149,7 +149,7 @@ export default {
     },
     getServicePageData() {
       this.http.get(this.ports.urls.ServicePageData, res => {
-        console.log("第三页调用")
+        //("第三页调用")
         this.act_cat_join_num_lists = res.data.results.act_cat_join_num_lists;
         this.act_register_date_num = res.data.results.act_register_date_num;
         this.act_sign_date_num = res.data.results.act_sign_date_num;

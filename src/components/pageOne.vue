@@ -118,7 +118,7 @@ export default {
   methods: {
     getHomePageData() {
       this.http.get(this.ports.urls.HomePageData,res => {
-          console.log("第一页调用");
+          //console.log("第一页调用");
           this.HomePageData = res.data.results;
       })
     }
