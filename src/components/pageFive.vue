@@ -4,9 +4,9 @@
       <div class="flag"><span class="flag-content">入馆服务人数</span></div>
       <el-col :span="8" class="wrapper-col" >
          <div class="today-service--contnet"><span>今日</span><span>服务人数</span></div>
-         <div class="today-service--num">{{enterNum}}人</div>
+         <div class="today-service--num">{{utils.numFormat(enterNum)}}人</div>
          <div class="yester-service--contnet"><span>昨日</span><span>服务人数</span></div>
-         <div class="yester-service--num">{{allYesterDay}}人</div>
+         <div class="yester-service--num">{{utils.numFormat(allYesterDay)}}人</div>
         <div id="today-service--num"></div>
       </el-col>
       <el-col :span="8" class="wrapper-col" >
@@ -15,10 +15,10 @@
         </el-col>
       <el-col :span="8" class="wrapper-col">
         <span class="entrance-num--now">在馆人数</span>
-        <span class="entrance-people--now">{{allCurrentVisitorData}}人</span>
+        <span class="entrance-people--now">{{utils.numFormat(allCurrentVisitorData)}}人</span>
         <span class="entrance-top--title">最高</span>
         <span class="entrance-top--num">在馆人数</span>
-        <span class="entrance-top--people">{{allTopInData}}人</span>
+        <span class="entrance-top--people">{{utils.numFormat(allTopInData)}}人</span>
         <div id="library-people">
         </div>
         </el-col>
@@ -49,6 +49,7 @@ export default {
       WeekInData:'',
       allYesterDay:'',
       enterNum:"",
+      pageFive:'',
       msg: "Welcome to Your Vue.js App"
     };
   },
@@ -57,16 +58,26 @@ export default {
     this.pageFiveData();
     this.getCurrentEnterNum(); 
     const pageFivePre = setInterval(() =>{
-      this.drawLine()                   
-    }, this.$store.state.intervalTime); 
-    const pageFive = setInterval(() =>{
-      this.getCurrentEnterNum()                   
-    }, 5000); 
+      this.pageFiveData();
+      this.drawLine();                   
+    }, this.$store.state.intervalTime);
   },
   computed: {
-    author() {
-      return this.$store.state.author;
+    pageNum() {
+      return this.$store.state.pageNum;
     }
+  },
+ watch:{
+      pageNum(){
+        console.log(this.$store.state.pageNum);
+        if(this.$store.state.pageNum===4){
+           this.pageFive = setInterval(() =>{
+             this.getCurrentEnterNum()                   
+          }, 5000); 
+        }else{
+          window.clearInterval(this.pageFive);
+        }
+       }
   },
   methods: {
     pageFiveData(){
@@ -1011,14 +1022,15 @@ export default {
   color: #fff;
   font-size: 24px;
   bottom: 15%;
-  left: 22%;
+  right: 13%;
+ 
 }
 .today-service--num {
   position: absolute;
   color: #fff;
   font-size: 24px;
   bottom: 15%;
-  right: 13%;
+   left: 22%;
 }
 #aggregate-people {
   height: 100%;

@@ -7,10 +7,10 @@
             <div class="aside-title">场馆预约数量统计</div>
             <div class="order-num" id="order-total">
               <el-row :gutter="20">
-                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.today_num}}</span><div class="order-day" id="order-day"></div></el-col>
-                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.week_num}}</span><div class="order-day" id="order-week"></div></el-col>
-                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.month_num}}</span><div class="order-day" id="order-month"></div> </el-col>
-                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.all_num}}</span><div class="order-day" id="order-all"></div></el-col>
+                 <el-col :span="6"><span class="show-order-num">{{utils.numFormat(venue_booking_date_num.today_num)}}</span><div class="order-day" id="order-day"></div></el-col>
+                 <el-col :span="6"><span class="show-order-num">{{utils.numFormat(venue_booking_date_num.week_num)}}</span><div class="order-day" id="order-week"></div></el-col>
+                 <el-col :span="6"><span class="show-order-num">{{utils.numFormat(venue_booking_date_num.month_num)}}</span><div class="order-day" id="order-month"></div> </el-col>
+                 <el-col :span="6"><span class="show-order-num">{{utils.numFormat(venue_booking_date_num.all_num)}}</span><div class="order-day" id="order-all"></div></el-col>
               </el-row>
             </div>
           </el-col>
@@ -22,7 +22,7 @@
                 <el-col :span="12" class="order-type--right">
                   <el-row class="right" v-for="(item,index)  in venue_cat_booking_num" :key="index" v-if='index<=4'>
                     <el-col :span="8">{{item.filter_name}}</el-col>
-                    <el-col :span="8">{{item.amount}}</el-col>
+                    <el-col :span="8">{{utils.numFormat(item.amount)}}</el-col>
                     <el-col :span="8">
                       <div class="order-type--icon order-type--first" v-if='index==0'>
                         <span v-if="index >2">{{index+1}}</span>

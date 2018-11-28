@@ -57,6 +57,7 @@ export default {
   },
   methods:{
    changePage:function(e){
+    console.log(e)
     this.$store.state.pageNum = e;
    }
   }

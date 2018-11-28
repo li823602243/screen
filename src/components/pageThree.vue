@@ -15,7 +15,7 @@
             </el-row>
               <el-row :gutter="24" class="aside-list--th" v-for="(item,index) in act_cat_join_num_lists" :key="item.filter_id">
                 <el-col :span="8" class="aside-list--td" :class="{'type': index == 0,'type1': index == 1,'type2': index == 2,'type3': index == 3,'type4': index == 4,'type5': index == 5}">{{item.filter_name}}</el-col>
-                <el-col :span="8" class="aside-list--td">{{item.amount}}</el-col>
+                <el-col :span="8" class="aside-list--td">{{utils.numFormat(item.amount)}}</el-col>
                 <el-col :span="8" class="aside-list--td">{{item.percent.toFixed(2)}}%</el-col>
               </el-row>
           </div>

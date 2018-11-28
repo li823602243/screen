@@ -597,9 +597,23 @@ export default {
             show: false
           }
         },
-        yAxis: {
-          show: false
-        },
+        yAxis:  {
+            show: true,
+            splitLine: {
+              show: false,
+            },
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            },
+            axisLabel: {
+              show: true,
+              color: "#fff",
+              fontSize:18
+            }
+          },
         series: [
           {
             name: "数量",
@@ -670,9 +684,23 @@ export default {
             show: false
           }
         },
-        yAxis: {
-          show: false
-        },
+        yAxis:  {
+            show: true,
+            splitLine: {
+              show: false,
+            },
+            axisTick: {
+              show: false
+            },
+            axisLine: {
+              show: false
+            },
+            axisLabel: {
+              show: true,
+              color: "#fff",
+              fontSize:18
+            }
+          },
         series: [
           {
             name: "数量",

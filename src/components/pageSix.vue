@@ -13,17 +13,17 @@
           </el-row>
           <el-row :gutter="20" class="live-num--row">
             <el-col :span="4" class="live-row--th">场次</el-col>
-            <el-col :span="5" class="live-row--td">{{live_channel_num.today_num}}</el-col>
-            <el-col :span="5" class="live-row--td">{{live_channel_num.week_num}}</el-col>
-            <el-col :span="5" class="live-row--td">{{live_channel_num.month_num}}</el-col>
-            <el-col :span="5" class="live-row--td">{{live_channel_num.all_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_channel_num.today_num)}}</el-col>
+            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_channel_num.week_num)}}</el-col>
+            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_channel_num.month_num)}}</el-col>
+            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_channel_num.all_num)}}</el-col>
           </el-row>
           <el-row :gutter="20" class="live-num--row">
             <el-col :span="4" class="live-row--th">观看人数</el-col>
-            <el-col :span="5" class="live-row--td">{{live_play_times.today_num}}</el-col>
-            <el-col :span="5" class="live-row--td">{{live_play_times.week_num}}</el-col>
-            <el-col :span="5" class="live-row--td">{{live_play_times.month_num}}</el-col>
-            <el-col :span="5" class="live-row--td">{{live_play_times.all_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_play_times.today_num)}}</el-col>
+            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_play_times.week_num)}}</el-col>
+            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_play_times.month_num)}}</el-col>
+            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_play_times.all_num)}}</el-col>
           </el-row>
         </div>
       </el-col>
@@ -46,7 +46,7 @@
   
         <el-col :span="12" >
           <div class="live-panel" v-for="(item,index) in live_channel_play_rank" :key="index" v-if="index<=2">
-            <div class="live-pannel--title">直播播放次数{{item.amount}}次</div>
+            <div class="live-pannel--title">直播播放次数{{utils.numFormat(item.amount)}}次</div>
             <div class="live-pannel-content">
               <span class="live-pannel--icon" :class="{'live-pannel-first':index==0,'live-pannel-second':index==1,'live-pannel-three':index==2}"></span>
               {{item.filter_name}}
@@ -57,7 +57,7 @@
         <el-col :span="12" class="live-aside">
           <el-row class="live-aside--row" v-for="(item,index) in live_channel_play_rank" :key="index" v-if="index >2">
               <el-col :span="16" class="live-aside--infos"> {{item.filter_name}}</el-col>
-              <el-col :span="6" class="live-aside--num">{{item.amount}}</el-col>
+              <el-col :span="6" class="live-aside--num">{{utils.numFormat(item.amount)}}</el-col>
               <el-col :span="2" class="live-aside--namal">{{index+1}}</el-col>
           </el-row>
         </el-col>

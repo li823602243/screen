@@ -27,7 +27,7 @@
         </el-row>
         <el-row class="resource-left--body" v-for="(item,index) in resource_cat_play_rank" :key="index">
           <el-col :span="8">{{item.filter_name}}</el-col>
-          <el-col :span="8"> {{item.amount}}</el-col>
+          <el-col :span="8"> {{utils.numFormat(item.amount)}}</el-col>
           <el-col :span="8" >
             <div class="resource-left--ranking resource-left--first" v-if="index==0"></div>
             <div class="resource-left--ranking resource-left--second" v-else-if="index==1"></div>
@@ -47,15 +47,15 @@
       <span class="bouble6"></span>
       <div class="resource-num">
         <span class="resource-title">资源数量</span>
-        <span class="num">{{resource_total}}</span>
+        <span class="num">{{utils.numFormat(resource_total)}}</span>
       </div>
       <div class="resource-play">
         <span class="resource-title">播放总数</span>
-        <span class="num">{{resource_play_total}} </span>
+        <span class="num">{{utils.numFormat(resource_play_total)}} </span>
       </div>
       <div class="resource-rong">
         <span class="resource-title"> 资源容量</span>
-        <span class="num">{{resource_size_total}}</span>
+        <span class="num">{{utils.numFormat(resource_size_total)}}</span>
       </div>
     </div>
     <div class="resource-right">
@@ -74,7 +74,7 @@
               <span class="p-header--name"   v-else-if="index==3">第四名</span>
               <span class="p-header--name"   v-else>第五名</span>
             </div>
-            <span class="p-header--play">播放{{item.amount}}次</span>
+            <span class="p-header--play">播放{{utils.numFormat(item.amount)}}次</span>
           </div>
           <div class="r-pannel--content">{{item.filter_name}}</div>
         </div>

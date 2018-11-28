@@ -7,9 +7,9 @@ const store = new Vuex.Store({
   // 定义状态
   state: {
     pageNum: 0,
-    autoplay:false,
-    interval:5000,
-    intervalTime:20000,
+    autoplay:true,
+    interval:15000,//了轮播时间间隔
+    intervalTime:600000,//接口刷新时间
     YearDataArrPre:[]
   },
   mutations: {

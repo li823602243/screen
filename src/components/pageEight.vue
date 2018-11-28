@@ -7,8 +7,8 @@
         <div class="map-tab--content">
           <div class="map-icon map-icon--wechat"></div>
           <div class="map-tab-infos">
-           <span class="map-num">{{userData.weixin_user_num}}</span>
-           <span class="map-title">昨日新增: {{userData.weixin_user_day_num}}</span>
+           <span class="map-num">{{utils.numFormat(userData.weixin_user_num)}}</span>
+           <span class="map-title">昨日新增: {{utils.numFormat(userData.weixin_user_day_num)}}</span>
           </div>
         </div>
       </div>
@@ -17,8 +17,8 @@
         <div class="map-tab--content">
           <div class="map-icon map-icon--sign"></div>
           <div class="map-tab-infos">
-           <span class="map-num">{{userData.register_user_num}}</span>
-           <span class="map-title">昨日新增: {{userData.register_user_day_num}}</span>
+           <span class="map-num">{{utils.numFormat(userData.register_user_num)}}</span>
+           <span class="map-title">昨日新增: {{utils.numFormat(userData.register_user_day_num)}}</span>
           </div>
         </div>
       </div>
@@ -30,8 +30,8 @@
         <div class="map-tab--content">
           <div class="map-icon map-icon--people"></div>
           <div class="map-tab-infos">
-           <span class="map-num">{{userData.site_visit_num}}</span>
-           <span class="map-title">昨日新增: {{userData.site_visit_day_num}}</span>
+           <span class="map-num">{{utils.numFormat(userData.site_visit_num)}}</span>
+           <span class="map-title">昨日新增: {{utils.numFormat(userData.site_visit_day_num)}}</span>
           </div>
         </div>
       </div>
@@ -40,8 +40,8 @@
         <div class="map-tab--content">
           <div class="map-icon map-icon--name"></div>
           <div class="map-tab-infos">
-           <span class="map-num">{{userData.verified_user_num}}</span>
-           <span class="map-title">昨日新增: {{userData.verified_user_day_num}}</span>
+           <span class="map-num">{{utils.numFormat(userData.verified_user_num)}}</span>
+           <span class="map-title">昨日新增: {{utils.numFormat(userData.verified_user_day_num)}}</span>
           </div>
         </div>
       </div>
@@ -104,9 +104,9 @@ export default {
         };
         //设置颜色
         var levelColorMap = {
-          "1": "rgba(241, 109, 115, .8)",
-          "2": "rgba(255, 235, 59, .7)",
-          "3": "rgba(147, 235, 248, 1)"
+          "1": "#F62157",
+          "2": "#05C3F9",
+          "3": "#ffb762"
         };
         var handleEvents = {
           /**
@@ -192,24 +192,13 @@ export default {
           },
           series: [
             {
-              type: "effectScatter",
+              // type: "effectScatter",
+              type: 'scatter',
               coordinateSystem: "geo",
-              symbolOffset:[0, '-200%'],
+              symbolOffset:[0, '-130%'],
               // symbol: 'diamond',
               showEffectOn: "render",
-              symbolSize: function (val) {
-                if(val[2] <= 1000){
-                  return 8;
-                } else if (1000 < val[2] && val[2] <=　2000){
-                  return 10;
-                } else if (2000 < val[2] && val[2] <=　5000){
-                  return 12;
-                } else if (5000 < val[2] && val[2] <=　10000){
-                  return 14;
-                }else{
-                  return 16;
-                }
-              },
+              symbolSize: 8,
               rippleEffect: {
                 period: 8,
                 scale: 4,
@@ -217,11 +206,7 @@ export default {
               },
               hoverAnimation: true,
               label:{                      //图形上的文本标签，可用于说明图形的一些数据信息，比如值，名称等，
-                  show:true,
-                  formatter: '{@[2]}',
-                  position:'top',
-                  distance:15,
-                  fontSize:24
+                  show:false,
               },
               itemStyle: {
                 normal: {
@@ -233,7 +218,44 @@ export default {
                 }
               },
               data: handleEvents.initSeriesData(opt.data)
-            }
+            },
+            {
+            name: '点',
+            type: 'scatter',
+            coordinateSystem: 'geo',
+            symbolOffset:[0, "-15px"],
+            symbol: 'pin',
+            symbolSize: function (val) {
+                if(val[2] <= 100){
+                 return 40;
+                }else if(100 < val[2] && val[2] <=　1000){
+                  return 60;
+                } else if (1000 < val[2] && val[2] <=　2000){
+                  return 60;
+                } else if (2000 < val[2] && val[2] <=　5000){
+                  return 80;
+                } else if (5000 < val[2] && val[2] <=　10000){
+                  return 100;
+                }else{
+                  return 120;
+                }
+              },
+            label:{                      //图形上的文本标签，可用于说明图形的一些数据信息，比如值，名称等，
+              show:true,
+              formatter: '{@[2]}',
+              color:'#fff',
+              fontSize:16
+            },
+            itemStyle: {
+              normal: {
+                 color: function(params) {
+                    return levelColorMap[params.value[3]];
+                  },
+              }
+            },
+            zlevel: 6,
+            data: handleEvents.initSeriesData(opt.data)
+          }
           ]
         };
 
@@ -259,8 +281,8 @@ export default {
         }
         userMapData.push(obj)
       }
-      this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
-      // this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
+      //this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
+       this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
         this.$echarts.registerMap("江苏", response.data);
         var myChart = this.$echarts.extendsMap("chart-panel", {
           bgColor: "#0f6ab8", // 画布背景色
