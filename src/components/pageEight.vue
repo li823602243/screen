@@ -7,8 +7,8 @@
         <div class="map-tab--content">
           <div class="map-icon map-icon--wechat"></div>
           <div class="map-tab-infos">
-           <span class="map-num">{{utils.numFormat(userData.weixin_user_num)}}</span>
-           <span class="map-title">昨日新增: {{utils.numFormat(userData.weixin_user_day_num)}}</span>
+           <span class="map-num">{{userData.weixin_user_num}}</span>
+           <span class="map-title">昨日新增: {{userData.weixin_user_day_num}}</span>
           </div>
         </div>
       </div>
@@ -17,8 +17,8 @@
         <div class="map-tab--content">
           <div class="map-icon map-icon--sign"></div>
           <div class="map-tab-infos">
-           <span class="map-num">{{utils.numFormat(userData.register_user_num)}}</span>
-           <span class="map-title">昨日新增: {{utils.numFormat(userData.register_user_day_num)}}</span>
+           <span class="map-num">{{userData.register_user_num}}</span>
+           <span class="map-title">昨日新增: {{userData.register_user_day_num}}</span>
           </div>
         </div>
       </div>
@@ -30,8 +30,8 @@
         <div class="map-tab--content">
           <div class="map-icon map-icon--people"></div>
           <div class="map-tab-infos">
-           <span class="map-num">{{utils.numFormat(userData.site_visit_num)}}</span>
-           <span class="map-title">昨日新增: {{utils.numFormat(userData.site_visit_day_num)}}</span>
+           <span class="map-num">{{userData.site_visit_num}}</span>
+           <span class="map-title">昨日新增: {{userData.site_visit_day_num}}</span>
           </div>
         </div>
       </div>
@@ -40,8 +40,8 @@
         <div class="map-tab--content">
           <div class="map-icon map-icon--name"></div>
           <div class="map-tab-infos">
-           <span class="map-num">{{utils.numFormat(userData.verified_user_num)}}</span>
-           <span class="map-title">昨日新增: {{utils.numFormat(userData.verified_user_day_num)}}</span>
+           <span class="map-num">{{userData.verified_user_num}}</span>
+           <span class="map-title">昨日新增: {{userData.verified_user_day_num}}</span>
           </div>
         </div>
       </div>
@@ -62,9 +62,9 @@ export default {
   mounted() {
     let that = this;
     this.getVenuePageData();
-    const pageEight = setInterval(() =>{                    
-      that.getVenuePageData();          
-    }, this.$store.state.intervalTime); 
+     const pageEight = setInterval(() =>{                    
+       that.getVenuePageData();          
+     }, this.$store.state.intervalTime); 
   },
   computed: {
     author() {
@@ -85,22 +85,21 @@ export default {
         var curGeoJson = {};
         var geoCoordMap = {
           南京市: [118.78, 32.04],
-          常州市: [119.95, 31.79],
           南通市: [120.8, 32.08],
-          昆山市: [120.95, 31.39],
           连云港市: [119.16, 34.56],
           淮安市: [119.15, 33.5],
           泰州市: [119.9, 32.49],
           苏州市: [120.590229,31.124587],
           镇江市: [119.44, 31.9],
           扬州市: [119.42, 32.39],
-          常州市: [119.95, 31.79],
+          常州市: [119.897546,31.593378],
           无锡市: [120.29, 31.59],
           徐州市: [117.2, 34.26],
           宿迁市: [118.5, 33.5],
           盐城市: [120.15, 33.38],
           昆山市: [121.02544,31.390804],
-          沭阳县:[118.785696,34.09952]
+          沭阳县:[118.785696,34.09952],
+          泰兴市:[120.059753,32.167449]
         };
         //设置颜色
         var levelColorMap = {
@@ -133,7 +132,7 @@ export default {
 
         var option = {
           title: {
-            text: "各地市注册人数",
+            text: "各地市微信推广人数",
             left: "center",
             top: 35,
             textStyle: {
@@ -231,7 +230,7 @@ export default {
                 }else if(100 < val[2] && val[2] <=　1000){
                   return 60;
                 } else if (1000 < val[2] && val[2] <=　2000){
-                  return 60;
+                  return 70;
                 } else if (2000 < val[2] && val[2] <=　5000){
                   return 80;
                 } else if (5000 < val[2] && val[2] <=　10000){
@@ -281,8 +280,8 @@ export default {
         }
         userMapData.push(obj)
       }
-      //this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
-       this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
+      //  this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
+        this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
         this.$echarts.registerMap("江苏", response.data);
         var myChart = this.$echarts.extendsMap("chart-panel", {
           bgColor: "#0f6ab8", // 画布背景色

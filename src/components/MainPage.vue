@@ -1,7 +1,7 @@
 <template>
   <el-carousel :interval="this.$store.state.interval" height="100%" v-on:change='changePage'  :autoplay="this.$store.state.autoplay" indicator-position='none'>
     <el-carousel-item>
-      <page-one></page-one>
+    <page-one></page-one>
     </el-carousel-item>
     <el-carousel-item>
       <page-two></page-two>
@@ -19,7 +19,7 @@
       <page-six></page-six>
     </el-carousel-item>
        <el-carousel-item>
-      <page-seven></page-seven>
+    <page-seven></page-seven>
     </el-carousel-item>
     <el-carousel-item>
       <page-eight></page-eight>

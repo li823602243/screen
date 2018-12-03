@@ -47,15 +47,15 @@
       <span class="bouble6"></span>
       <div class="resource-num">
         <span class="resource-title">资源数量</span>
-        <span class="num">{{utils.numFormat(resource_total)}}</span>
+        <span class="num">{{resource_total}}</span>
       </div>
       <div class="resource-play">
         <span class="resource-title">播放总数</span>
-        <span class="num">{{utils.numFormat(resource_play_total)}} </span>
+        <span class="num">{{resource_play_total}} </span>
       </div>
       <div class="resource-rong">
         <span class="resource-title"> 资源容量</span>
-        <span class="num">{{utils.numFormat(resource_size_total)}}</span>
+        <span class="num">{{resource_size_total}}</span>
       </div>
     </div>
     <div class="resource-right">
@@ -99,9 +99,9 @@ export default {
   mounted() {
     let that = this;
     this.getVenuePageData();
-    const pageSeven = setInterval(() =>{                    
-      that.getVenuePageData();          
-    }, this.$store.state.intervalTime); 
+     const pageSeven = setInterval(() =>{                    
+       that.getVenuePageData();          
+     }, this.$store.state.intervalTime); 
   },
   computed: {
     author() {

@@ -22,9 +22,9 @@
   mounted() {
     let that = this; 
    this.getVenuePageData();
-   const pageNine = setInterval(() =>{                    
-      that.getVenuePageData();          
-    }, this.$store.state.intervalTime); 
+    const pageNine = setInterval(() =>{                    
+       that.getVenuePageData();          
+     }, this.$store.state.intervalTime); 
   },
   computed: {
       author () {

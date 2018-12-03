@@ -13,17 +13,17 @@
           </el-row>
           <el-row :gutter="20" class="live-num--row">
             <el-col :span="4" class="live-row--th">场次</el-col>
-            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_channel_num.today_num)}}</el-col>
-            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_channel_num.week_num)}}</el-col>
-            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_channel_num.month_num)}}</el-col>
-            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_channel_num.all_num)}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_channel_num.today_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_channel_num.week_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_channel_num.month_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_channel_num.all_num}}</el-col>
           </el-row>
           <el-row :gutter="20" class="live-num--row">
             <el-col :span="4" class="live-row--th">观看人数</el-col>
-            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_play_times.today_num)}}</el-col>
-            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_play_times.week_num)}}</el-col>
-            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_play_times.month_num)}}</el-col>
-            <el-col :span="5" class="live-row--td">{{utils.numFormat(live_play_times.all_num)}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_play_times.today_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_play_times.week_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_play_times.month_num}}</el-col>
+            <el-col :span="5" class="live-row--td">{{live_play_times.all_num}}</el-col>
           </el-row>
         </div>
       </el-col>
@@ -88,9 +88,9 @@
     mounted() {
       let that  =  this;
       this.getVenuePageData();
-      const pageFour = setInterval(() =>{                    
-         that.getVenuePageData();          
-      }, this.$store.state.intervalTime); 
+       const pageFour = setInterval(() =>{                    
+          that.getVenuePageData();          
+       }, this.$store.state.intervalTime); 
     },
   
     computed: {
@@ -114,6 +114,25 @@
         });
       },
       drawLine() {
+        const numFormat = num =>{
+          num = parseInt(num);
+          num=num.toString().split(".");  // 分隔小数点
+          var arr=num[0].split("").reverse();  // 转换成字符数组并且倒序排列
+          var res=[];
+          for(var i=0,len=arr.length;i<len;i++){
+            if(i%3===0&&i!==0){
+              res.push(",");   // 添加分隔符
+            }
+            res.push(arr[i]);
+          }
+          res.reverse(); // 再次倒序成为正确的顺序
+          if(num[1]){  // 如果有小数的话添加小数部分
+            res=res.join("").concat("."+num[1]);
+          }else{
+            res=res.join("");
+          }
+          return res;
+        }
         for(let i in this.live_play_year_trend){
            this.live_play_year_trend_data.push(this.live_play_year_trend[i])
         }
@@ -159,8 +178,9 @@
               show: false
             },
             min: 0,
+            minInterval : 1,
             max: Math.max.apply(null, this.live_play_year_trend_data),
-            interval: Math.max.apply(null, this.live_play_year_trend_data)/5,
+            // interval: Math.max.apply(null, this.live_play_year_trend_data)/5,
             axisLine: {
               lineStyle: {
                 type: "solid",
@@ -179,8 +199,11 @@
                 label : {
                   show: true,
                   color:'#2ba9f2',
-                  fontSize:18
-                  },
+                  fontSize:18,
+                  formatter:function(p){ 
+                    return numFormat(p.value)
+                  }
+                },
                 lineStyle: {
                   width: 5 //折线宽度
                 },
@@ -232,18 +255,21 @@
   .watch-people {
     width: 100%;
     height: 360px;
-    border: 1px solid #002ac5
+    border: 1px solid #002ac5;
   }
   .live-ranking {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     flex: 1;
+    border-bottom: 1px solid #002ac5;
+    overflow: auto;
   }
   .live-ranking--wrapper {
     width: 100%;
     height: 100%;
-    border: 1px solid #002ac5
+    border: 1px solid #002ac5;
+     border-bottom: none;
   }
   .live-num {
     display: flex;

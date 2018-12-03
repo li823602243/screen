@@ -10,7 +10,7 @@
           <div class="aside-list">
             <el-row :gutter="24" class="aside-list--tr">
               <el-col :span="8" class="aside-list--td">类别</el-col>
-              <el-col :span="8" class="aside-list--td">活动数量</el-col>
+              <el-col :span="8" class="aside-list--td">服务人数</el-col>
               <el-col :span="8" class="aside-list--td">占比</el-col>
             </el-row>
               <el-row :gutter="24" class="aside-list--th" v-for="(item,index) in act_cat_join_num_lists" :key="item.filter_id">
@@ -106,16 +106,16 @@ export default {
   mounted() {
     let that = this;
     this.getServicePageData();
-    const pageThree = setInterval(() =>{
-          this.showNums= "day",
-          this.act_cat_join_num_lists= "",
-          this.act_cat_join_num_arr= [],
-          this.bookPeopleNum= "",
-          this.joinPeopleNum= "",
-          this.trendWeekData=[],
-          this.trendYearData=[]                  
-         that.getServicePageData();          
-    }, this.$store.state.intervalTime); 
+     const pageThree = setInterval(() =>{
+           this.showNums= "day",
+           this.act_cat_join_num_lists= "",
+           this.act_cat_join_num_arr= [],
+           this.bookPeopleNum= "",
+           this.joinPeopleNum= "",
+           this.trendWeekData=[],
+           this.trendYearData=[]                  
+          that.getServicePageData();          
+     }, this.$store.state.intervalTime); 
   },
   computed: {
     author() {
@@ -159,6 +159,25 @@ export default {
       });
     },
     drawLine() {
+        const numFormat = num =>{
+          num = parseInt(num);
+          num=num.toString().split(".");  // 分隔小数点
+          var arr=num[0].split("").reverse();  // 转换成字符数组并且倒序排列
+          var res=[];
+          for(var i=0,len=arr.length;i<len;i++){
+            if(i%3===0&&i!==0){
+              res.push(",");   // 添加分隔符
+            }
+            res.push(arr[i]);
+          }
+          res.reverse(); // 再次倒序成为正确的顺序
+          if(num[1]){  // 如果有小数的话添加小数部分
+            res=res.join("").concat("."+num[1]);
+          }else{
+            res=res.join("");
+          }
+          return res;
+        }
       // 基于准备好的dom，初始化echarts实例
       this.drawTotal();
       this.bookPeopleNum = this.act_register_date_num.today_num;
@@ -190,7 +209,12 @@ export default {
             color: "#43d8d7"
           }
         },
-
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow"
+          }
+        },
         grid: {
           left: "10%",
 
@@ -406,7 +430,10 @@ export default {
             label : {
               show: true,
               color:'#2ba9f2',
-              fontSize:18
+              fontSize:18,
+              formatter:function(p){ 
+                return numFormat(p.value)
+              }
             },
             itemStyle: {
               normal: {
@@ -472,6 +499,19 @@ export default {
             type: "pie",
             radius: [40, 150],
             roseType: "area",
+            itemStyle : {
+              normal: {
+                  label: {                 //指示到模块的标签文字
+                      show: true,
+                      fontSize:18,
+                      formatter: '{b} : {c}'
+                  },
+                  labelLine: {             //指示到模块的标签线
+                      show: true,
+
+                  }
+              },
+           },
             data: this.act_cat_join_num_arr
           }
         ]
@@ -742,356 +782,125 @@ export default {
       for(let i in this.user_age_period_num){
         userAge.push(this.user_age_period_num[i].percent/100)
       }
-      let ageChart = this.$echarts.init(document.getElementById("service-age"));
+      let ageChart = this.$echarts.init(document.getElementById("service-age"), null, {renderer: 'svg'});
+      let plantCap = [];
+      for(let i in this.user_age_period_num){
+        let obj = {}
+        obj.name = this.user_age_period_num[i].filter_name;
+        obj.value = this.user_age_period_num[i].amount;
+        obj.pre = this.user_age_period_num[i].percent;
+        plantCap.push(obj)
+
+      }
+      var datalist = [{
+            offset: [56, 48],
+            opacity: .95,
+            color: '#f467ce'
+        }, {
+            offset: [35, 80],
+            opacity: .88,
+            color: '#7aabe2'
+        }, {
+            offset: [20, 43],
+            opacity: .84,
+            color: '#ff7123'
+        }, {
+            offset: [83, 30],
+            opacity: .8,
+            color: '#ffc400'
+        }, {
+            offset: [36, 20],
+            opacity: .75,
+            color: '#5e333f'
+        }];
+        var datas = [];
+        for (var i = 0; i < plantCap.length; i++) {
+            var item = plantCap[i];
+            var itemToStyle = datalist[i];
+            let itemValue = parseFloat(item.pre).toFixed(2);
+            datas.push({
+                name:itemValue+'%' + '\n\n' + item.name+'岁',
+                value: itemToStyle.offset,
+                symbolSize: this.orderData(itemValue),
+                label: {
+                    normal: {
+                        textStyle: {
+                            fontSize: 16
+                        }
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: itemToStyle.color,
+                        opacity: itemToStyle.opacity
+                    }
+                },
+            })
+        }
       let ageChartOption = {
-        title: [
-          {
-            text: "0-20岁",
-            left: "25%",
-            top: "38%",
-            textAlign: "center",
-            textStyle: {
-              fontWeight: "normal",
-              color: "#fff",
-              fontSize: 20,
-              textAlign: "center"
-            }
-          },
-          {
-            text: "21~30岁",
-
-            left: "50%",
-
-            top: "38%",
-
-            textAlign: "center",
-
-            textStyle: {
-              fontWeight: "normal",
-
-              color: "#fff",
-
-              fontSize: 20,
-
-              textAlign: "center"
-            }
-          },
-          {
-            text: "31~40岁",
-
-            left: "75%",
-
-            top: "38%",
-
-            textAlign: "center",
-
-            textStyle: {
-              fontWeight: "normal",
-
-              color: "#fff",
-
-              fontSize: 20,
-
-              textAlign: "center"
-            }
-          },
-          {
-            text: "41~50岁",
-
-            left: "35%",
-
-            top: "78%",
-
-            textAlign: "center",
-
-            textStyle: {
-              fontWeight: "normal",
-
-              color: "#fff",
-
-              fontSize: 20,
-
-              textAlign: "center"
-            }
-          },
-          {
-            text: "50岁以上",
-
-            left: "65%",
-
-            top: "78%",
-
-            textAlign: "center",
-
-            textStyle: {
-              fontWeight: "normal",
-
-              color: "#fff",
-
-              fontSize: 20,
-
-              textAlign: "center"
-            }
-          }
-        ],
-        series: [
-          {
-            type: "liquidFill",
-            data: [userAge[0]],
-            radius: "20%",
-            // 水球颜色
-            color: ["#db4e8d", "#db4e8d", "#db4e8d"],
-
-            center: ["25%", "25%"],
-
-            // outline  外边
-
-            outline: {
-              // show: false
-
-              borderDistance: 5,
-
-              itemStyle: {
-                borderWidth: 1,
-
-                borderColor: "#db4e8d"
-              }
-            },
-
+        grid: {
+        show: false,
+        top: 10,
+        bottom: 10
+        },
+        xAxis: [{
+            gridIndex: 0,
+            type: 'value',
+            show: false,
+            min: 0,
+            max: 100,
+            nameLocation: 'middle',
+            nameGap: 5
+        }],
+        yAxis: [{
+            gridIndex: 0,
+            min: 0,
+            show: false,
+            max: 100,
+            nameLocation: 'middle',
+            nameGap: 30
+        }],
+        series: [{
+            type: 'scatter',
+            symbol: 'circle',
+            symbolSize: 120,
             label: {
-              normal: {
-                // textStyle: {
-
-                color: "#fff",
-
-                insideColor: "#fff",
-
-                fontSize: 22
-
-                // }
-              }
+                normal: {
+                    show: true,
+                    formatter: '{b}',
+                    color: '#fff',
+                    textStyle: {
+                        fontSize: '20'
+                    }
+                },
             },
-
-            // 内图 背景色 边
-
-            backgroundStyle: {
-              color: "rgba(4,24,74,0.8)"
-
-              // borderWidth: 5,
-
-              // borderColor: 'red',
-            }
-          },
-
-          {
-            type: "liquidFill",
-
-            data: [userAge[1]],
-
-            radius: "20%",
-
-            // 水球颜色
-
-            color: ["#0070f0", "#0070f0", "#0070f0"],
-
-            center: ["50%", "25%"],
-
-            // outline  外边
-
-            outline: {
-              // show: false
-
-              borderDistance: 5,
-
-              itemStyle: {
-                borderWidth: 1,
-
-                borderColor: "#0070f0"
-              }
-            },
-
-            label: {
-              normal: {
-                textStyle: {
-                  color: "#fff",
-
-                  insideColor: "#fff",
-
-                  fontSize: 20
+            itemStyle: {
+                normal: {
+                    color: '#00acea'
                 }
-              }
             },
-
-            // 内图 背景色 边
-
-            backgroundStyle: {
-              color: "rgba(4,24,74,0.8)"
-
-              // borderWidth: 5,
-
-              // borderColor: 'red',
-            }
-          },
-
-          {
-            type: "liquidFill",
-
-            data: [userAge[2]],
-
-            radius: "20%",
-
-            // 水球颜色
-
-            color: ["#9d4fc2", "#9d4fc2", "#9d4fc2"],
-
-            center: ["75%", "25%"],
-
-            // outline  外边
-
-            outline: {
-              // show: false
-
-              borderDistance: 5,
-
-              itemStyle: {
-                borderWidth: 1,
-
-                borderColor: "#9d4fc2"
-              }
-            },
-
-            label: {
-              normal: {
-                textStyle: {
-                  color: "#fff",
-
-                  insideColor: "#fff",
-
-                  fontSize: 20
-                }
-              }
-            },
-
-            // 内图 背景色 边
-
-            backgroundStyle: {
-              color: "rgba(4,24,74,0.8)"
-
-              // borderWidth: 5,
-
-              // borderColor: 'red',
-            }
-          },
-
-          {
-            type: "liquidFill",
-
-            //data: [0.6, 0.5, 0.4, 0.3],
-
-            data: [userAge[3]],
-
-            radius: "20%",
-
-            // 水球颜色
-
-            color: ["#00ddf0", "#00ddf0", "#00ddf0"],
-
-            center: ["35%", "65%"],
-
-            // outline  外边
-
-            outline: {
-              // show: false
-
-              borderDistance: 5,
-
-              itemStyle: {
-                borderWidth: 1,
-
-                borderColor: "#00ddf0"
-              }
-            },
-
-            label: {
-              normal: {
-                textStyle: {
-                  color: "#fff",
-
-                  insideColor: "#fff",
-
-                  fontSize: 24
-                }
-              }
-            },
-
-            // 内图 背景色 边
-
-            backgroundStyle: {
-              color: "rgba(4,24,74,0.8)"
-
-              // borderWidth: 5,
-
-              // borderColor: 'red',
-            }
-          },
-
-          {
-            type: "liquidFill",
-
-            //data: [0.6, 0.5, 0.4, 0.3],
-
-            data: [userAge[4]],
-
-            radius: "20%",
-
-            // 水球颜色
-
-            color: ["#d0c944", "#d0c944", "#d0c944"],
-
-            center: ["65%", "65%"],
-
-            // outline  外边
-
-            outline: {
-              // show: false
-
-              borderDistance: 5,
-
-              itemStyle: {
-                borderWidth: 1,
-
-                borderColor: "#d0c944"
-              }
-            },
-
-            label: {
-              normal: {
-                textStyle: {
-                  color: "#fff",
-
-                  insideColor: "#fff",
-
-                  fontSize: 22
-                }
-              }
-            },
-
-            // 内图 背景色 边
-
-            backgroundStyle: {
-              color: "rgba(4,24,74,0.8)"
-
-              // borderWidth: 5,
-
-              // borderColor: 'red',
-            }
-          }
-        ]
+            data: datas
+        }]
       };
       ageChart.setOption(ageChartOption);
       window.addEventListener("resize", () => {
         ageChart.resize();
       });
+    },
+    orderData(items){
+       if(items <= 10){
+        return 75;
+      }else if(10 < items && items <=　30){
+        return 90;
+      } else if (30 < items && items <=　50){
+        return 110;
+      } else if (50 < items && items <=　70){
+        return 130;
+      } else if (70 < items && items <=　90){
+        return 150;
+      }else{
+        return 170;
+      }
     }
   }
 };

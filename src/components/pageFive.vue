@@ -6,7 +6,7 @@
          <div class="today-service--contnet"><span>今日</span><span>服务人数</span></div>
          <div class="today-service--num">{{utils.numFormat(enterNum)}}人</div>
          <div class="yester-service--contnet"><span>昨日</span><span>服务人数</span></div>
-         <div class="yester-service--num">{{utils.numFormat(allYesterDay)}}人</div>
+         <div class="yester-service--num">{{utils.numFormat(this.$store.state.allYesterDay)}}人</div>
         <div id="today-service--num"></div>
       </el-col>
       <el-col :span="8" class="wrapper-col" >
@@ -57,10 +57,10 @@ export default {
     let that = this;
     this.pageFiveData();
     this.getCurrentEnterNum(); 
-    const pageFivePre = setInterval(() =>{
-      this.pageFiveData();
-      this.drawLine();                   
-    }, this.$store.state.intervalTime);
+     const pageFivePre = setInterval(() =>{
+       this.pageFiveData();
+       this.drawLine();                   
+     }, this.$store.state.intervalTime);
   },
   computed: {
     pageNum() {
@@ -69,7 +69,7 @@ export default {
   },
  watch:{
       pageNum(){
-        console.log(this.$store.state.pageNum);
+        // console.log(this.$store.state.pageNum);
         if(this.$store.state.pageNum===4){
            this.pageFive = setInterval(() =>{
              this.getCurrentEnterNum()                   
@@ -82,7 +82,6 @@ export default {
   methods: {
     pageFiveData(){
       this.http.get(this.ports.urls.allCurrentVisitorData, res => {
-        console.log(res)
         this.allCurrentVisitorData = res.data.results.in_num;
         this.enterNum = res.data.results.enter_num;
       });
@@ -94,17 +93,11 @@ export default {
        this.YearDataArr = res.data.results.yesterday;
         // this.drawLine();
       });
-      this.http.get(this.ports.urls.getWeekInData, res => {
-        this.WeekInData = res.data.results;
-      });
-
       this.http.get(this.ports.urls.allYesterDay, res => {
          this.allYesterDay = res.data.results;
       });
-
-      this.http.get(this.ports.urls.allTotalEnterNum, res => {
-        console.log(res)
-        this.allTotalEnterNum = res.data.results;
+      this.http.get(this.ports.urls.getWeekInData, res => {
+        this.WeekInData = res.data.results;
         this.drawLine();
       });
     },
@@ -126,6 +119,25 @@ export default {
       });
     },
     drawLine() {
+        const numFormat = num =>{
+          num = parseInt(num);
+          num=num.toString().split(".");  // 分隔小数点
+          var arr=num[0].split("").reverse();  // 转换成字符数组并且倒序排列
+          var res=[];
+          for(var i=0,len=arr.length;i<len;i++){
+            if(i%3===0&&i!==0){
+              res.push(",");   // 添加分隔符
+            }
+            res.push(arr[i]);
+          }
+          res.reverse(); // 再次倒序成为正确的顺序
+          if(num[1]){  // 如果有小数的话添加小数部分
+            res=res.join("").concat("."+num[1]);
+          }else{
+            res=res.join("");
+          }
+          return res;
+        }
       // 基于准备好的dom，初始化echarts实例
       let todayServiceNum = this.$echarts.init(
         document.getElementById("today-service--num")
@@ -166,7 +178,9 @@ export default {
               }
             },
             detail: {
-              formatter: "{value}人",
+              formatter:function(p){
+                return numFormat(p)+'人'
+              },
               color: "#fff",
               offsetCenter: [0, "100%"],
               rich:{
@@ -175,7 +189,7 @@ export default {
             },
             data: [
               {
-                value: this.allTotalEnterNum,
+                value: this.$store.state.allTotalEnterNum,
                 // name: "累计服务人数"
               }
             ]
@@ -183,16 +197,22 @@ export default {
         ]
       };
       let entranceNowTotalOption = {
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow"
+          }
+        },
         grid: {
           left: "10%",
           right: "10%",
-          bottom: "5%",
+          bottom: "2%",
           top: "7%",
           height: "85%",
           containLabel: true,
           z: 22
         },
-        xAxis: [
+        xAxis:
           {
             type: "category",
             gridIndex: 0,
@@ -212,43 +232,27 @@ export default {
               color: "#fff",
               fontSize: 16
             }
-          }
-        ],
-        yAxis: [
-          {
-            type: "value",
-            gridIndex: 0,
-            splitLine: {
-              show: false
-            },
-            axisTick: {
-              show: false
-            },
-            axisLine: {
-              show: false
-            },
-            axisLabel: {
-              show: false
-            }
           },
-          {
-            type: "value",
-            gridIndex: 0,
-            splitNumber: 12,
+          yAxis: {
+            show: true,
+            minInterval : 1,
+            // interval: Math.max.apply(null, this.WeekInData)/5,
+            max: Math.max.apply(null, this.WeekInData),
             splitLine: {
+              show: false,
+            },
+            axisTick: {
               show: false
             },
             axisLine: {
               show: false
             },
-            axisTick: {
-              show: false
-            },
             axisLabel: {
-              show: false
+              show: true,
+              color: "#fff",
+              fontSize:18
             }
-          }
-        ],
+         },
         series: [
           {
             type: "bar",
@@ -665,13 +669,14 @@ export default {
           yAxis: [
             {
               type: "value",
-              splitNumber: 6,
+              // splitNumber: 6,
+              minInterval : 1,
               axisLabel: {
                 textStyle: {
-                  color: "#333",
+                  color: "#fff",
                   fontStyle: "normal",
                   fontFamily: "微软雅黑",
-                  fontSize: 16
+                  fontSize: 18
                 }
               },
               axisLine: {
@@ -888,6 +893,18 @@ export default {
   font-size: 24px;
   color: #54ffff;
   padding: 5px 15px;
+}
+.flag-content:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid #0324aa;
+    background-color: #000832;
+    transform: perspective(2em) scale(1.1,1.3) rotateX(-10deg);
+    z-index: -1;
 }
 .entrance-wrapper {
   display: flex;

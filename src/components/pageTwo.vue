@@ -53,6 +53,9 @@
 .wrapper {
   padding: 0 60px 40px 60px;
   box-sizing: border-box;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .page-two > .el-col-11 {
   width: 48.5%!important;
@@ -253,16 +256,16 @@ export default {
   mounted() {
     let that = this;
     this.getActivityPageData();
-    const pageTwo = setInterval(() =>{
-        this.ActivityPageData= '',
-        this.shows='week',
-        this.showNums='day',
-        this.actTrendBottomData=[],
-        this.actTrendData=[],
-        this.actStatusData=[],
-        this.maxActStatus=[]               
-        that.getActivityPageData();          
-    }, this.$store.state.intervalTime); 
+     const pageTwo = setInterval(() =>{
+         this.ActivityPageData= '',
+         this.shows='week',
+         this.showNums='day',
+         this.actTrendBottomData=[],
+         this.actTrendData=[],
+         this.actStatusData=[],
+         this.maxActStatus=[]               
+         that.getActivityPageData();          
+     }, this.$store.state.intervalTime); 
   },
   computed: {
       author () {
@@ -329,6 +332,25 @@ export default {
       this.drawActStatusCharts()
     },
     drawLine() {
+        const numFormat = num =>{
+            num = parseInt(num);
+            num=num.toString().split(".");  // 分隔小数点
+            var arr=num[0].split("").reverse();  // 转换成字符数组并且倒序排列
+            var res=[];
+            for(var i=0,len=arr.length;i<len;i++){
+              if(i%3===0&&i!==0){
+                res.push(",");   // 添加分隔符
+              }
+              res.push(arr[i]);
+            }
+            res.reverse(); // 再次倒序成为正确的顺序
+            if(num[1]){  // 如果有小数的话添加小数部分
+              res=res.join("").concat("."+num[1]);
+            }else{
+              res=res.join("");
+            }
+            return res;
+        }
       // 基于准备好的dom，初始化echarts实例
       let actPublicChart = this.$echarts.init(
         document.getElementById("actPublic")
@@ -375,7 +397,9 @@ export default {
             label: {
               normal: {
                 show: true,
-                formatter: "{b}:{c}",
+                formatter: function(p){
+                  return p.name +":"+ numFormat(p.value)
+                },
                 fontSize:18
               },
               emphasis: {

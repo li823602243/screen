@@ -19,7 +19,7 @@ export default {
   },
   // 挂载完成时
   mounted(){
-    this.nowTimes();
+   // this.nowTimes();
   },
   methods: {
 // 获取当前时间函数

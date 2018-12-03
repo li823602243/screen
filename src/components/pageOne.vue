@@ -7,19 +7,19 @@
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">活动发布场次</span>
-              <span class="num">{{utils.numFormat(HomePageData.act_total)}}</span>
+              <span class="num">{{HomePageData.act_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日新增:{{utils.numFormat(HomePageData.act_today)}}</span>
+          <span class="tips">昨日新增:{{HomePageData.act_today}}</span>
         </el-col>
         <el-col :span="12" class="circle-content--bottom">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">活动参与人数</span>
-              <span class="num">{{utils.numFormat(HomePageData.act_join_total)}}</span>
+              <span class="num">{{HomePageData.act_join_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日参与:{{utils.numFormat(HomePageData.act_join_today)}}</span>
+          <span class="tips">昨日参与:{{HomePageData.act_join_today}}</span>
         </el-col>
       </el-row>
       <el-row :gutter="24">
@@ -27,28 +27,28 @@
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">直播观看人数</span>
-              <span class="num">{{utils.numFormat(HomePageData.live_play_total)}}</span>
+              <span class="num">{{HomePageData.live_play_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日观看:{{utils.numFormat(HomePageData.live_play_today)}}</span>
+          <span class="tips">昨日观看:{{HomePageData.live_play_today}}</span>
         </el-col>
        <el-col :span="12">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">资源点播人数</span>
-              <span class="num">{{utils.numFormat(HomePageData.video_play_total)}}</span>
+              <span class="num">{{HomePageData.video_play_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日观看:{{utils.numFormat(HomePageData.video_play_today)}}</span>
+          <span class="tips">昨日观看:{{HomePageData.video_play_today}}</span>
         </el-col>
       </el-row>
     </el-col>
     <el-col :span="6">
       <div class="platform">
         <span class="title">平台访问次数</span>
-        <span class="num">{{utils.numFormat(HomePageData.web_access_total)}}</span>
+        <span class="num">{{HomePageData.web_access_total}}</span>
       </div>
-      <div class="tips">今日新增:{{utils.numFormat(HomePageData.web_access_today)}}</div>
+      <div class="tips">今日新增:{{HomePageData.web_access_today}}</div>
       </el-col>
     <el-col :span="9">
       <el-row :gutter="24">
@@ -56,19 +56,19 @@
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">场馆预约次数</span>
-              <span class="num">{{utils.numFormat(HomePageData.venue_booking_total)}}</span>
+              <span class="num">{{HomePageData.venue_booking_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日预约:{{utils.numFormat(HomePageData.venue_booking_today)}}</span>
+          <span class="tips">昨日预约:{{HomePageData.venue_booking_today}}</span>
         </el-col>
        <el-col :span="12" class="circle-content--bottom">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">入馆服务人数</span>
-              <span class="num">{{utils.numFormat(HomePageData.agency_service_total)}}</span>
+              <span class="num">{{utils.numFormat(allTotalEnterNum)}}</span>
             </div>
           </div>
-          <span class="tips">昨日新增:{{utils.numFormat(HomePageData.agency_service_today)}}</span>
+          <span class="tips">昨日新增:{{utils.numFormat(allYesterDay)}}</span>
         </el-col>
       </el-row>
       <el-row :gutter="24">
@@ -76,19 +76,19 @@
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">微信关注人数</span>
-              <span class="num">{{utils.numFormat(HomePageData.wx_inviter_total)}}</span>
+              <span class="num">{{HomePageData.wx_inviter_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日新增:{{utils.numFormat(HomePageData.wx_inviter_today)}}</span>
+          <span class="tips">昨日新增:{{HomePageData.wx_inviter_today}}</span>
         </el-col>
        <el-col :span="12">
           <div class="circle-content">
             <div class="circle-wrapper">
               <span class="title">注册用户人数</span>
-              <span class="num">{{utils.numFormat(HomePageData.register_total)}}</span>
+              <span class="num">{{HomePageData.register_total}}</span>
             </div>
           </div>
-          <span class="tips">昨日新增:{{utils.numFormat(HomePageData.register_today)}}</span>
+          <span class="tips">昨日新增:{{HomePageData.register_today}}</span>
         </el-col>
       </el-row>
     </el-col>
@@ -100,14 +100,16 @@
 export default {
   data() {
     return {
-      HomePageData:''
+      HomePageData:'',
+      allTotalEnterNum:'',
+      allYesterDay:''
     };
   },
   mounted() {
     this.getHomePageData();
-    const pageOne = setInterval(() =>{                    
-         this.getHomePageData();          
-    }, this.$store.state.intervalTime);      
+     const pageOne = setInterval(() =>{                    
+          this.getHomePageData();          
+     }, this.$store.state.intervalTime);      
   },
   computed: {
     author() {
@@ -117,9 +119,16 @@ export default {
   methods: {
     getHomePageData() {
       this.http.get(this.ports.urls.HomePageData,res => {
-          //console.log("第一页调用");
           this.HomePageData = res.data.results;
       })
+      this.http.get(this.ports.urls.allYesterDay, res => {
+        this.allYesterDay = res.data.results;
+        this.$store.state.allYesterDay=res.data.results;
+      });
+      this.http.get(this.ports.urls.allTotalEnterNum, res => {
+        this.allTotalEnterNum = res.data.results;
+        this.$store.state.allTotalEnterNum=res.data.results;
+      });
     }
   }
 };
@@ -155,10 +164,10 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   margin:  0 auto;
-  animation:changDeg 5s linear 0.2s infinite;
+  /* animation:changDeg 5s linear 0.2s infinite; */
 }
 .circle-wrapper {
-  animation:changDegr 5s linear 0.2s infinite;
+  /* animation:changDegr 5s linear 0.2s infinite; */
 }
 .circle-wrapper .title {
   display: inline-block;

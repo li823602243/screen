@@ -7,10 +7,10 @@
             <div class="aside-title">场馆预约数量统计</div>
             <div class="order-num" id="order-total">
               <el-row :gutter="20">
-                 <el-col :span="6"><span class="show-order-num">{{utils.numFormat(venue_booking_date_num.today_num)}}</span><div class="order-day" id="order-day"></div></el-col>
-                 <el-col :span="6"><span class="show-order-num">{{utils.numFormat(venue_booking_date_num.week_num)}}</span><div class="order-day" id="order-week"></div></el-col>
-                 <el-col :span="6"><span class="show-order-num">{{utils.numFormat(venue_booking_date_num.month_num)}}</span><div class="order-day" id="order-month"></div> </el-col>
-                 <el-col :span="6"><span class="show-order-num">{{utils.numFormat(venue_booking_date_num.all_num)}}</span><div class="order-day" id="order-all"></div></el-col>
+                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.today_num}}</span><div class="order-day" id="order-day"></div></el-col>
+                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.week_num}}</span><div class="order-day" id="order-week"></div></el-col>
+                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.month_num}}</span><div class="order-day" id="order-month"></div> </el-col>
+                 <el-col :span="6"><span class="show-order-num">{{venue_booking_date_num.all_num}}</span><div class="order-day" id="order-all"></div></el-col>
               </el-row>
             </div>
           </el-col>
@@ -88,15 +88,15 @@ export default {
   mounted() {
     let that = this;
     this.getVenuePageData();
-    const pageFour = setInterval(() =>{    
-          this.venue_booking_date_num={},
-          this.city_agency_room_num=[],
-          this.venue_cat_booking_num=[],
-          this.myCityData=[],
-          this.agencyAmount=[],
-         this.venueAmount=[]                
-         that.getVenuePageData();          
-    }, this.$store.state.intervalTime); 
+     const pageFour = setInterval(() =>{    
+           this.venue_booking_date_num={},
+           this.city_agency_room_num=[],
+           this.venue_cat_booking_num=[],
+           this.myCityData=[],
+           this.agencyAmount=[],
+          this.venueAmount=[]                
+          that.getVenuePageData();          
+     }, this.$store.state.intervalTime); 
   },
   computed: {
     author() {
@@ -578,11 +578,59 @@ export default {
   flex: 1;
   /* height: 100%; */
 }
+.aside-title {
+    position: relative;
+    text-decoration: none;
+    display: inline-block;
+    height: 60px;
+    line-height: 60px;
+    padding: 0 30px;
+    font-size: 25px;
+    color: #55fffc;
+}
+.aside-title:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: transparent;
+    border: 1px solid #032ac6;
+    border-bottom: none;
+    -webkit-transform: perspective(1em) scale(1) rotateX(1.2deg);
+    z-index: -1;
+    transform-origin: bottom left;
+}
 .order-type {
   position: relative;
   flex: 1;
   width: 100%;
   border: 1px solid #032ac6;
+  border-bottom: none;
+}
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar
+{
+    width: 8px;
+    height: 2px;
+    background-color: #000733;
+}
+ 
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track
+{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+ 
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb
+{
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    background-color: #555;
 }
 .order-type::after{
   position: absolute;
@@ -610,6 +658,8 @@ export default {
   align-items: flex-start;
   height: auto;
   margin-top: 30px;
+  border-bottom: 1px solid #032ac6;
+  overflow: auto;
 }
 .wrapper-col--left {
   height: 100%;
