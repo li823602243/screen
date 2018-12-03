@@ -10,7 +10,10 @@ const store = new Vuex.Store({
     autoplay:true,
     interval:15000,//了轮播时间间隔
     intervalTime:600000,//接口刷新时间
-    YearDataArrPre:[]
+    YearDataArrPre:[],
+    allTotalEnterNum:"1",
+    allYesterDay:'2'
+
   },
   mutations: {
     modifyMsg(state, Obj) {

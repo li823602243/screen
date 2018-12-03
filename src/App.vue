@@ -1,7 +1,9 @@
 <template>
   <div id="app" :class='[pageNum ? "page-other" : "page"]'>
     <top-bar></top-bar>
-    <router-view/>
+     <router-view>
+           <keep-alive> </keep-alive>
+      </router-view>
   </div>
 </template>
 

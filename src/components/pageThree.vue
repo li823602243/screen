@@ -819,7 +819,7 @@ export default {
             var itemToStyle = datalist[i];
             let itemValue = parseFloat(item.pre).toFixed(2);
             datas.push({
-                name:itemValue+'%' + '\n\n' + item.name+'岁',
+                name:itemValue+'%' + '\n\n' + item.name,
                 value: itemToStyle.offset,
                 symbolSize: this.orderData(itemValue),
                 label: {

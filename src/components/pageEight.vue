@@ -280,8 +280,8 @@ export default {
         }
         userMapData.push(obj)
       }
-      //  this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
-        this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
+        this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
+       // this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
         this.$echarts.registerMap("江苏", response.data);
         var myChart = this.$echarts.extendsMap("chart-panel", {
           bgColor: "#0f6ab8", // 画布背景色
