@@ -12,7 +12,9 @@ import store from './store/store'
 import axios from 'axios'
 import utils from './utils/utils.js'
 import echarts from 'echarts'
-    
+  
+import 'swiper/dist/css/swiper.css';
+
 Vue.use(ElementUI) //使用ElementUI
 Vue.use(Vuex)
 Vue.config.productionTip = false
