@@ -1,42 +1,36 @@
 <template>
-    <div class="swiper-container">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <page-one></page-one>
-            </div>
-            <div class="swiper-slide">
-             <page-two></page-two>
-            </div>
-            <div class="swiper-slide">
-              <page-three></page-three>
-            </div>
-             <div class="swiper-slide">
-               <page-four></page-four>
-            </div>
-             <div class="swiper-slide">
-               <page-five></page-five>
-            </div>
-             <div class="swiper-slide">
-              <page-six></page-six>
-            </div>
-            <div class="swiper-slide">
-               <page-seven></page-seven>
-            </div>
-            <div class="swiper-slide">
-              <page-eight></page-eight>
-            </div>
-            <div class="swiper-slide">
-               <page-nine></page-nine>
-            </div>
-        </div>
-        <!-- 如果需要导航按钮 -->
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-    </div>
+  <el-carousel :interval="this.$store.state.interval" height="100%" v-on:change='changePage'  :autoplay="this.$store.state.autoplay" indicator-position='none'>
+    <el-carousel-item>
+    <page-one></page-one>
+    </el-carousel-item>
+    <el-carousel-item>
+      <page-two></page-two>
+    </el-carousel-item>
+    <el-carousel-item>
+      <page-three></page-three>
+    </el-carousel-item>
+    <el-carousel-item>
+      <page-four></page-four>
+    </el-carousel-item>
+       <el-carousel-item>
+      <page-five></page-five>
+    </el-carousel-item>
+       <el-carousel-item>
+      <page-six></page-six>
+    </el-carousel-item>
+       <el-carousel-item>
+    <page-seven></page-seven>
+    </el-carousel-item>
+    <el-carousel-item>
+      <page-eight></page-eight>
+    </el-carousel-item>
+    <el-carousel-item>
+      <page-nine></page-nine>
+    </el-carousel-item>
+  </el-carousel>
 </template>
 
 <script>
-import Swiper from 'swiper';
 import pageOne from "./pageOne.vue";
 import pageTwo from "./pageTwo.vue";
 import pageThree from "./pageThree.vue";
@@ -59,13 +53,7 @@ export default {
     pageEight,
     pageNine
   },
-  mounted(){
-    new Swiper ('.swiper-container', {
-    loop: true,
-    // 如果需要前进后退按钮
-    nextButton: '.swiper-button-next',
-    prevButton: '.swiper-button-prev',
-  })        
+  mounted() {
   },
   methods:{
    changePage:function(e){
@@ -88,10 +76,6 @@ export default {
 }
 .el-carousel {
   flex: 1;
-}
-.swiper-container {
-  width:100%;
-  height:100%;      
 }
 .el-carousel__item h3 {
   color: #475669;

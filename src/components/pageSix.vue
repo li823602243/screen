@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <el-row :gutter="20">
+    <el-row :gutter="20" class="top-wrapper">
       <el-col :span="12" class="live-num--total">
         <div class="title-flag left">直播数量统计</div>
         <div class="live-num">
@@ -30,7 +30,7 @@
   
       <el-col :span="12" class="live-num--watch">
   
-        <div class="title-flag left">观看人数趋势</div>
+        <div class="title-flag left">观看人次趋势</div>
   
         <div class="watch-people" id="watch-people"></div>
   
@@ -40,13 +40,13 @@
   
     <el-row :gutter="20" class="live-ranking">
   
-      <div class="title-flag left">观看人数趋势</div>
+      <div class="title-flag left">观看人次趋势</div>
   
       <el-row class="live-ranking--wrapper">
   
         <el-col :span="12" >
           <div class="live-panel" v-for="(item,index) in live_channel_play_rank" :key="index" v-if="index<=2">
-            <div class="live-pannel--title">直播播放次数{{utils.numFormat(item.amount)}}次</div>
+            <div class="live-pannel--title">{{utils.numFormat(item.amount)}}</div>
             <div class="live-pannel-content">
               <span class="live-pannel--icon" :class="{'live-pannel-first':index==0,'live-pannel-second':index==1,'live-pannel-three':index==2}"></span>
               {{item.filter_name}}
@@ -238,7 +238,7 @@
 </script>
 <style>
   .live-num {
-    height: 300px;
+    height: 280px;
     border: 1px solid #002ac5;
     width: 100%;
   }
@@ -254,7 +254,7 @@
   }
   .watch-people {
     width: 100%;
-    height: 360px;
+    height: 320px;
     border: 1px solid #002ac5;
   }
   .live-ranking {
@@ -262,14 +262,11 @@
     flex-direction: column;
     align-items: flex-start;
     flex: 1;
-    border-bottom: 1px solid #002ac5;
-    overflow: auto;
   }
   .live-ranking--wrapper {
     width: 100%;
     height: 100%;
     border: 1px solid #002ac5;
-     border-bottom: none;
   }
   .live-num {
     display: flex;
@@ -343,6 +340,7 @@
   }
   .live-aside {
     padding: 10px;
+    height: 100%;
   }
   .live-aside .live-aside--row{
     padding: 15px 0;

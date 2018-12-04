@@ -26,7 +26,7 @@
        <el-col :span="12">
           <div class="circle-content">
             <div class="circle-wrapper">
-              <span class="title">直播观看人数</span>
+              <span class="title">直播观看人次</span>
               <span class="num">{{HomePageData.live_play_total}}</span>
             </div>
           </div>
@@ -35,7 +35,7 @@
        <el-col :span="12">
           <div class="circle-content">
             <div class="circle-wrapper">
-              <span class="title">资源点播人数</span>
+              <span class="title">资源点播人次</span>
               <span class="num">{{HomePageData.video_play_total}}</span>
             </div>
           </div>

@@ -62,9 +62,9 @@ export default {
   mounted() {
     let that = this;
     this.getVenuePageData();
-     const pageEight = setInterval(() =>{                    
-       that.getVenuePageData();          
-     }, this.$store.state.intervalTime); 
+    const pageEight = setInterval(() =>{                    
+      that.getVenuePageData();          
+    }, this.$store.state.intervalTime); 
   },
   computed: {
     author() {
@@ -85,27 +85,28 @@ export default {
         var curGeoJson = {};
         var geoCoordMap = {
           南京市: [118.78, 32.04],
+          常州市: [119.95, 31.79],
           南通市: [120.8, 32.08],
+          昆山市: [120.95, 31.39],
           连云港市: [119.16, 34.56],
           淮安市: [119.15, 33.5],
           泰州市: [119.9, 32.49],
           苏州市: [120.590229,31.124587],
           镇江市: [119.44, 31.9],
           扬州市: [119.42, 32.39],
-          常州市: [119.897546,31.593378],
+          常州市: [119.95, 31.79],
           无锡市: [120.29, 31.59],
           徐州市: [117.2, 34.26],
           宿迁市: [118.5, 33.5],
           盐城市: [120.15, 33.38],
           昆山市: [121.02544,31.390804],
-          沭阳县:[118.785696,34.09952],
-          泰兴市:[120.059753,32.167449]
+          沭阳县:[118.785696,34.09952]
         };
         //设置颜色
         var levelColorMap = {
-          "1": "#F62157",
-          "2": "#05C3F9",
-          "3": "#ffb762"
+          "1": "rgba(241, 109, 115, .8)",
+          "2": "rgba(255, 235, 59, .7)",
+          "3": "rgba(147, 235, 248, 1)"
         };
         var handleEvents = {
           /**
@@ -132,7 +133,7 @@ export default {
 
         var option = {
           title: {
-            text: "各地市微信推广人数",
+            text: "各地市注册人数",
             left: "center",
             top: 35,
             textStyle: {
@@ -191,13 +192,24 @@ export default {
           },
           series: [
             {
-              // type: "effectScatter",
-              type: 'scatter',
+              type: "effectScatter",
               coordinateSystem: "geo",
-              symbolOffset:[0, '-130%'],
+              symbolOffset:[0, '-200%'],
               // symbol: 'diamond',
               showEffectOn: "render",
-              symbolSize: 8,
+              symbolSize: function (val) {
+                if(val[2] <= 1000){
+                  return 8;
+                } else if (1000 < val[2] && val[2] <=　2000){
+                  return 10;
+                } else if (2000 < val[2] && val[2] <=　5000){
+                  return 12;
+                } else if (5000 < val[2] && val[2] <=　10000){
+                  return 14;
+                }else{
+                  return 16;
+                }
+              },
               rippleEffect: {
                 period: 8,
                 scale: 4,
@@ -205,7 +217,11 @@ export default {
               },
               hoverAnimation: true,
               label:{                      //图形上的文本标签，可用于说明图形的一些数据信息，比如值，名称等，
-                  show:false,
+                  show:true,
+                  formatter: '{@[2]}',
+                  position:'top',
+                  distance:15,
+                  fontSize:24
               },
               itemStyle: {
                 normal: {
@@ -217,44 +233,7 @@ export default {
                 }
               },
               data: handleEvents.initSeriesData(opt.data)
-            },
-            {
-            name: '点',
-            type: 'scatter',
-            coordinateSystem: 'geo',
-            symbolOffset:[0, "-15px"],
-            symbol: 'pin',
-            symbolSize: function (val) {
-                if(val[2] <= 100){
-                 return 40;
-                }else if(100 < val[2] && val[2] <=　1000){
-                  return 60;
-                } else if (1000 < val[2] && val[2] <=　2000){
-                  return 70;
-                } else if (2000 < val[2] && val[2] <=　5000){
-                  return 80;
-                } else if (5000 < val[2] && val[2] <=　10000){
-                  return 100;
-                }else{
-                  return 120;
-                }
-              },
-            label:{                      //图形上的文本标签，可用于说明图形的一些数据信息，比如值，名称等，
-              show:true,
-              formatter: '{@[2]}',
-              color:'#fff',
-              fontSize:16
-            },
-            itemStyle: {
-              normal: {
-                 color: function(params) {
-                    return levelColorMap[params.value[3]];
-                  },
-              }
-            },
-            zlevel: 6,
-            data: handleEvents.initSeriesData(opt.data)
-          }
+            }
           ]
         };
 
@@ -280,8 +259,8 @@ export default {
         }
         userMapData.push(obj)
       }
-        this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
-       // this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
+      this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
+      // this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
         this.$echarts.registerMap("江苏", response.data);
         var myChart = this.$echarts.extendsMap("chart-panel", {
           bgColor: "#0f6ab8", // 画布背景色

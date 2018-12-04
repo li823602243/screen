@@ -1,7 +1,7 @@
 <template>
   <div class="resource-wrapper">
     <div class="resource-left">
-      <div class="title-flag left">分类排名TOP10</div>
+      <div class="title-flag left">分类排名TOP</div>
       <div class="resource-left--content">
         <el-row class="resource-left--title">
   

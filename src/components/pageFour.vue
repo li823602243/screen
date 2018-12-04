@@ -17,7 +17,7 @@
         </el-row>
         <el-row class="order-type--content">
           <el-col :span="24" class="order-type--wrapper"> 
-            <div class="aside-title">按类型TOP10</div>
+            <div class="aside-title">按类型TOP</div>
             <el-row class="order-type">
                 <el-col :span="12" class="order-type--right">
                   <el-row class="right" v-for="(item,index)  in venue_cat_booking_num" :key="index" v-if='index<=4'>

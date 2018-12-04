@@ -579,6 +579,22 @@ export default {
       let entranceNowNumChart = this.$echarts.init(
         document.getElementById("entrance-now-num")
       );
+      function formatDate(time){
+          var date = new Date(time);
+
+          var year = date.getFullYear(),
+              month = date.getMonth()+1,//月份是从0开始的
+              day = date.getDate(),
+              hour = date.getHours(),
+              min = date.getMinutes(),
+              sec = date.getSeconds();
+          var newTime =
+                      (hour < 10? '0' + hour : hour) + ':' +
+                      (min < 10? '0' + min : min) + ':' +
+                      (sec < 10? '0' + sec : sec);
+
+          return newTime;         
+      }
       let entranceNowNumOption = {
         baseOption: {
           timeline: {
@@ -789,7 +805,7 @@ export default {
                 var len = 12;
                 while (len--) {
                   // 格式化时间
-                  res.unshift(now.toLocaleTimeString().replace(/^\D*/, ''));
+                  res.unshift(formatDate(now));
                   now = new Date(now - 5000);
                 }
                 return res;
@@ -877,7 +893,7 @@ export default {
 </script>
 <style>
 .entrance-people {
-  height: 360px;
+  height: 45%;
   border: 1px solid #012bc6;
 }
 .flag {
