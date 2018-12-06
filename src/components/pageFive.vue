@@ -207,7 +207,7 @@ export default {
           left: "10%",
           right: "10%",
           bottom: "2%",
-          top: "7%",
+          top: "10%",
           height: "85%",
           containLabel: true,
           z: 22
@@ -259,6 +259,15 @@ export default {
             barWidth: "20%",
             xAxisIndex: 0,
             yAxisIndex: 0,
+            label: {
+              show: true, //开启显示
+              position: 'top', //在上方显示
+              textStyle: { //数值样式
+                color: '#fff',
+                fontSize: 16,
+                // fontWeight: 600
+                }
+            },
             itemStyle: {
               normal: {
                 barBorderRadius: 30,

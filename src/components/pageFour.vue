@@ -659,7 +659,6 @@ export default {
   height: auto;
   margin-top: 30px;
   border-bottom: 1px solid #032ac6;
-  overflow: auto;
 }
 .wrapper-col--left {
   height: 100%;
@@ -703,7 +702,7 @@ export default {
 }
 .show-order-num {
   position: absolute;
-  font-size: 20px;
+  font-size: 28px;
   color: #fff;
   top: 50%;
   left: 50%;
@@ -729,13 +728,20 @@ export default {
 .order-type--right  .el-row .el-col{
   font-size: 24px;
   color: #fff;
-  margin: 15px 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  /* text-align: center; */
+  justify-content: center;
+  /* margin: 15px 0; */
 }
 .order-type--icon {
-  height: 50px;
-  line-height: 50px;
-  width: 50px;
+  height: 60%;
   margin: 0 auto;
+  width: 60%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .order-type--first {
   background-image: url(../../static/images/gold-one.png);

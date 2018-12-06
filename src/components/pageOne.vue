@@ -164,10 +164,10 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   margin:  0 auto;
-  /* animation:changDeg 5s linear 0.2s infinite; */
+  animation:changDeg 5s linear 0.2s infinite; 
 }
 .circle-wrapper {
-  /* animation:changDegr 5s linear 0.2s infinite; */
+  animation:changDegr 5s linear 0.2s infinite;
 }
 .circle-wrapper .title {
   display: inline-block;

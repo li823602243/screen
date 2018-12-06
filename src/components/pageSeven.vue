@@ -392,7 +392,7 @@ export default {
 
   margin: 5px auto;
 
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .resource-num > .num {
@@ -400,7 +400,21 @@ export default {
 
   margin: 5px auto;
 
+  font-size: 28px;
+}
+.resource-rong >.num {
+  display: inline-block;
+
+  margin: 5px auto;
+
   font-size: 24px;
+}
+.resource-play >.num{
+  display: inline-block;
+
+  margin: 5px auto;
+
+  font-size: 28px;
 }
 
 .resource-play {
@@ -550,7 +564,7 @@ export default {
 .resource-left--body {
   font-size: 22px;
   color: #fff;
-  padding: 3% 0;
+  height: 10%;
 }
 .resource-left--ranking {
   height: 44px;
@@ -581,8 +595,12 @@ export default {
   background-repeat: no-repeat;
 }
 .resource-pannel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   position: relative;
-  padding: 6% 35px;
+  padding: 0 35px;
+  height: 20%;;
 }
 .resource-pannel::after {
   position: absolute;
@@ -592,6 +610,9 @@ export default {
   border-bottom: 1px dashed #1a5271;
   left: 50%;
   margin-left: -43%;
+}
+.resource-pannel:last-child::after {
+   border-bottom: none;
 }
 .resource-pannel .r-pannel--header {
   overflow: hidden;

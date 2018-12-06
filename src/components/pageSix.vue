@@ -44,12 +44,18 @@
   
       <el-row class="live-ranking--wrapper">
   
-        <el-col :span="12" >
+        <el-col :span="12" class="live-panel--wrapper" >
           <div class="live-panel" v-for="(item,index) in live_channel_play_rank" :key="index" v-if="index<=2">
-            <div class="live-pannel--title">{{utils.numFormat(item.amount)}}</div>
             <div class="live-pannel-content">
               <span class="live-pannel--icon" :class="{'live-pannel-first':index==0,'live-pannel-second':index==1,'live-pannel-three':index==2}"></span>
-              {{item.filter_name}}
+              <div class="live-pannel--infos">
+                <el-row :gutter="20">
+                  <el-col :span="20"> <div class="live-pannel--message">{{item.filter_name}}</div></el-col>
+                  <el-col :span="4">  <div class="live-pannel--title">{{utils.numFormat(item.amount)}}</div></el-col>
+                </el-row>
+                
+               
+              </div>
             </div>
           </div>
         </el-col>
@@ -267,6 +273,7 @@
     width: 100%;
     height: 100%;
     border: 1px solid #002ac5;
+    flex: 1;
   }
   .live-num {
     display: flex;
@@ -298,8 +305,8 @@
   }
   .live-pannel-content {
     position: relative;
-    font-size: 24px;
-    padding: 20px 20px;
+    font-size: 22px;
+    padding: 2% 20px;
     color: #fff;
     border: 1px solid#ffcb6f;
     width: 90%;
@@ -309,9 +316,9 @@
   .live-pannel-content .live-pannel--icon {
     position: absolute;
     left: 50%;
-    margin-left: -100px;
+    margin-left: -80px;
     display: inline-block;
-    width: 200px;
+    width: 160px;
     height: 58px;
     top: -39px;
     background-size: contain;
@@ -332,27 +339,38 @@
     background-size: contain;
     background-repeat: no-repeat;
    }
+   .live-panel--wrapper {
+     height: 100%;
+   }
   .live-panel {
-    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* padding-top: 20px; */
+    height: 33.33%;
   }
   .live-pannel--title {
     text-align: right;
   }
   .live-aside {
-    padding: 10px;
+    padding: 0 10px;
     height: 100%;
   }
   .live-aside .live-aside--row{
-    padding: 15px 0;
+    padding: 0;
     border-bottom: 1px dashed #11395c;
+  }
+  .live-aside .live-aside--row:last-child {
+     border-bottom: none;
   }
   .live-aside .live-aside--row{
     display: flex;
     align-items: center;
     flex-direction: row;
     width: 100%;
-    font-size: 24px;
+    font-size: 22px;
     color: #fff;
+    height: 20%;
   }
   .live-aside--num {
     color: #55ffff;

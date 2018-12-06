@@ -1,6 +1,5 @@
 <template>
   <!-- <div id="myChart" :style="{width: '300px', height: '300px'}"></div> -->
-  
   <div class="wrapper pageThree">
     <el-row :gutter="24">
       <el-col :span="7" class="aside-wrapper">
@@ -13,72 +12,73 @@
               <el-col :span="8" class="aside-list--td">服务人数</el-col>
               <el-col :span="8" class="aside-list--td">占比</el-col>
             </el-row>
-              <el-row :gutter="24" class="aside-list--th" v-for="(item,index) in act_cat_join_num_lists" :key="item.filter_id">
-                <el-col :span="8" class="aside-list--td" :class="{'type': index == 0,'type1': index == 1,'type2': index == 2,'type3': index == 3,'type4': index == 4,'type5': index == 5}">{{item.filter_name}}</el-col>
-                <el-col :span="8" class="aside-list--td">{{utils.numFormat(item.amount)}}</el-col>
-                <el-col :span="8" class="aside-list--td">{{item.percent.toFixed(2)}}%</el-col>
-              </el-row>
+            <el-row
+              :gutter="24"
+              class="aside-list--th"
+              v-for="(item,index) in act_cat_join_num_lists"
+              :key="item.filter_id"
+            >
+              <el-col
+                :span="8"
+                class="aside-list--td"
+                :class="{'type': index == 0,'type1': index == 1,'type2': index == 2,'type3': index == 3,'type4': index == 4,'type5': index == 5}"
+              >{{item.filter_name}}</el-col>
+              <el-col :span="8" class="aside-list--td">{{utils.numFormat(item.amount)}}</el-col>
+              <el-col :span="8" class="aside-list--td">{{item.percent.toFixed(2)}}%</el-col>
+            </el-row>
           </div>
-  
         </div>
-  
       </el-col>
-  
+
       <el-col :span="17" class="main-wrapper">
-  
         <div class="main-title">年龄段数量统计</div>
-  
+
         <div class="main">
-  
           <el-row :gutter="24" class="main-top">
-  
             <el-col :span="12" class="main-left">
-  
-              <div class="flag page-three--flag"><span class="flag-content">活动服务人数</span></div>
+              <div class="flag page-three--flag">
+                <span class="flag-content">活动服务人数</span>
+              </div>
               <div class="date-group page-three--group">
-                <div class="date" :class="{active:showNums=='day'}"  @click="chooseDateNum('day')">今日</div>
-                <div class="date" :class="{active:showNums=='week'}"  @click="chooseDateNum('week')">本周</div>
-                <div class="date" :class="{active:showNums=='month'}"  @click="chooseDateNum('month')">本月</div>
-                <div class="date" :class="{active:showNums=='all'}"  @click="chooseDateNum('all')">全部</div>
+                <div class="date" :class="{active:showNums=='day'}" @click="chooseDateNum('day')">今日</div>
+                <div
+                  class="date"
+                  :class="{active:showNums=='week'}"
+                  @click="chooseDateNum('week')"
+                >本周</div>
+                <div
+                  class="date"
+                  :class="{active:showNums=='month'}"
+                  @click="chooseDateNum('month')"
+                >本月</div>
+                <div class="date" :class="{active:showNums=='all'}" @click="chooseDateNum('all')">全部</div>
               </div>
               <span class="service-icon--book"></span>
               <span class="service-icon--join"></span>
               <div id="service-order"></div>
-  
             </el-col>
-  
+
             <el-col :span="12" class="main-right">
-  
               <div id="service-age"></div>
-  
             </el-col>
-  
           </el-row>
-  
+
           <el-row :gutter="24" class="mian-footer">
-  
-            <div class="flag"><span class="flag-content">活动服务人数趋势</span></div>
-  
+            <div class="flag">
+              <span class="flag-content">活动服务人数趋势</span>
+            </div>
+
             <el-col :span="8" class="mian-footer--col">
-  
               <div class="service-trend" id="trend-week"></div>
-  
             </el-col>
-  
+
             <el-col :span="16" class="mian-footer--col">
-  
               <div class="service-trend" id="trend-year"></div>
-  
             </el-col>
-  
           </el-row>
-  
         </div>
-  
       </el-col>
-  
     </el-row>
-  
   </div>
 </template>
 
@@ -96,8 +96,8 @@ export default {
       act_cat_join_num_arr: [],
       bookPeopleNum: "",
       joinPeopleNum: "",
-      trendWeekData:[],
-      trendYearData:[]
+      trendWeekData: [],
+      trendYearData: []
     };
   },
   components: {
@@ -106,16 +106,16 @@ export default {
   mounted() {
     let that = this;
     this.getServicePageData();
-     const pageThree = setInterval(() =>{
-           this.showNums= "day",
-           this.act_cat_join_num_lists= "",
-           this.act_cat_join_num_arr= [],
-           this.bookPeopleNum= "",
-           this.joinPeopleNum= "",
-           this.trendWeekData=[],
-           this.trendYearData=[]                  
-          that.getServicePageData();          
-     }, this.$store.state.intervalTime); 
+    const pageThree = setInterval(() => {
+      (this.showNums = "day"),
+        (this.act_cat_join_num_lists = ""),
+        (this.act_cat_join_num_arr = []),
+        (this.bookPeopleNum = ""),
+        (this.joinPeopleNum = ""),
+        (this.trendWeekData = []),
+        (this.trendYearData = []);
+      that.getServicePageData();
+    }, this.$store.state.intervalTime);
   },
   computed: {
     author() {
@@ -159,25 +159,26 @@ export default {
       });
     },
     drawLine() {
-        const numFormat = num =>{
-          num = parseInt(num);
-          num=num.toString().split(".");  // 分隔小数点
-          var arr=num[0].split("").reverse();  // 转换成字符数组并且倒序排列
-          var res=[];
-          for(var i=0,len=arr.length;i<len;i++){
-            if(i%3===0&&i!==0){
-              res.push(",");   // 添加分隔符
-            }
-            res.push(arr[i]);
+      const numFormat = num => {
+        num = parseInt(num);
+        num = num.toString().split("."); // 分隔小数点
+        var arr = num[0].split("").reverse(); // 转换成字符数组并且倒序排列
+        var res = [];
+        for (var i = 0, len = arr.length; i < len; i++) {
+          if (i % 3 === 0 && i !== 0) {
+            res.push(","); // 添加分隔符
           }
-          res.reverse(); // 再次倒序成为正确的顺序
-          if(num[1]){  // 如果有小数的话添加小数部分
-            res=res.join("").concat("."+num[1]);
-          }else{
-            res=res.join("");
-          }
-          return res;
+          res.push(arr[i]);
         }
+        res.reverse(); // 再次倒序成为正确的顺序
+        if (num[1]) {
+          // 如果有小数的话添加小数部分
+          res = res.join("").concat("." + num[1]);
+        } else {
+          res = res.join("");
+        }
+        return res;
+      };
       // 基于准备好的dom，初始化echarts实例
       this.drawTotal();
       this.bookPeopleNum = this.act_register_date_num.today_num;
@@ -190,12 +191,12 @@ export default {
       let trendYearChart = this.$echarts.init(
         document.getElementById("trend-year")
       );
-      // let trendWeekData = 
-      for(let i in this.act_sign_trend_data.week){
-         this.trendWeekData.push(this.act_sign_trend_data.week[i])
+      // let trendWeekData =
+      for (let i in this.act_sign_trend_data.week) {
+        this.trendWeekData.push(this.act_sign_trend_data.week[i]);
       }
-      for(let i in this.act_sign_trend_data.year){
-         this.trendYearData.push(this.act_sign_trend_data.year[i])
+      for (let i in this.act_sign_trend_data.year) {
+        this.trendYearData.push(this.act_sign_trend_data.year[i]);
       }
       let trendWeekOption = {
         title: {
@@ -296,7 +297,15 @@ export default {
             type: "bar",
 
             barWidth: 10,
-
+            label: {
+              show: true, //开启显示
+              position: 'top', //在上方显示
+              textStyle: { //数值样式
+                color: '#fff',
+                fontSize: 16,
+                // fontWeight: 600
+                }
+            },
             itemStyle: {
               normal: {
                 color: new this.$echarts.graphic.LinearGradient(
@@ -424,15 +433,15 @@ export default {
         series: [
           {
             color: ["#337ae4"],
-            symbol:'circle',//拐点样式
-            symbolSize: 15,//拐点大小
+            symbol: "circle", //拐点样式
+            symbolSize: 15, //拐点大小
             type: "line",
-            label : {
+            label: {
               show: true,
-              color:'#2ba9f2',
-              fontSize:18,
-              formatter:function(p){ 
-                return numFormat(p.value)
+              color: "#2ba9f2",
+              fontSize: 18,
+              formatter: function(p) {
+                return numFormat(p.value);
               }
             },
             itemStyle: {
@@ -464,7 +473,7 @@ export default {
                   ],
 
                   false
-                ),
+                )
               }
             },
 
@@ -499,19 +508,20 @@ export default {
             type: "pie",
             radius: [40, 150],
             roseType: "area",
-            itemStyle : {
+            itemStyle: {
               normal: {
-                  label: {                 //指示到模块的标签文字
-                      show: true,
-                      fontSize:18,
-                      formatter: '{b} : {c}'
-                  },
-                  labelLine: {             //指示到模块的标签线
-                      show: true,
-
-                  }
-              },
-           },
+                label: {
+                  //指示到模块的标签文字
+                  show: true,
+                  fontSize: 18,
+                  formatter: "{b} : {c}"
+                },
+                labelLine: {
+                  //指示到模块的标签线
+                  show: true
+                }
+              }
+            },
             data: this.act_cat_join_num_arr
           }
         ]
@@ -779,126 +789,128 @@ export default {
     },
     userAgePeriodNum() {
       let userAge = [];
-      for(let i in this.user_age_period_num){
-        userAge.push(this.user_age_period_num[i].percent/100)
+      for (let i in this.user_age_period_num) {
+        userAge.push(this.user_age_period_num[i].percent / 100);
       }
-      let ageChart = this.$echarts.init(document.getElementById("service-age"), null, {renderer: 'svg'});
-      let plantCap = [];
-      for(let i in this.user_age_period_num){
-        let obj = {}
-        obj.name = this.user_age_period_num[i].filter_name;
-        obj.value = this.user_age_period_num[i].amount;
-        obj.pre = this.user_age_period_num[i].percent;
-        plantCap.push(obj)
+      let ageChart = this.$echarts.init(
+        document.getElementById("service-age"),
+        null,
+        { renderer: "svg" }
+      );
+       let scaleData = [];
+        for(let i in this.user_age_period_num){
+          let obj = {}
+         obj.name = this.user_age_period_num[i].filter_name;
+         obj.value = parseInt(this.user_age_period_num[i].amount);
+          scaleData.push(obj)
 
-      }
-      var datalist = [{
-            offset: [56, 48],
-            opacity: .95,
-            color: '#f467ce'
-        }, {
-            offset: [35, 80],
-            opacity: .88,
-            color: '#7aabe2'
-        }, {
-            offset: [20, 43],
-            opacity: .84,
-            color: '#ff7123'
-        }, {
-            offset: [83, 30],
-            opacity: .8,
-            color: '#ffc400'
-        }, {
-            offset: [36, 20],
-            opacity: .75,
-            color: '#5e333f'
-        }];
-        var datas = [];
-        for (var i = 0; i < plantCap.length; i++) {
-            var item = plantCap[i];
-            var itemToStyle = datalist[i];
-            let itemValue = parseFloat(item.pre).toFixed(2);
-            datas.push({
-                name:itemValue+'%' + '\n\n' + item.name,
-                value: itemToStyle.offset,
-                symbolSize: this.orderData(itemValue),
-                label: {
-                    normal: {
-                        textStyle: {
-                            fontSize: 16
-                        }
-                    }
-                },
-                itemStyle: {
-                    normal: {
-                        color: itemToStyle.color,
-                        opacity: itemToStyle.opacity
-                    }
-                },
-            })
-        }
-      let ageChartOption = {
-        grid: {
-        show: false,
-        top: 10,
-        bottom: 10
+       }
+var rich = {
+    white: {
+        color: '#ddd',
+        align: 'center',
+        padding: [3, 0]
+    }
+};
+var placeHolderStyle = {
+    normal: {
+        label: {
+            show: false
         },
-        xAxis: [{
-            gridIndex: 0,
-            type: 'value',
-            show: false,
-            min: 0,
-            max: 100,
-            nameLocation: 'middle',
-            nameGap: 5
-        }],
-        yAxis: [{
-            gridIndex: 0,
-            min: 0,
-            show: false,
-            max: 100,
-            nameLocation: 'middle',
-            nameGap: 30
-        }],
-        series: [{
-            type: 'scatter',
-            symbol: 'circle',
-            symbolSize: 120,
+        labelLine: {
+            show: false
+        },
+        color: 'rgba(0, 0, 0, 0)',
+        borderColor: 'rgba(0, 0, 0, 0)',
+        borderWidth: 0
+    }
+};
+var data = [];
+var color=['#00ffff','#00cfff','#006ced','#ffe000','#ffa800','#ff5b00','#ff3000']
+for (var i = 0; i < scaleData.length; i++) {
+    data.push({
+        value: scaleData[i].value,
+        name: scaleData[i].name,
+        itemStyle: {
+            normal: {
+                borderWidth: 2,
+                shadowBlur: 150,
+                borderColor:color[i],
+                shadowColor: color[i]
+            }
+        }
+    }, {
+        value: 2,
+        name: '',
+        itemStyle: placeHolderStyle
+    });
+}
+var seriesObj = [{
+    name: '',
+    type: 'pie',
+    clockWise: false,
+    radius: [60, 120],
+    hoverAnimation: false,
+    itemStyle: {
+        normal: {
             label: {
-                normal: {
-                    show: true,
-                    formatter: '{b}',
-                    color: '#fff',
-                    textStyle: {
-                        fontSize: '20'
+                show: true,
+                position: 'outside',
+                fontSize:16,
+                formatter: function(params) {
+                    var percent = 0;
+                    var total = 0;
+                    for (var i = 0; i < scaleData.length; i++) {
+                        total += scaleData[i].value;
+                    }
+                    percent = ((params.value / total) * 100).toFixed(0);
+                    if(params.name !== '') {
+                        return params.name + '\n' + '占比' + percent + '%';
+                    }else {
+                        return '';
                     }
                 },
+                rich: rich
             },
-            itemStyle: {
-                normal: {
-                    color: '#00acea'
-                }
-            },
-            data: datas
-        }]
+            labelLine: {
+                length:15,
+                length2:50,
+                show: true,
+                color:'#00ffff'
+            }
+        }
+    },
+    data: data
+}];
+      let ageChartOption = {
+        tooltip: {
+          show: false
+        },
+        legend: {
+          show: false
+        },
+        toolbox: {
+          show: false
+        },
+        series: seriesObj
       };
       ageChart.setOption(ageChartOption);
       window.addEventListener("resize", () => {
         ageChart.resize();
       });
     },
-    orderData(items){
-       if(items <= 10){
+    orderData(items) {
+      if (items <= 10) {
         return 75;
-      }else if(10 < items && items <=　30){
+      } else if (10 < items && items <= 30) {
         return 90;
-      } else if (30 < items && items <=　50){
+      } else if (30 < items && items <= 50) {
         return 110;
-      } else if (50 < items && items <=　70){
+      } else if (50 < items && items <= 70) {
         return 130;
-      } else if (70 < items && items <=　90){
+      } else if (70 < items && items <= 90) {
         return 150;
-      }else{
+      } else {
         return 170;
       }
     }
@@ -1281,7 +1293,7 @@ export default {
   background-repeat: no-repeat;
 }
 .page-three--flag {
-  top: 0!important;
+  top: 0 !important;
 }
 .page-three--group {
   margin: 50px auto 0px auto;
