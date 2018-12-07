@@ -107,13 +107,13 @@ export default {
     let that = this;
     this.getServicePageData();
     const pageThree = setInterval(() => {
-      (this.showNums = "day"),
-        (this.act_cat_join_num_lists = ""),
-        (this.act_cat_join_num_arr = []),
-        (this.bookPeopleNum = ""),
-        (this.joinPeopleNum = ""),
-        (this.trendWeekData = []),
-        (this.trendYearData = []);
+      this.showNums = "day",
+      this.act_cat_join_num_lists = "",
+      this.act_cat_join_num_arr = [],
+      this.bookPeopleNum = "",
+      this.joinPeopleNum = "",
+      this.trendWeekData = [],
+      this.trendYearData = [];
       that.getServicePageData();
     }, this.$store.state.intervalTime);
   },
@@ -148,6 +148,7 @@ export default {
       this.drawServicePeople();
     },
     getServicePageData() {
+      this.act_cat_join_num_lists =[]
       this.http.get(this.ports.urls.ServicePageData, res => {
         //("第三页调用")
         this.act_cat_join_num_lists = res.data.results.act_cat_join_num_lists;
@@ -185,10 +186,10 @@ export default {
       this.joinPeopleNum = this.act_sign_date_num.today_num;
       this.drawServicePeople();
       this.userAgePeriodNum();
-      let trendWeekChart = this.$echarts.init(
+      this.$store.state.trendWeekChart = this.$echarts.init(
         document.getElementById("trend-week")
       );
-      let trendYearChart = this.$echarts.init(
+      this.$store.state.trendYearChart = this.$echarts.init(
         document.getElementById("trend-year")
       );
       // let trendWeekData =
@@ -481,17 +482,17 @@ export default {
           }
         ]
       };
-      trendWeekChart.setOption(trendWeekOption);
+      this.$store.state.trendWeekChart.setOption(trendWeekOption);
       window.addEventListener("resize", () => {
-        trendWeekChart.resize();
+        this.$store.state.trendWeekChart.resize();
       });
-      trendYearChart.setOption(trendYearOption);
+      this.$store.state.trendYearChart.setOption(trendYearOption);
       window.addEventListener("resize", () => {
-        trendYearChart.resize();
+        this.$store.state.trendYearChart.resize();
       });
     },
     drawTotal() {
-      let actTypeChart = this.$echarts.init(
+      this.$store.state.actTypeChart = this.$echarts.init(
         document.getElementById("aside-charts")
       );
       for (let i in this.act_cat_join_num_lists) {
@@ -526,13 +527,13 @@ export default {
           }
         ]
       };
-      actTypeChart.setOption(actTrendOption);
+      this.$store.state.actTypeChart.setOption(actTrendOption);
       window.addEventListener("resize", () => {
-        actTypeChart.resize();
+        this.$store.state.actTypeChart.resize();
       });
     },
     drawServicePeople() {
-      let orderChart = this.$echarts.init(
+      this.$store.state.orderChart = this.$echarts.init(
         document.getElementById("service-order")
       );
       var placeHolderStyle = {
@@ -782,9 +783,9 @@ export default {
         ]
       };
       // 绘制图表
-      orderChart.setOption(orderChartOption);
+      this.$store.state.orderChart.setOption(orderChartOption);
       window.addEventListener("resize", () => {
-        orderChart.resize();
+        this.$store.state.orderChart.resize();
       });
     },
     userAgePeriodNum() {
@@ -792,7 +793,7 @@ export default {
       for (let i in this.user_age_period_num) {
         userAge.push(this.user_age_period_num[i].percent / 100);
       }
-      let ageChart = this.$echarts.init(
+      this.$store.state.ageChart = this.$echarts.init(
         document.getElementById("service-age"),
         null,
         { renderer: "svg" }
@@ -894,9 +895,9 @@ var seriesObj = [{
         },
         series: seriesObj
       };
-      ageChart.setOption(ageChartOption);
+      this.$store.state.ageChart.setOption(ageChartOption);
       window.addEventListener("resize", () => {
-        ageChart.resize();
+        this.$store.state.ageChart.resize();
       });
     },
     orderData(items) {

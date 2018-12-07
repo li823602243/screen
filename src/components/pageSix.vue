@@ -142,7 +142,7 @@
         for(let i in this.live_play_year_trend){
            this.live_play_year_trend_data.push(this.live_play_year_trend[i])
         }
-        let trendYearChart = this.$echarts.init(
+        this.$store.state.trendYearChart = this.$echarts.init(
           document.getElementById("watch-people")
         );
          let trendYearOption = {
@@ -234,9 +234,9 @@
           }]
   
         };
-        trendYearChart.setOption(trendYearOption);
+        this.$store.state.trendYearChart.setOption(trendYearOption);
         window.addEventListener("resize", () => {
-          trendYearChart.resize();
+          this.$store.state.trendYearChart.resize();
         });
       }
     }

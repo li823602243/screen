@@ -139,16 +139,16 @@ export default {
           return res;
         }
       // 基于准备好的dom，初始化echarts实例
-      let todayServiceNum = this.$echarts.init(
+      this.$store.state.todayServiceNum = this.$echarts.init(
         document.getElementById("today-service--num")
       );
-      let libraryNum = this.$echarts.init(
+      this.$store.state.libraryNum = this.$echarts.init(
         document.getElementById("library-people")
       );
-      let aggregateChart = this.$echarts.init(
+      this.$store.state.aggregateChart = this.$echarts.init(
         document.getElementById("aggregate-people")
       );
-      let entranceNowTotalChart = this.$echarts.init(
+      this.$store.state.entranceNowTotalChart = this.$echarts.init(
         document.getElementById("entrance-now-total")
       );
       let aggregateOption = {
@@ -565,27 +565,27 @@ export default {
           }
         ]
       };
-      aggregateChart.setOption(aggregateOption);
+      this.$store.state.aggregateChart.setOption(aggregateOption);
       window.addEventListener("resize", () => {
-        aggregateChart.resize();
+        this.$store.state.aggregateChart.resize();
       });
-      entranceNowTotalChart.setOption(entranceNowTotalOption);
+      this.$store.state.entranceNowTotalChart.setOption(entranceNowTotalOption);
       window.addEventListener("resize", () => {
-        entranceNowTotalChart.resize();
+        this.$store.state.entranceNowTotalChart.resize();
       });
-      todayServiceNum.setOption(todayServiceOption);
+      this.$store.state.todayServiceNum.setOption(todayServiceOption);
       window.addEventListener("resize", () => {
-        todayServiceNum.resize();
+        this.$store.state.todayServiceNum.resize();
       });
-      libraryNum.setOption(libraryNumOption);
+      this.$store.state.libraryNum.setOption(libraryNumOption);
       window.addEventListener("resize", () => {
-        libraryNum.resize();
+        this.$store.state.libraryNum.resize();
       });
     },
     drwaEntranceNow(){
       this.dataBoxArr.shift();
       this.dataBoxArr.push(this.getNowMin()+':'+this.getNowTime()*5);
-      let entranceNowNumChart = this.$echarts.init(
+      this.$store.state.entranceNowNumChart = this.$echarts.init(
         document.getElementById("entrance-now-num")
       );
       function formatDate(time){
@@ -833,9 +833,9 @@ export default {
           }
         ]
       };
-      entranceNowNumChart.setOption(entranceNowNumOption,true);
+      this.$store.state.entranceNowNumChart.setOption(entranceNowNumOption,true);
       window.addEventListener("resize", () => {
-        entranceNowNumChart.resize();
+        this.$store.state.entranceNowNumChart.resize();
       });
     },
     //获取当前系统秒数

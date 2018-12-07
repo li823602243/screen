@@ -4,8 +4,8 @@
     <el-col :span="9">
       <el-row :gutter="24">
         <el-col :span="12" class="circle-content--bottom">
-          <div class="circle-content">
-            <div class="circle-wrapper">
+          <div class="circle-content" :class="{circleAnimation:this.$store.state.pageNum==10}">
+            <div class="circle-wrapper" :class="{circleAnimationWrapper:this.$store.state.pageNum==10}">
               <span class="title">活动发布场次</span>
               <span class="num">{{HomePageData.act_total}}</span>
             </div>
@@ -13,8 +13,8 @@
           <span class="tips">昨日新增:{{HomePageData.act_today}}</span>
         </el-col>
         <el-col :span="12" class="circle-content--bottom">
-          <div class="circle-content">
-            <div class="circle-wrapper">
+          <div class="circle-content" :class="{circleAnimation:this.$store.state.pageNum==10}">
+            <div class="circle-wrapper" :class="{circleAnimationWrapper:this.$store.state.pageNum==10}">
               <span class="title">活动参与人数</span>
               <span class="num">{{HomePageData.act_join_total}}</span>
             </div>
@@ -24,8 +24,8 @@
       </el-row>
       <el-row :gutter="24">
        <el-col :span="12">
-          <div class="circle-content">
-            <div class="circle-wrapper">
+          <div class="circle-content" :class="{circleAnimation:this.$store.state.pageNum==10}">
+            <div class="circle-wrapper" :class="{circleAnimationWrapper:this.$store.state.pageNum==10}">
               <span class="title">直播观看人次</span>
               <span class="num">{{HomePageData.live_play_total}}</span>
             </div>
@@ -33,8 +33,8 @@
           <span class="tips">昨日观看:{{HomePageData.live_play_today}}</span>
         </el-col>
        <el-col :span="12">
-          <div class="circle-content">
-            <div class="circle-wrapper">
+          <div class="circle-content" :class="{circleAnimation:this.$store.state.pageNum==10}">
+            <div class="circle-wrapper" :class="{circleAnimationWrapper:this.$store.state.pageNum==10}">
               <span class="title">资源点播人次</span>
               <span class="num">{{HomePageData.video_play_total}}</span>
             </div>
@@ -53,8 +53,8 @@
     <el-col :span="9">
       <el-row :gutter="24">
        <el-col :span="12" class="circle-content--bottom">
-          <div class="circle-content">
-            <div class="circle-wrapper">
+          <div class="circle-content" :class="{circleAnimation:this.$store.state.pageNum==10}">
+            <div class="circle-wrapper" :class="{circleAnimationWrapper:this.$store.state.pageNum==10}">
               <span class="title">场馆预约次数</span>
               <span class="num">{{HomePageData.venue_booking_total}}</span>
             </div>
@@ -62,8 +62,8 @@
           <span class="tips">昨日预约:{{HomePageData.venue_booking_today}}</span>
         </el-col>
        <el-col :span="12" class="circle-content--bottom">
-          <div class="circle-content">
-            <div class="circle-wrapper">
+          <div class="circle-content" :class="{circleAnimation:this.$store.state.pageNum==10}">
+            <div class="circle-wrapper" :class="{circleAnimationWrapper:this.$store.state.pageNum==10}">
               <span class="title">入馆服务人数</span>
               <span class="num">{{utils.numFormat(allTotalEnterNum)}}</span>
             </div>
@@ -73,8 +73,8 @@
       </el-row>
       <el-row :gutter="24">
        <el-col :span="12">
-          <div class="circle-content">
-            <div class="circle-wrapper">
+          <div class="circle-content" :class="{circleAnimation:this.$store.state.pageNum==10}">
+            <div class="circle-wrapper" :class="{circleAnimationWrapper:this.$store.state.pageNum==10}">
               <span class="title">微信关注人数</span>
               <span class="num">{{HomePageData.wx_inviter_total}}</span>
             </div>
@@ -82,8 +82,8 @@
           <span class="tips">昨日新增:{{HomePageData.wx_inviter_today}}</span>
         </el-col>
        <el-col :span="12">
-          <div class="circle-content">
-            <div class="circle-wrapper">
+          <div class="circle-content" :class="{circleAnimation:this.$store.state.pageNum==10}">
+            <div class="circle-wrapper" :class="{circleAnimationWrapper:this.$store.state.pageNum==10}">
               <span class="title">注册用户人数</span>
               <span class="num">{{HomePageData.register_total}}</span>
             </div>
@@ -106,6 +106,7 @@ export default {
     };
   },
   mounted() {
+    console.log("1111111")
     this.getHomePageData();
      const pageOne = setInterval(() =>{                    
           this.getHomePageData();          
@@ -164,10 +165,15 @@ export default {
   background-size: cover;
   background-repeat: no-repeat;
   margin:  0 auto;
-  animation:changDeg 5s linear 0.2s infinite; 
+  
 }
-.circle-wrapper {
+.circleAnimation {
+  animation:changDeg 5s linear 0.2s infinite; 
+  transform: translateZ(0);
+}
+.circleAnimationWrapper {
   animation:changDegr 5s linear 0.2s infinite;
+  transform: translateZ(0); 
 }
 .circle-wrapper .title {
   display: inline-block;
@@ -216,18 +222,18 @@ export default {
 }
 @keyframes changDeg{
 			0%{
-				transform: rotate(0deg);
+        transform: rotate(0deg);
 			}
 			100%{
-				transform: rotate(360deg);
+        transform: rotate(360deg);
 			}
 		}
 @keyframes changDegr{
 			0%{
-				transform: rotate(360deg);
+        transform: rotate(360deg);
 			}
 			100%{
-				transform: rotate(0deg);
+        transform: rotate(0deg);
 			}
 		}
 </style>

@@ -41,13 +41,13 @@
         },
        drawLine() {
         // 基于准备好的dom，初始化echarts实例
-        let userSexChart = this.$echarts.init(
+        this.$store.state.userSexChart = this.$echarts.init(
           document.getElementById("user-left")
         );
-        let userTimeChart = this.$echarts.init(
+        this.$store.state.userTimeChart = this.$echarts.init(
           document.getElementById("user-middle")
         );
-        let userPadChart = this.$echarts.init(
+        this.$store.state.userPadChart = this.$echarts.init(
           document.getElementById("user-right")
         );
         var data = [];
@@ -271,19 +271,19 @@
             }]
         };
         // 绘制图表
-        userSexChart.setOption(userSexOptions);
+        this.$store.state.userSexChart.setOption(userSexOptions);
         window.addEventListener("resize", () => {
-          userSexChart.resize();
+          this.$store.state.userSexChart.resize();
         });
 
-        userTimeChart.setOption(userTimeOptions);
+        this.$store.state.userTimeChart.setOption(userTimeOptions);
         window.addEventListener("resize", () => {
-          userTimeChart.resize();
+          this.$store.state.userTimeChart.resize();
         });
 
-        userPadChart.setOption(userPadOptions);
+        this.$store.state.userPadChart.setOption(userPadOptions);
         window.addEventListener("resize", () => {
-          userPadChart.resize();
+          this.$store.state.userPadChart.resize();
         });
       }
   }

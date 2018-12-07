@@ -39,21 +39,21 @@
     </div>
     <div class="resource">
       <span class="resource-stage--title">资源鉴赏数据统计</span>
-      <span class="bouble1"></span>
-      <span class="bouble2"></span>
-      <span class="bouble3"></span>
-      <span class="bouble4"></span>
-      <span class="bouble5"></span>
-      <span class="bouble6"></span>
-      <div class="resource-num">
+      <span class="bouble1" :class="{bouble1Animation:this.$store.state.pageNum==16}"></span>
+      <span class="bouble2" :class="{bouble2Animation:this.$store.state.pageNum==16}"></span>
+      <span class="bouble3" :class="{bouble3Animation:this.$store.state.pageNum==16}"></span>
+      <span class="bouble4" :class="{bouble4Animation:this.$store.state.pageNum==16}"></span>
+      <span class="bouble5" :class="{bouble5Animation:this.$store.state.pageNum==16}"></span>
+      <span class="bouble6" :class="{bouble6Animation:this.$store.state.pageNum==16}"></span>
+      <div class="resource-num" :class="{resourceAnimation:this.$store.state.pageNum==16}">
         <span class="resource-title">资源数量</span>
         <span class="num">{{resource_total}}</span>
       </div>
-      <div class="resource-play">
+      <div class="resource-play" :class="{resourcePlayAnimation:this.$store.state.pageNum==16}">
         <span class="resource-title">播放总数</span>
         <span class="num">{{resource_play_total}} </span>
       </div>
-      <div class="resource-rong">
+      <div class="resource-rong" :class="{resourceRongAnimation:this.$store.state.pageNum==16}">
         <span class="resource-title"> 资源容量</span>
         <span class="num">{{resource_size_total}}</span>
       </div>
@@ -173,12 +173,12 @@ export default {
   background-repeat: no-repeat;
 
   background-position: 50% 100%;
-
-  animation: bubbleRise 8s linear infinite;
-
   z-index: 2;
 }
-
+.bouble1Animation {
+  animation: bubbleRise 8s linear infinite;
+  transform: translateZ(0); 
+}
 .bouble2 {
   position: absolute;
 
@@ -201,12 +201,12 @@ export default {
   background-repeat: no-repeat;
 
   background-position: 50% 100%;
-
-  animation: bubbleRise 10s linear infinite;
-
   z-index: 2;
 }
-
+.bouble2Animation {
+  animation: bubbleRise 10s linear infinite;
+  transform: translateZ(0); 
+}
 .bouble3 {
   position: absolute;
 
@@ -229,12 +229,12 @@ export default {
   background-repeat: no-repeat;
 
   background-position: 50% 100%;
-
-  animation: bubbleRise 6s linear infinite;
-
   z-index: 2;
 }
-
+.bouble3Animation {
+  animation: bubbleRise 6s linear infinite;
+  transform: translateZ(0); 
+}
 .bouble4 {
   position: absolute;
 
@@ -256,13 +256,13 @@ export default {
 
   background-repeat: no-repeat;
 
-  background-position: 50% 100%;
-
-  animation: bubbleRise 9s linear infinite;
-
+  background-position: 50% 100%; 
   z-index: 2;
 }
-
+.bouble4Animation {
+  animation: bubbleRise 9s linear infinite;
+  transform: translateZ(0);
+}
 @keyframes bubbleRise {
   0% {
     transform: translate(0px, 0px);
@@ -382,11 +382,12 @@ export default {
 
   color: #000733;
 
-  z-index: 1;
-
-  animation: cricleTrans 6s linear infinite;
+  z-index: 1; 
 }
-
+.resourceAnimation {
+  animation: cricleTrans 6s linear infinite;
+  transform: translateZ(0);
+}
 .resource-title {
   display: inline-block;
 
@@ -445,10 +446,11 @@ export default {
   color: #fff;
 
   z-index: 1;
-
-  animation: cricleTrans 8s linear infinite;
 }
-
+.resourcePlayAnimation {
+  animation: cricleTrans 8s linear infinite;
+  transform: translateZ(0); 
+}
 .resource-rong {
   position: absolute;
 
@@ -473,10 +475,11 @@ export default {
   background-color: #dfe3a7;
 
   color: #000733;
-
-  animation: cricleTrans 10s linear infinite;
 }
-
+.resourceRongAnimation {
+  animation: cricleTrans 10s linear infinite;
+  transform: translateZ(0); 
+}
 .resource-left {
   display: flex;
 

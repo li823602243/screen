@@ -4,28 +4,28 @@
     <page-one></page-one>
     </el-carousel-item>
     <el-carousel-item>
-      <page-two></page-two>
+      <page-two ref="mychildTwo"></page-two>
     </el-carousel-item>
     <el-carousel-item>
-      <page-three></page-three>
+      <page-three ref="mychildThree"></page-three>
     </el-carousel-item>
     <el-carousel-item>
-      <page-four></page-four>
+      <page-four ref="mychildFour"></page-four>
     </el-carousel-item>
        <el-carousel-item>
-      <page-five></page-five>
+      <page-five ref="mychildFive"></page-five>
     </el-carousel-item>
        <el-carousel-item>
-      <page-six></page-six>
+      <page-six ref="mychildSix"></page-six>
     </el-carousel-item>
        <el-carousel-item>
-    <page-seven></page-seven>
+    <page-seven ref="mychildSeven"></page-seven>
     </el-carousel-item>
     <el-carousel-item>
-      <page-eight></page-eight>
+      <page-eight ref="mychildEight"></page-eight>
     </el-carousel-item>
     <el-carousel-item>
-      <page-nine></page-nine>
+      <page-nine ref="mychildNine"></page-nine>
     </el-carousel-item>
   </el-carousel>
 </template>
@@ -59,6 +59,95 @@ export default {
    changePage:function(e){
     console.log(e)
     this.$store.state.pageNum = e;
+    switch(e)
+      {
+      case 0:
+        this.$store.state.userSexChart.clear();
+        this.$store.state.userTimeChart.clear();
+        this.$store.state.userPadChart.clear();
+
+        this.$store.state.actTypeChart.clear();
+        this.$store.state.actPublicChart.clear();
+        this.$store.state.actStatusChart.clear();
+        this.$store.state.actTrendChart.clear();
+        break;
+       case 1:
+         this.$refs.mychildTwo.getActivityPageData();
+        break;
+      case 2:
+        // 第二页
+        this.$store.state.actTypeChart.clear();
+        this.$store.state.actPublicChart.clear();
+        this.$store.state.actStatusChart.clear();
+        this.$store.state.actTrendChart.clear();
+
+        this.$refs.mychildThree.getServicePageData();
+        // 第三页
+        this.$store.state.trendWeekChart.clear();
+        this.$store.state.trendYearChart.clear();
+        this.$store.state.actTypeChart.clear();
+        this.$store.state.orderChart.clear();
+        this.$store.state.ageChart.clear();
+        break;
+      case 3:
+        // 第三页
+        this.$store.state.trendWeekChart.clear();
+        this.$store.state.trendYearChart.clear();
+        this.$store.state.actTypeChart.clear();
+        this.$store.state.orderChart.clear();
+        this.$store.state.ageChart.clear();
+
+        this.$refs.mychildFour.getVenuePageData();
+        // 第四页
+        this.$store.state.orderDayChart.clear();
+        this.$store.state.orderWeekChart.clear();
+        this.$store.state.orderMonthChart.clear();
+        this.$store.state.orderAllChart.clear();
+        this.$store.state.addressCityTotalChart.clear();
+        break;
+      case 4:
+        // 第四页
+        this.$store.state.orderDayChart.clear();
+        this.$store.state.orderWeekChart.clear();
+        this.$store.state.orderMonthChart.clear();
+        this.$store.state.orderAllChart.clear();
+        this.$store.state.addressCityTotalChart.clear();
+        this.$refs.mychildFive.pageFiveData();
+        //第五页
+        this.$store.state.todayServiceNum.clear();
+        this.$store.state.libraryNum.clear();
+        this.$store.state.aggregateChart.clear();
+        this.$store.state.entranceNowTotalChart.clear();
+        this.$store.state.entranceNowNumChart.clear();
+        break;
+      case 5:
+        //第五页
+        this.$store.state.todayServiceNum.clear();
+        this.$store.state.libraryNum.clear();
+        this.$store.state.aggregateChart.clear();
+        this.$store.state.entranceNowTotalChart.clear();
+        this.$store.state.entranceNowNumChart.clear();
+        this.$refs.mychildSix.getVenuePageData();
+        //第六页
+        this.$store.state.trendYearChart.clear();
+        break;
+      case 6:
+        //第六页
+        this.$store.state.trendYearChart.clear();
+        //this.$store.state.mapChart.clear();
+        break;
+      case 7:
+        this.$refs.mychildEight.getVenuePageData();
+        this.$store.state.userSexChart.clear();
+        this.$store.state.userTimeChart.clear();
+        this.$store.state.userPadChart.clear();
+        break;
+      case 8:
+        //this.$store.state.mapChart.clear();
+        this.$refs.mychildNine.getVenuePageData();
+        break;
+      default:
+      }
    }
   }
 };

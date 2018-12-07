@@ -105,6 +105,7 @@ export default {
   },
   methods: {
     getVenuePageData() {
+      this.myCityData = []
       this.http.get(this.ports.urls.VenuePageData, res => {
         //console.log("第四页调用");
         this.venue_booking_date_num = res.data.results.venue_booking_date_num;
@@ -115,19 +116,19 @@ export default {
     },
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
-      let orderDayChart = this.$echarts.init(
+      this.$store.state.orderDayChart = this.$echarts.init(
         document.getElementById("order-day")
       );
-      let orderWeekChart = this.$echarts.init(
+      this.$store.state.orderWeekChart = this.$echarts.init(
         document.getElementById("order-week")
       );
-      let orderMonthChart = this.$echarts.init(
+      this.$store.state.orderMonthChart = this.$echarts.init(
         document.getElementById("order-month")
       );
-      let orderAllChart = this.$echarts.init(
+      this.$store.state.orderAllChart = this.$echarts.init(
         document.getElementById("order-all")
       );
-      let addressCityTotalChart = this.$echarts.init(
+      this.$store.state.addressCityTotalChart = this.$echarts.init(
         document.getElementById("address-city-total")
       );
       var dataStyle = {
@@ -536,25 +537,25 @@ export default {
         ]
       });
       // 绘制图表
-      orderDayChart.setOption(orderDayOption);
+      this.$store.state.orderDayChart.setOption(orderDayOption);
       window.addEventListener("resize", () => {
-        orderDayChart.resize();
+        this.$store.state.orderDayChart.resize();
       });
-      orderWeekChart.setOption(orderWeekOption);
+      this.$store.state.orderWeekChart.setOption(orderWeekOption);
       window.addEventListener("resize", () => {
-        orderWeekChart.resize();
+        this.$store.state.orderWeekChart.resize();
       });
-      orderMonthChart.setOption(orderMonthOption);
+      this.$store.state.orderMonthChart.setOption(orderMonthOption);
       window.addEventListener("resize", () => {
-        orderMonthChart.resize();
+        this.$store.state.orderMonthChart.resize();
       });
-      orderAllChart.setOption(orderAllOption);
+      this.$store.state.orderAllChart.setOption(orderAllOption);
       window.addEventListener("resize", () => {
-        orderAllChart.resize();
+        this.$store.state.orderAllChart.resize();
       });
-      addressCityTotalChart.setOption(addressCityTotalOption);
+      this.$store.state.addressCityTotalChart.setOption(addressCityTotalOption);
       window.addEventListener("resize", () => {
-        addressCityTotalChart.resize();
+        this.$store.state.addressCityTotalChart.resize();
       });
     }
   }

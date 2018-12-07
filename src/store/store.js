@@ -12,7 +12,11 @@ const store = new Vuex.Store({
     intervalTime:600000,//接口刷新时间
     YearDataArrPre:[],
     allTotalEnterNum:"1",
-    allYesterDay:'2'
+    allYesterDay:'2',
+    pageOneChart:'',
+    pageTwoChart:'',
+    pageThreeChart:'',
+    pageFourChart:'',
 
   },
   mutations: {

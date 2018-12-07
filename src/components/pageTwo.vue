@@ -271,6 +271,13 @@ export default {
   },
   methods: {
     getActivityPageData() {
+      this.act_area_num_lists = [];
+      this.act_cat_num_lists = []; 
+      this.act_status_data = [];
+      this.act_trend_publish = [];
+      this.actStatusData = [];
+      this.maxActStatus =[];
+      this.actTrendData= [];
       this.http.get(this.ports.urls.ActivityPageData,res => {
           //console.log("第二页调用");
           this.act_area_num_lists = res.data.results.act_area_num_lists;
@@ -334,13 +341,13 @@ export default {
     },
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
-      let actPublicChart = this.$echarts.init(
+     this.$store.state.actPublicChart = this.$echarts.init(
         document.getElementById("actPublic")
       );
-      let actStatusChart = this.$echarts.init(
+      this.$store.state.actStatusChart = this.$echarts.init(
         document.getElementById("actStatus")
       );
-      let actTypeChart = this.$echarts.init(document.getElementById("actType"));
+      this.$store.state.actTypeChart = this.$echarts.init(document.getElementById("actType"));
       let actPublicData = [];
       let actPublicDataLength = this.act_area_num_lists.length;
       for(let i in this.act_area_num_lists){
@@ -580,17 +587,17 @@ export default {
         this.actTrendData.push(this.act_trend_publish.week[i])
       }
       // 绘制图表
-      actPublicChart.setOption(actPublicOption);
+      this.$store.state.actPublicChart.setOption(actPublicOption);
       window.addEventListener("resize", () => {
-        actPublicChart.resize();
+        this.$store.state.actPublicChart.resize();
       });
-      actTypeChart.setOption(actTypeChartOption);
+      this.$store.state.actTypeChart.setOption(actTypeChartOption);
       window.addEventListener("resize", () => {
-        actTypeChart.resize();
+         this.$store.state.actTypeChart.resize();
       });
     },
     drawTrendCharts(){
-      let actTrendChart = this.$echarts.init(
+      this.$store.state.actTrendChart = this.$echarts.init(
         document.getElementById("actTrend")
       );
        let actTrendOption = {
@@ -676,13 +683,13 @@ export default {
           }
         ]
       };
-      actTrendChart.setOption(actTrendOption);
+      this.$store.state.actTrendChart.setOption(actTrendOption);
       window.addEventListener("resize", () => {
         actTrendChart.resize();
       });
     },
     drawActStatusCharts(){
-      let actStatusChart = this.$echarts.init(
+      this.$store.state.actStatusChart = this.$echarts.init(
         document.getElementById("actStatus")
       );
       var myColor = ["#f57473", "#54ffff", "#f7b449", "#8a79f4"];
@@ -786,9 +793,9 @@ export default {
           }
         ]
       };
-      actStatusChart.setOption(actStatusOption);
+      this.$store.state.actStatusChart.setOption(actStatusOption);
       window.addEventListener("resize", () => {
-        actStatusChart.resize();
+        this.$store.state.actStatusChart.actStatusChart.resize();
       });
     }
   }
