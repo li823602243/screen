@@ -76,6 +76,7 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex';
   export default {
   
     name: "hello",
@@ -93,31 +94,28 @@
   
     mounted() {
       let that  =  this;
-      this.getVenuePageData();
-       const pageFour = setInterval(() =>{                    
-          that.getVenuePageData();          
-       }, this.$store.state.intervalTime); 
+      setTimeout(()=>{
+        this.getVenuePageData();
+      },500)
     },
   
     computed: {
   
-      author() {
-  
-        return this.$store.state.author
-  
-      }
+      ...mapState({
+        SixPageData:state=>state.getSixPageData.msg,
+      })
   
     },
     methods: {
       getVenuePageData() {
-      this.http.get(this.ports.urls.LivePageData, res => {
-         // console.log("第六页调用");
-          this.live_play_times = res.data.results.live_play_times;
-          this.live_play_year_trend = res.data.results.live_play_year_trend;
-          this.live_channel_num = res.data.results.live_channel_num;
-          this.live_channel_play_rank = res.data.results.live_channel_play_rank;
-          this.drawLine();
-        });
+          let that = this;
+          this.live_play_times = this.SixPageData.live_play_times;
+          this.live_play_year_trend = this.SixPageData.live_play_year_trend;
+          this.live_channel_num = this.SixPageData.live_channel_num;
+          this.live_channel_play_rank = this.SixPageData.live_channel_play_rank;
+          this.$nextTick(()=>{
+            that.drawLine();
+          });
       },
       drawLine() {
         const numFormat = num =>{

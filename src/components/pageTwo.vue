@@ -234,6 +234,7 @@
 
 <script>
 import DateChoose from "./DateChoose.vue";
+import {mapState} from 'vuex';
 export default {
   name: "hello",
   components: {
@@ -252,22 +253,15 @@ export default {
   },
   mounted() {
     let that = this;
-    this.getActivityPageData();
-    const pageTwo = setInterval(() =>{
-        this.ActivityPageData= '',
-        this.shows='week',
-        this.showNums='day',
-        this.actTrendBottomData=[],
-        this.actTrendData=[],
-        this.actStatusData=[],
-        this.maxActStatus=[]               
-        that.getActivityPageData();          
-    }, this.$store.state.intervalTime); 
+      setTimeout(()=>{
+        this.getActivityPageData();
+      },500)
   },
   computed: {
-      author () {
-        return this.$store.state.author
-      }
+      ...mapState({
+        SecondPageData:state=>state.getSecondPageData.msg,
+        
+      })
   },
   methods: {
     getActivityPageData() {
@@ -278,17 +272,14 @@ export default {
       this.actStatusData = [];
       this.maxActStatus =[];
       this.actTrendData= [];
-      this.http.get(this.ports.urls.ActivityPageData,res => {
-          //console.log("第二页调用");
-          this.act_area_num_lists = res.data.results.act_area_num_lists;
-          this.act_cat_num_lists = res.data.results.act_cat_num_lists;
-          this.act_status_data = res.data.results.act_status_data;
-          this.act_trend_publish = res.data.results.act_trend_publish;
-          for(let i in this.act_trend_publish.week){
-            this.actTrendData.push(this.act_trend_publish.week[i]);
-          }
-          this.drawLine();
-      })
+      this.act_area_num_lists = this.SecondPageData.act_area_num_lists;
+      this.act_cat_num_lists = this.SecondPageData.act_cat_num_lists;
+      this.act_status_data = this.SecondPageData.act_status_data;
+      this.act_trend_publish = this.SecondPageData.act_trend_publish;
+      for(let i in this.act_trend_publish.week){
+        this.actTrendData.push(this.act_trend_publish.week[i]);
+      }
+      this.drawLine();
     },
     chooseDate:function(data){
       this.shows=data;
@@ -408,6 +399,7 @@ export default {
       for( let i in this.act_status_data.today){
          this.actStatusData.push(this.act_status_data.today[i].amount)
       }
+      console.log(this.actStatusData)
       for(let i in  this.actStatusData){
         this.maxActStatus.push(1.1*Math.max.apply(null, this.actStatusData))
       }
@@ -685,7 +677,7 @@ export default {
       };
       this.$store.state.actTrendChart.setOption(actTrendOption);
       window.addEventListener("resize", () => {
-        actTrendChart.resize();
+        this.$store.state.actTrendChart.resize();
       });
     },
     drawActStatusCharts(){
@@ -795,7 +787,7 @@ export default {
       };
       this.$store.state.actStatusChart.setOption(actStatusOption);
       window.addEventListener("resize", () => {
-        this.$store.state.actStatusChart.actStatusChart.resize();
+        this.$store.state.actStatusChart.resize();
       });
     }
   }

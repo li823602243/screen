@@ -25,7 +25,7 @@
   
   
         </el-row>
-        <el-row class="resource-left--body" v-for="(item,index) in resource_cat_play_rank" :key="index">
+        <el-row class="resource-left--body" v-for="(item,index) in SevenPageData.resource_cat_play_rank" :key="index">
           <el-col :span="8">{{item.filter_name}}</el-col>
           <el-col :span="8"> {{utils.numFormat(item.amount)}}</el-col>
           <el-col :span="8" >
@@ -47,21 +47,21 @@
       <span class="bouble6" :class="{bouble6Animation:this.$store.state.pageNum==16}"></span>
       <div class="resource-num" :class="{resourceAnimation:this.$store.state.pageNum==16}">
         <span class="resource-title">资源数量</span>
-        <span class="num">{{resource_total}}</span>
+        <span class="num">{{SevenPageData.resource_total}}</span>
       </div>
       <div class="resource-play" :class="{resourcePlayAnimation:this.$store.state.pageNum==16}">
         <span class="resource-title">播放总数</span>
-        <span class="num">{{resource_play_total}} </span>
+        <span class="num">{{SevenPageData.resource_play_total}} </span>
       </div>
       <div class="resource-rong" :class="{resourceRongAnimation:this.$store.state.pageNum==16}">
         <span class="resource-title"> 资源容量</span>
-        <span class="num">{{resource_size_total}}</span>
+        <span class="num">{{SevenPageData.resource_size_total}}</span>
       </div>
     </div>
     <div class="resource-right">
       <div class="title-flag right">资源播放TOP</div>
       <div class="resource-left--content">
-        <div class="resource-pannel" v-for="(item,index) in resource_video_play_rank" :key="index" v-if="index<=4">
+        <div class="resource-pannel" v-for="(item,index) in SevenPageData.resource_video_play_rank" :key="index" v-if="index<=4">
           <div class="r-pannel--header">
             <div class="p-header--left">
               <span class="p-header--icon p-header--first" v-if="index==0"></span>
@@ -84,41 +84,20 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   name: "hello",
   data() {
     return {
-      resource_total: "",
-      resource_play_total: "",
-      resource_total: "",
-      resource_cat_play_rank: "",
-      resource_video_play_rank: "",
-      resource_size_total:""
     };
   },
   mounted() {
     let that = this;
-    this.getVenuePageData();
-     const pageSeven = setInterval(() =>{                    
-       that.getVenuePageData();          
-     }, this.$store.state.intervalTime); 
   },
   computed: {
-    author() {
-      return this.$store.state.author;
-    }
-  },
-  methods: {
-    getVenuePageData() {
-      this.http.get(this.ports.urls.ResourcePageData, res => {
-        //console.log("第七页调用");
-        this.resource_total = res.data.results.resource_total;
-        this.resource_play_total = res.data.results.resource_play_total;
-        this.resource_cat_play_rank = res.data.results.resource_cat_play_rank;
-        this.resource_size_total = res.data.results.resource_size_total;
-        this.resource_video_play_rank = res.data.results.resource_video_play_rank;
-      });
-    }
+    ...mapState({
+      SevenPageData:state=>state.getSevenPageData.msg,
+    })
   }
 };
 </script>

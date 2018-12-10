@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   name: "hello",
   data() {
@@ -62,22 +63,16 @@ export default {
   mounted() {
     let that = this;
     this.getVenuePageData();
-     const pageEight = setInterval(() =>{                    
-       that.getVenuePageData();          
-     }, this.$store.state.intervalTime); 
   },
   computed: {
-    author() {
-      return this.$store.state.author;
-    }
+    ...mapState({
+      EightPageData:state=>state.getEightPageData.msg,
+    })
   },
   methods: {
     getVenuePageData() {
-      this.http.get(this.ports.urls.userPageData, res => {
-         //console.log("第八页调用");
-        this.userData = res.data.results;
+        this.userData = this.EightPageData;
         this.drawLine();
-      });
     },
     drawLine() {
       let mapChart = this.$echarts.init(document.getElementById("echarts"));
@@ -277,8 +272,8 @@ export default {
         }
         userMapData.push(obj)
       }
-       this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
-       //this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
+       //this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
+       this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
         this.$echarts.registerMap("江苏", response.data);
         var myChart = this.$echarts.extendsMap("chart-panel", {
           bgColor: "#0f6ab8", // 画布背景色

@@ -9,7 +9,8 @@
 </template>
 
 <script>
-  export default {
+import {mapState} from 'vuex';
+export default {
   name: "hello",
   data() {
     return {
@@ -21,23 +22,17 @@
   },
   mounted() {
     let that = this; 
-   this.getVenuePageData();
-    const pageNine = setInterval(() =>{                    
-       that.getVenuePageData();          
-     }, this.$store.state.intervalTime); 
+    this.getVenuePageData();
   },
   computed: {
-      author () {
-        return this.$store.state.author
-      }
+    ...mapState({
+      EightPageData:state=>state.getEightPageData.msg,
+    })
   },
   methods: {
         getVenuePageData() {
-        this.http.get(this.ports.urls.userPageData, res => {
-            //console.log("第九页调用");
-            this.userData = res.data.results;
+            this.userData = this.EightPageData;
             this.drawLine();
-        });
         },
        drawLine() {
         // 基于准备好的dom，初始化echarts实例

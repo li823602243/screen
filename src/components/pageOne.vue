@@ -97,40 +97,18 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   data() {
     return {
-      HomePageData:'',
       allTotalEnterNum:'',
       allYesterDay:''
     };
   },
-  mounted() {
-    console.log("1111111")
-    this.getHomePageData();
-     const pageOne = setInterval(() =>{                    
-          this.getHomePageData();          
-     }, this.$store.state.intervalTime);      
-  },
   computed: {
-    author() {
-      return this.$store.state.pageNum;
-    }
-  },
-  methods: {
-    getHomePageData() {
-      this.http.get(this.ports.urls.HomePageData,res => {
-          this.HomePageData = res.data.results;
-      })
-      this.http.get(this.ports.urls.allYesterDay, res => {
-        this.allYesterDay = res.data.results;
-        this.$store.state.allYesterDay=res.data.results;
-      });
-      this.http.get(this.ports.urls.allTotalEnterNum, res => {
-        this.allTotalEnterNum = res.data.results;
-        this.$store.state.allTotalEnterNum=res.data.results;
-      });
-    }
+    ...mapState({
+      HomePageData:state=>state.getOnePageData.msg,
+    })
   }
 };
 </script>

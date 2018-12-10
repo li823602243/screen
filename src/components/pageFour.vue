@@ -73,6 +73,7 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   name: "hello",
   data() {
@@ -87,32 +88,26 @@ export default {
   },
   mounted() {
     let that = this;
-    this.getVenuePageData();
-     const pageFour = setInterval(() =>{    
-           this.venue_booking_date_num={},
-           this.city_agency_room_num=[],
-           this.venue_cat_booking_num=[],
-           this.myCityData=[],
-           this.agencyAmount=[],
-          this.venueAmount=[]                
-          that.getVenuePageData();          
-     }, this.$store.state.intervalTime); 
+    setTimeout(()=>{
+        this.getVenuePageData();
+    },500)
   },
   computed: {
-    author() {
-      return this.$store.state.author;
-    }
+    ...mapState({
+        FourPageData:state=>state.getFourPageData.msg,
+      })
   },
   methods: {
     getVenuePageData() {
+      let that = this ;
       this.myCityData = []
-      this.http.get(this.ports.urls.VenuePageData, res => {
-        //console.log("第四页调用");
-        this.venue_booking_date_num = res.data.results.venue_booking_date_num;
-        this.city_agency_room_num = res.data.results.city_agency_room_num;
-        this.venue_cat_booking_num = res.data.results.venue_cat_booking_num;
-        this.drawLine();
+      this.venue_booking_date_num = this.FourPageData.venue_booking_date_num;
+      this.city_agency_room_num = this.FourPageData.city_agency_room_num;
+      this.venue_cat_booking_num = this.FourPageData.venue_cat_booking_num;
+      this.$nextTick(()=>{
+        that.drawLine();
       });
+      
     },
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
@@ -330,6 +325,7 @@ export default {
         this.agencyAmount.push(this.city_agency_room_num[i].agency_amount);
         this.venueAmount.push(this.city_agency_room_num[i].venue_amount);
       }
+      console.log(this.myCityData)
       var dataFirm = {
         1: this.agencyAmount
       };

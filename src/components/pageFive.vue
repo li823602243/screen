@@ -4,9 +4,9 @@
       <div class="flag"><span class="flag-content">入馆服务人数</span></div>
       <el-col :span="8" class="wrapper-col" >
          <div class="today-service--contnet"><span>今日</span><span>服务人数</span></div>
-         <div class="today-service--num">{{utils.numFormat(enterNum)}}人</div>
+         <div class="today-service--num">{{utils.numFormat(enterNum.enter_num)}}人</div>
          <div class="yester-service--contnet"><span>昨日</span><span>服务人数</span></div>
-         <div class="yester-service--num">{{utils.numFormat(this.$store.state.allYesterDay)}}人</div>
+         <div class="yester-service--num">{{utils.numFormat(allYesterDay)}}人</div>
         <div id="today-service--num"></div>
       </el-col>
       <el-col :span="8" class="wrapper-col" >
@@ -15,10 +15,10 @@
         </el-col>
       <el-col :span="8" class="wrapper-col">
         <span class="entrance-num--now">在馆人数</span>
-        <span class="entrance-people--now">{{utils.numFormat(allCurrentVisitorData)}}人</span>
+        <span class="entrance-people--now">{{utils.numFormat(allCurrentVisitorData.in_num)}}人</span>
         <span class="entrance-top--title">最高</span>
         <span class="entrance-top--num">在馆人数</span>
-        <span class="entrance-top--people">{{utils.numFormat(allTopInData)}}人</span>
+        <span class="entrance-top--people">{{utils.numFormat(allTopInData.num)}}人</span>
         <div id="library-people">
         </div>
         </el-col>
@@ -37,35 +37,33 @@
 </template>
 
 <script>
+import {mapState} from 'vuex';
 export default {
   name: "hello",
   data() {
     return {
       dataBoxArr:[],
-      TodayDataArr:[],
-      YearDataArr:[],
-      allCurrentVisitorData:'',
-      allTopInData:'',
-      WeekInData:'',
-      allYesterDay:'',
-      enterNum:"",
       pageFive:'',
       msg: "Welcome to Your Vue.js App"
     };
   },
   mounted() {
     let that = this;
-    this.pageFiveData();
-    this.getCurrentEnterNum(); 
-     const pageFivePre = setInterval(() =>{
-       this.pageFiveData();
-       this.drawLine();                   
-     }, this.$store.state.intervalTime);
+    that.pageFiveData();
   },
   computed: {
     pageNum() {
       return this.$store.state.pageNum;
-    }
+    },
+    ...mapState({
+      allCurrentVisitorData:state=>state.allCurrentVisitorData.msg,
+      enterNum:state=>state.allCurrentVisitorData.msg,
+      allTopInData:state=>state.allTopInData.msg,
+      WeekInData:state=>state.getWeekInData.msg,
+      TodayDataArrs:state=>state.currentEnterNum.msg,
+      YearDataArrs:state=>state.currentEnterNum.msg,
+      allYesterDay:state=>state.allYesterDay.msg,
+    }),
   },
  watch:{
       pageNum(){
@@ -81,24 +79,9 @@ export default {
   },
   methods: {
     pageFiveData(){
-      this.http.get(this.ports.urls.allCurrentVisitorData, res => {
-        this.allCurrentVisitorData = res.data.results.in_num;
-        this.enterNum = res.data.results.enter_num;
-      });
-      this.http.get(this.ports.urls.allTopInData, res => {
-        this.allTopInData = res.data.results.num;
-      });
-      this.http.get(this.ports.urls.currentEnterNum, res => {
-       this.TodayDataArr = res.data.results.today;
-       this.YearDataArr = res.data.results.yesterday;
-        // this.drawLine();
-      });
-      this.http.get(this.ports.urls.allYesterDay, res => {
-         this.allYesterDay = res.data.results;
-      });
-      this.http.get(this.ports.urls.getWeekInData, res => {
-        this.WeekInData = res.data.results;
-        this.drawLine();
+      let that = this;
+      this.$nextTick(()=>{
+        that.drawLine();
       });
     },
     getCurrentEnterNum(){
@@ -107,8 +90,8 @@ export default {
        this.http.get(this.ports.urls.currentEnterNum, res => {
        if(nowTime != this.$store.state.nowTimeTips){
         this.$store.state.nowTimeTips = myDate.getMinutes();// 最新数据
-        this.$store.state.TodayDataArrPre = this.TodayDataArr;// 最新数据
-        this.$store.state.YearDataArrPre = this.YearDataArr;// 最新数据
+        this.$store.state.TodayDataArrPre = this.TodayDataArrs.today;// 最新数据
+        this.$store.state.YearDataArrPre = this.YearDataArrs.yesterday;// 最新数据
        }else{
         this.TodayDataArr = res.data.results.today;//
         this.YearDataArr = res.data.results.yesterday;

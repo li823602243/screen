@@ -84,9 +84,7 @@
 
 <script>
 import DateChoose from "./DateChoose.vue";
-
-import echartsLiquidfill from "echarts-liquidfill"; //在这里引入
-
+import { mapState } from "vuex";
 export default {
   name: "hello",
   data() {
@@ -97,7 +95,7 @@ export default {
       bookPeopleNum: "",
       joinPeopleNum: "",
       trendWeekData: [],
-      trendYearData: []
+      trendYearData: [],
     };
   },
   components: {
@@ -105,22 +103,14 @@ export default {
   },
   mounted() {
     let that = this;
-    this.getServicePageData();
-    const pageThree = setInterval(() => {
-      this.showNums = "day",
-      this.act_cat_join_num_lists = "",
-      this.act_cat_join_num_arr = [],
-      this.bookPeopleNum = "",
-      this.joinPeopleNum = "",
-      this.trendWeekData = [],
-      this.trendYearData = [];
-      that.getServicePageData();
-    }, this.$store.state.intervalTime);
+    setTimeout(()=>{
+       this.getServicePageData();
+    })
   },
   computed: {
-    author() {
-      return this.$store.state.author;
-    }
+    ...mapState({
+      ThreePageData: state => state.getThreePageData.msg
+    })
   },
   methods: {
     chooseDateNum: function(data) {
@@ -148,18 +138,19 @@ export default {
       this.drawServicePeople();
     },
     getServicePageData() {
-      this.act_cat_join_num_lists =[]
-      this.http.get(this.ports.urls.ServicePageData, res => {
-        //("第三页调用")
-        this.act_cat_join_num_lists = res.data.results.act_cat_join_num_lists;
-        this.act_register_date_num = res.data.results.act_register_date_num;
-        this.act_sign_date_num = res.data.results.act_sign_date_num;
-        this.act_sign_trend_data = res.data.results.act_sign_trend_data;
-        this.user_age_period_num = res.data.results.user_age_period_num;
-        this.drawLine();
+      let that = this;
+      this.act_cat_join_num_lists = [];
+      this.act_cat_join_num_lists = this.ThreePageData.act_cat_join_num_lists;
+      this.act_register_date_num = this.ThreePageData.act_register_date_num;
+      this.act_sign_date_num = this.ThreePageData.act_sign_date_num;
+      this.act_sign_trend_data = this.ThreePageData.act_sign_trend_data;
+      this.user_age_period_num = this.ThreePageData.user_age_period_num;
+      this.$nextTick(()=>{
+        that.drawLine();
       });
     },
     drawLine() {
+      this.trendWeekData = [];
       const numFormat = num => {
         num = parseInt(num);
         num = num.toString().split("."); // 分隔小数点
@@ -300,12 +291,13 @@ export default {
             barWidth: 10,
             label: {
               show: true, //开启显示
-              position: 'top', //在上方显示
-              textStyle: { //数值样式
-                color: '#fff',
-                fontSize: 16,
+              position: "top", //在上方显示
+              textStyle: {
+                //数值样式
+                color: "#fff",
+                fontSize: 16
                 // fontWeight: 600
-                }
+              }
             },
             itemStyle: {
               normal: {
@@ -495,12 +487,15 @@ export default {
       this.$store.state.actTypeChart = this.$echarts.init(
         document.getElementById("aside-charts")
       );
+      this.act_cat_join_num_arr = [];
       for (let i in this.act_cat_join_num_lists) {
         let obj = {};
         obj.name = this.act_cat_join_num_lists[i].filter_name;
         obj.value = this.act_cat_join_num_lists[i].amount;
         this.act_cat_join_num_arr.push(obj);
       }
+      console.log("00000000000000000000000000000000")
+      console.log(this.act_cat_join_num_arr)
       let actTrendOption = {
         color: ["#37a2da", "#32c5e9", "#9fe6b8", "#ffdb5c", "#ff9f7f"],
         calculable: true,
@@ -798,91 +793,103 @@ export default {
         null,
         { renderer: "svg" }
       );
-       let scaleData = [];
-        for(let i in this.user_age_period_num){
-          let obj = {}
-         obj.name = this.user_age_period_num[i].filter_name;
-         obj.value = parseInt(this.user_age_period_num[i].amount);
-          scaleData.push(obj)
-
-       }
-var rich = {
-    white: {
-        color: '#ddd',
-        align: 'center',
-        padding: [3, 0]
-    }
-};
-var placeHolderStyle = {
-    normal: {
-        label: {
+      let scaleData = [];
+      for (let i in this.user_age_period_num) {
+        let obj = {};
+        obj.name = this.user_age_period_num[i].filter_name;
+        obj.value = parseInt(this.user_age_period_num[i].amount);
+        scaleData.push(obj);
+      }
+      var rich = {
+        white: {
+          color: "#ddd",
+          align: "center",
+          padding: [3, 0]
+        }
+      };
+      var placeHolderStyle = {
+        normal: {
+          label: {
             show: false
-        },
-        labelLine: {
+          },
+          labelLine: {
             show: false
-        },
-        color: 'rgba(0, 0, 0, 0)',
-        borderColor: 'rgba(0, 0, 0, 0)',
-        borderWidth: 0
-    }
-};
-var data = [];
-var color=['#00ffff','#00cfff','#006ced','#ffe000','#ffa800','#ff5b00','#ff3000']
-for (var i = 0; i < scaleData.length; i++) {
-    data.push({
-        value: scaleData[i].value,
-        name: scaleData[i].name,
-        itemStyle: {
-            normal: {
+          },
+          color: "rgba(0, 0, 0, 0)",
+          borderColor: "rgba(0, 0, 0, 0)",
+          borderWidth: 0
+        }
+      };
+      var data = [];
+      var color = [
+        "#00ffff",
+        "#00cfff",
+        "#006ced",
+        "#ffe000",
+        "#ffa800",
+        "#ff5b00",
+        "#ff3000"
+      ];
+      for (var i = 0; i < scaleData.length; i++) {
+        data.push(
+          {
+            value: scaleData[i].value,
+            name: scaleData[i].name,
+            itemStyle: {
+              normal: {
                 borderWidth: 2,
                 shadowBlur: 150,
-                borderColor:color[i],
+                borderColor: color[i],
                 shadowColor: color[i]
+              }
             }
-        }
-    }, {
-        value: 2,
-        name: '',
-        itemStyle: placeHolderStyle
-    });
-}
-var seriesObj = [{
-    name: '',
-    type: 'pie',
-    clockWise: false,
-    radius: [60, 120],
-    hoverAnimation: false,
-    itemStyle: {
-        normal: {
-            label: {
+          },
+          {
+            value: 2,
+            name: "",
+            itemStyle: placeHolderStyle
+          }
+        );
+      }
+      var seriesObj = [
+        {
+          name: "",
+          type: "pie",
+          clockWise: false,
+          radius: [60, 120],
+          hoverAnimation: false,
+          itemStyle: {
+            normal: {
+              label: {
                 show: true,
-                position: 'outside',
-                fontSize:16,
+                position: "outside",
+                fontSize: 16,
                 formatter: function(params) {
-                    var percent = 0;
-                    var total = 0;
-                    for (var i = 0; i < scaleData.length; i++) {
-                        total += scaleData[i].value;
-                    }
-                    percent = ((params.value / total) * 100).toFixed(0);
-                    if(params.name !== '') {
-                        return params.name + '\n' + '占比' + percent + '%';
-                    }else {
-                        return '';
-                    }
+                  var percent = 0;
+                  var total = 0;
+                  for (var i = 0; i < scaleData.length; i++) {
+                    total += scaleData[i].value;
+                  }
+                  percent = ((params.value / total) * 100).toFixed(0);
+                  if (params.name !== "") {
+                    return params.name + "\n" + "占比" + percent + "%";
+                  } else {
+                    return "";
+                  }
                 },
                 rich: rich
-            },
-            labelLine: {
-                length:15,
-                length2:50,
+              },
+              labelLine: {
+                length: 15,
+                length2: 50,
                 show: true,
-                color:'#00ffff'
+                color: "#00ffff"
+              }
             }
+          },
+          data: data
         }
-    },
-    data: data
-}];
+      ];
       let ageChartOption = {
         tooltip: {
           show: false
