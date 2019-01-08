@@ -55,13 +55,13 @@
          <div class="address-left">
           <el-row class="address-left--top">
             <el-col :span="8">
-              机构数
+              机构总数
             </el-col>
             <el-col :span="8">
               城市
             </el-col>
             <el-col :span="8">
-              活动室数量
+              活动室总数
             </el-col>
           </el-row>
           <el-row class="address-left--bottom" id="address-city-total">
@@ -183,7 +183,7 @@ export default {
       let orderDayOption = {
         title: {
           text: "今日",
-          bottom: 30,
+          bottom: 15,
           left: "center",
           textStyle: {
             fontWeight: "normal",
@@ -218,7 +218,7 @@ export default {
       let orderWeekOption = {
         title: {
           text: "本周",
-          bottom: 30,
+          bottom: 15,
           left: "center",
           textStyle: {
             fontWeight: "normal",
@@ -253,7 +253,7 @@ export default {
       let orderMonthOption = {
         title: {
           text: "本月",
-          bottom: 30,
+          bottom: 15,
           left: "center",
           textStyle: {
             fontWeight: "normal",
@@ -288,7 +288,7 @@ export default {
       let orderAllOption = {
         title: {
           text: "全部",
-          bottom: 30,
+          bottom: 15,
           left: "center",
           textStyle: {
             fontWeight: "normal",
@@ -325,7 +325,7 @@ export default {
         this.agencyAmount.push(this.city_agency_room_num[i].agency_amount);
         this.venueAmount.push(this.city_agency_room_num[i].venue_amount);
       }
-      console.log(this.myCityData)
+      //(this.myCityData)
       var dataFirm = {
         1: this.agencyAmount
       };
@@ -566,7 +566,7 @@ export default {
   flex-direction: column;
 }
 .order-num {
-  height: 300px;
+  height: 16vw;
   width: 100%;
   border: 1px solid #032ac6;
 }

@@ -242,7 +242,7 @@
 </script>
 <style>
   .live-num {
-    height: 280px;
+    height: 14vw;
     border: 1px solid #002ac5;
     width: 100%;
   }
@@ -258,7 +258,7 @@
   }
   .watch-people {
     width: 100%;
-    height: 320px;
+    height: 15vw;
     border: 1px solid #002ac5;
   }
   .live-ranking {
@@ -281,7 +281,7 @@
     box-sizing: border-box;
   }
   .live-num .live-num--row {
-    font-size: 24px;
+    font-size: 1.3vw;
     color: aliceblue;
   }
   .live-num .live-row--th {
@@ -295,7 +295,7 @@
     float: left;
   }
   .live-pannel--title {
-    font-size: 24px;
+    font-size: 1.5vw;
     color: #55FFFF;
     margin-bottom: 5px;
     text-align: right;
@@ -303,8 +303,8 @@
   }
   .live-pannel-content {
     position: relative;
-    font-size: 22px;
-    padding: 2% 20px;
+    font-size: 1.2vw;
+    padding: 1vw 0.5vw;
     color: #fff;
     border: 1px solid#ffcb6f;
     width: 90%;
@@ -316,9 +316,9 @@
     left: 50%;
     margin-left: -80px;
     display: inline-block;
-    width: 160px;
-    height: 58px;
-    top: -39px;
+    width: 8vw;
+    height: 4vw;
+    top: -40%;
     background-size: contain;
     background-repeat: no-repeat;
   }
@@ -338,14 +338,18 @@
     background-repeat: no-repeat;
    }
    .live-panel--wrapper {
+     display: flex;
+     flex-direction: column;
+     justify-content: space-around;
      height: 100%;
+     padding: 20px 0;
    }
   .live-panel {
     display: flex;
     flex-direction: column;
     justify-content: center;
     /* padding-top: 20px; */
-    height: 33.33%;
+    height: 4vw;
   }
   .live-pannel--title {
     text-align: right;
@@ -366,7 +370,7 @@
     align-items: center;
     flex-direction: row;
     width: 100%;
-    font-size: 22px;
+    font-size: 1.2vw;
     color: #fff;
     height: 20%;
   }

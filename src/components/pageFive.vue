@@ -63,6 +63,7 @@ export default {
       TodayDataArrs:state=>state.currentEnterNum.msg,
       YearDataArrs:state=>state.currentEnterNum.msg,
       allYesterDay:state=>state.allYesterDay.msg,
+      YearDataAll:state=>state.allTotalData.msg,
     }),
   },
  watch:{
@@ -172,7 +173,7 @@ export default {
             },
             data: [
               {
-                value: this.$store.state.allTotalEnterNum,
+                value: this.YearDataAll,
                 // name: "累计服务人数"
               }
             ]

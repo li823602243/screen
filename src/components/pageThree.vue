@@ -105,7 +105,7 @@ export default {
     let that = this;
     setTimeout(()=>{
        this.getServicePageData();
-    })
+    },500)
   },
   computed: {
     ...mapState({
@@ -494,8 +494,8 @@ export default {
         obj.value = this.act_cat_join_num_lists[i].amount;
         this.act_cat_join_num_arr.push(obj);
       }
-      console.log("00000000000000000000000000000000")
-      console.log(this.act_cat_join_num_arr)
+      //console.log("00000000000000000000000000000000")
+     // console.log(this.act_cat_join_num_arr)
       let actTrendOption = {
         color: ["#37a2da", "#32c5e9", "#9fe6b8", "#ffdb5c", "#ff9f7f"],
         calculable: true,
@@ -1065,7 +1065,7 @@ export default {
 .aside-charts {
   position: relative;
 
-  height: 480px;
+  height: 18vw;
 }
 
 .aside::after {
@@ -1191,7 +1191,7 @@ export default {
 }
 
 .main-top {
-  height: 400px;
+  height: 20vw;
 
   border-bottom: 1px solid #022ac8;
 

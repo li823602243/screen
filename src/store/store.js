@@ -8,11 +8,11 @@ const store = new Vuex.Store({
   // 定义状态
   state: {
     pageNum: 0,
-    autoplay: true,
+    autoplay: false,
     interval: 15000,//了轮播时间间隔
     intervalTime: 600000,//接口刷新时间
     YearDataArrPre: [],
-    allTotalEnterNum: "1",
+    // allTotalEnterNum: "1",
     allYesterDay: '2',
     pageOneChart: '',
     pageTwoChart: '',
@@ -65,6 +65,10 @@ const store = new Vuex.Store({
     allYesterDay:{
       errno: 1,
       msg: {}
+    },
+    allTotalData:{
+      errno: 1,
+      msg: {}
     }
 
   },
@@ -104,6 +108,9 @@ const store = new Vuex.Store({
     },
     [types.ALL_YESTER_DAY](state, res) {
       state.allYesterDay = { ...state.allYesterDay, msg: res.data.results }
+    },
+    [types.ALL_TOTAL_NUM](state, res) {
+      state.allTotalData = { ...state.allTotalData, msg: res.data.results }
     }
   },
   actions: {
@@ -167,23 +174,25 @@ const store = new Vuex.Store({
     //所有机构一周入馆人数
     getWeekInData({ commit }) {
       api.getWeekInData().then(res => {
-        console.log(res)
         commit(types.GET_WEEK_IN, res);
       })
     },
     //当前一分钟入馆人数
     currentEnterNum({ commit }) {
       api.currentEnterNum().then(res => {
-        console.log(res)
         commit(types.CURRENT_ENTER_NUM, res);
       })
     },
     //昨日在馆人数
     allYesterDay({ commit }) {
       api.allYesterDay().then(res => {
-        console.log(res)
-        console.log('213213213213213213')
         commit(types.ALL_YESTER_DAY, res);
+      })
+    },
+    //服务总人数
+    allTotalEnterNum({ commit }) {
+      api.allTotalEnterNum().then(res => {
+        commit(types.ALL_TOTAL_NUM, res);
       })
     }
   }

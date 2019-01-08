@@ -39,21 +39,21 @@
     </div>
     <div class="resource">
       <span class="resource-stage--title">资源鉴赏数据统计</span>
-      <span class="bouble1" :class="{bouble1Animation:this.$store.state.pageNum==16}"></span>
-      <span class="bouble2" :class="{bouble2Animation:this.$store.state.pageNum==16}"></span>
-      <span class="bouble3" :class="{bouble3Animation:this.$store.state.pageNum==16}"></span>
-      <span class="bouble4" :class="{bouble4Animation:this.$store.state.pageNum==16}"></span>
-      <span class="bouble5" :class="{bouble5Animation:this.$store.state.pageNum==16}"></span>
-      <span class="bouble6" :class="{bouble6Animation:this.$store.state.pageNum==16}"></span>
-      <div class="resource-num" :class="{resourceAnimation:this.$store.state.pageNum==16}">
+      <span class="bouble1" :class="{bouble1Animation:this.$store.state.pageNum==6}"></span>
+      <span class="bouble2" :class="{bouble2Animation:this.$store.state.pageNum==6}"></span>
+      <span class="bouble3" :class="{bouble3Animation:this.$store.state.pageNum==6}"></span>
+      <span class="bouble4" :class="{bouble4Animation:this.$store.state.pageNum==6}"></span>
+      <span class="bouble5" :class="{bouble5Animation:this.$store.state.pageNum==6}"></span>
+      <span class="bouble6" :class="{bouble6Animation:this.$store.state.pageNum==6}"></span>
+      <div class="resource-num" :class="{resourceAnimation:this.$store.state.pageNum==6}">
         <span class="resource-title">资源数量</span>
         <span class="num">{{SevenPageData.resource_total}}</span>
       </div>
-      <div class="resource-play" :class="{resourcePlayAnimation:this.$store.state.pageNum==16}">
+      <div class="resource-play" :class="{resourcePlayAnimation:this.$store.state.pageNum==6}">
         <span class="resource-title">播放总数</span>
         <span class="num">{{SevenPageData.resource_play_total}} </span>
       </div>
-      <div class="resource-rong" :class="{resourceRongAnimation:this.$store.state.pageNum==16}">
+      <div class="resource-rong" :class="{resourceRongAnimation:this.$store.state.pageNum==6}">
         <span class="resource-title"> 资源容量</span>
         <span class="num">{{SevenPageData.resource_size_total}}</span>
       </div>
@@ -544,15 +544,18 @@ export default {
   color: #55ffff;
 }
 .resource-left--body {
-  font-size: 22px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 1.2vw;
   color: #fff;
   height: 10%;
 }
 .resource-left--ranking {
-  height: 44px;
-  line-height: 44px;
+  height: 2.2vw;
+  line-height: 2.2vw;
   text-align: center;
-  width: 47px;
+  width: 2.2vw;
   margin: 0 auto;
   background-position: 50%;
 }
@@ -605,8 +608,8 @@ export default {
 }
 .resource-pannel .p-header--icon {
   display: inline-block;
-  width: 47px;
-  height: 38px;
+  width: 2.5vw;
+  height: 2.4vw;
   background-image: url(../../static/images/crown.png);
   background-size: contain;
   background-repeat: no-repeat;
@@ -624,19 +627,19 @@ export default {
 .resource-pannel .p-header--name {
   color: #ffffff;
   margin-left: 20px;
-  font-size: 24px;
+  font-size: 1.6vw;
 }
 .resource-pannel .p-header--play {
   float: right;
   color: #51f5f6;
-  font-size: 24px;
+  font-size: 1.5vw;
 }
 .p-header--left {
   float: left;
 }
 .r-pannel--content {
-  padding-top: 15px;
-  font-size: 22px;
+  padding-top: 0.5vw;
+  font-size: 1.2vw;
   color: #fff;
   text-align: left;
   display: -webkit-box;

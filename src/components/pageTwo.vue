@@ -172,7 +172,9 @@
 .pannel-content {
   width: 100%;
   /* width: 880px; */
-  height: 380px; 
+  /* height: 380px;  */
+  height:0;
+  padding-bottom:50%;
   border: 1px solid #032ac6;
 }
 .pannel-content--infos {
@@ -253,9 +255,9 @@ export default {
   },
   mounted() {
     let that = this;
-      setTimeout(()=>{
-        this.getActivityPageData();
-      },500)
+    setTimeout(()=>{
+      this.getActivityPageData();
+    },500)
   },
   computed: {
       ...mapState({
@@ -327,7 +329,7 @@ export default {
       for(let i in  this.actStatusData){
         this.maxActStatus.push(1.1*Math.max.apply(null, this.actStatusData))
       }
-      console.log(this.maxActStatus)
+     // console.log(this.maxActStatus)
       this.drawActStatusCharts()
     },
     drawLine() {
@@ -399,7 +401,7 @@ export default {
       for( let i in this.act_status_data.today){
          this.actStatusData.push(this.act_status_data.today[i].amount)
       }
-      console.log(this.actStatusData)
+      //console.log(this.actStatusData)
       for(let i in  this.actStatusData){
         this.maxActStatus.push(1.1*Math.max.apply(null, this.actStatusData))
       }

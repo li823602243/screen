@@ -22,7 +22,9 @@ export default {
   },
   mounted() {
     let that = this; 
-    this.getVenuePageData();
+    this.$nextTick(function () {
+     that.getVenuePageData();
+    })
   },
   computed: {
     ...mapState({

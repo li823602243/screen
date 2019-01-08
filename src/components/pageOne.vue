@@ -65,10 +65,10 @@
           <div class="circle-content" :class="{circleAnimation:this.$store.state.pageNum==10}">
             <div class="circle-wrapper" :class="{circleAnimationWrapper:this.$store.state.pageNum==10}">
               <span class="title">入馆服务人数</span>
-              <span class="num">{{utils.numFormat(allTotalEnterNum)}}</span>
+              <span class="num">{{utils.numFormat(YearDataArrs)}}</span>
             </div>
           </div>
-          <span class="tips">昨日新增:{{utils.numFormat(allYesterDay)}}</span>
+          <span class="tips">昨日新增:{{allYesterDay}}</span>
         </el-col>
       </el-row>
       <el-row :gutter="24">
@@ -101,13 +101,13 @@ import {mapState} from 'vuex';
 export default {
   data() {
     return {
-      allTotalEnterNum:'',
-      allYesterDay:''
     };
   },
   computed: {
     ...mapState({
       HomePageData:state=>state.getOnePageData.msg,
+      YearDataArrs:state=>state.allTotalData.msg,
+      allYesterDay:state=>state.allYesterDay.msg,
     })
   }
 };
@@ -137,10 +137,10 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 300px;
-  width: 300px;
+  height: 14vw;
+  width: 14vw;
   background: url('../../static/images/index-circle.png');
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   margin:  0 auto;
   
@@ -155,23 +155,23 @@ export default {
 }
 .circle-wrapper .title {
   display: inline-block;
-  font-size: 30px;
+  font-size: 1.3vw;
   color: #fff;
   margin: 5px;
 }
 .circle-content--bottom {
-  margin-bottom: 45px;
+  /* margin-bottom: 45px; */
 }
 .circle-wrapper .num {
   display: block;
-  font-size: 48px;
+  font-size: 2.5vw;
   color: #f1ffa3;
   margin: 5px;
 }
 .tips {
   display: block;
   margin: 26px auto;
-  font-size: 30px;
+  font-size: 1.8vw;
   color: #55fffe;
 }
 .platform {
@@ -188,13 +188,13 @@ export default {
 }
 .platform .title {
   display: inline-block;
-  font-size: 30px;
+  font-size: 2.2vw;
   color: #fff;
   margin: 5px;
 }
 .platform .num {
   display: inline-block;
-  font-size: 48px;
+  font-size: 2.5vw;
   color: #f1ffa3;
   margin: 5px;
 }
@@ -213,5 +213,5 @@ export default {
 			100%{
         transform: rotate(0deg);
 			}
-		}
+    }    
 </style>

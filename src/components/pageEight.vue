@@ -60,13 +60,15 @@ export default {
       userMapData:[]
     };
   },
-  mounted() {
-    let that = this;
-    this.getVenuePageData();
-  },
   computed: {
     ...mapState({
       EightPageData:state=>state.getEightPageData.msg,
+    })
+  },
+  mounted() {
+    let that = this;
+    this.$nextTick(function () {
+     that.getVenuePageData();
     })
   },
   methods: {

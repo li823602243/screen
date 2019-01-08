@@ -173,6 +173,7 @@ export default {
       this.$store.dispatch('getWeekInData');
       this.$store.dispatch('currentEnterNum');
       this.$store.dispatch('allYesterDay');
+      this.$store.dispatch('allTotalEnterNum');
    }
   }
 };
