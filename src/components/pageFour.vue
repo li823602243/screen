@@ -288,7 +288,7 @@ export default {
       let orderAllOption = {
         title: {
           text: "全部",
-          bottom: 15,
+          bottom: 15   ,
           left: "center",
           textStyle: {
             fontWeight: "normal",

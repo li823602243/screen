@@ -139,6 +139,8 @@ export default {
   align-items: center;
   height: 14vw;
   width: 14vw;
+  min-height: 200px;
+  min-width: 200px;
   background: url('../../static/images/index-circle.png');
   background-size: contain;
   background-repeat: no-repeat;

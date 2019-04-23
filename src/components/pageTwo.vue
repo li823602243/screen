@@ -171,10 +171,7 @@
 }
 .pannel-content {
   width: 100%;
-  /* width: 880px; */
-  /* height: 380px;  */
-  height:0;
-  padding-bottom:50%;
+  height: 18vw;
   border: 1px solid #032ac6;
 }
 .pannel-content--infos {
