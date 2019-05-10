@@ -1,5 +1,5 @@
 <template>
-  <div class="user-wrapper">
+  <div class="user-wrapper wrapper">
     <el-row :gutter="20">
       <el-col :span="7"><div class="user-left" id="user-left"></div></el-col>
       <el-col :span="10"><div class="user-middle" id="user-middle"></div></el-col>
@@ -220,9 +220,9 @@ export default {
         };
         for(let i in this.userData.site_client_visit_num) {
             if(this.userData.site_client_visit_num[i].filter_id==1){
-             this.pcData = this.userData.site_client_visit_num[i].amount
+             this.phoneData = this.userData.site_client_visit_num[i].amount
             }else{
-              this.phoneData = this.userData.site_client_visit_num[i].amount
+              this.pcData = this.userData.site_client_visit_num[i].amount
             }
         }
         let userPadData = [{

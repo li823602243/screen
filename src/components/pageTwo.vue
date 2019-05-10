@@ -53,13 +53,14 @@
 .wrapper {
   padding: 0 60px 40px 60px;
   box-sizing: border-box;
+  justify-content: space-between;
 }
 .page-two > .el-col-11 {
   width: 48.5%!important;
 }
 .interval {
   margin-top: 30px;
-  flex: 1;
+  /* flex: 1; */
 }
 .actStatus {
   color: #fff;
@@ -78,7 +79,7 @@
   border: 1px solid #032ac6
 }
 .pannel-content--bottom {
-  height: 100%;
+  height: 350px;
   width: 100%;
   border: 1px solid #032ac6
 }
@@ -171,7 +172,7 @@
 }
 .pannel-content {
   width: 100%;
-  height: 18vw;
+  height: 260px;
   border: 1px solid #032ac6;
 }
 .pannel-content--infos {
@@ -360,10 +361,19 @@ export default {
       }
       let actPublicOption = {
         calculable: true,
+        grid: [
+          {
+            show: false,
+            left: "9%",
+            top: '10%',
+            bottom: "10%",
+            containLabel: false,
+          }
+        ],
         series: [
           {
             type: "pie",
-            radius: [37, 250],
+            radius: [50, 200],
             avoidLabelOverlap: false,
             startAngle: 0,
             center: ["50%", "10%"],
@@ -374,7 +384,7 @@ export default {
               normal: {
                 show: true,
                 formatter: "{b}:{c}",
-                fontSize:18
+                fontSize:14
               },
               emphasis: {
                 show: true
@@ -434,6 +444,7 @@ export default {
       let actTypeChartOption = {
         grid: {
           left: "10%",
+          top:'10%',
           bottom: 0,
           containLabel: true
         },
@@ -685,6 +696,12 @@ export default {
       );
       var myColor = ["#f57473", "#54ffff", "#f7b449", "#8a79f4"];
       let actStatusOption = {
+        grid: {
+            left:"15%",
+            right:'15%',
+            top:"10%",
+            bottom:"10%"
+        },
         xAxis: {
           max: Math.max.apply(null, this.maxActStatus),
           show: false,
@@ -708,7 +725,7 @@ export default {
               formatter: function(value, index) {
                 return ["{title|" + value + "} "].join("\n");
               },
-              fontSize:20,
+              fontSize:16,
               rich: {
                 lg: {
                   backgroundColor: "#339911",
@@ -728,7 +745,7 @@ export default {
             data: this.actStatusData,
             axisLabel: {
               textStyle: {
-                fontSize: 20,
+                fontSize: 16,
                 color: "#fff"
               }
             },

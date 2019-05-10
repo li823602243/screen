@@ -215,7 +215,7 @@ export default {
 
           top: "22%",
 
-          bottom: "20%",
+          bottom: "5%",
 
           containLabel: true
         },
@@ -352,7 +352,7 @@ export default {
 
           top: "22%",
 
-          bottom: "20%",
+          bottom: "5%",
 
           containLabel: true
         },
@@ -499,17 +499,24 @@ export default {
       let actTrendOption = {
         color: ["#37a2da", "#32c5e9", "#9fe6b8", "#ffdb5c", "#ff9f7f"],
         calculable: true,
+        grid: {
+          left: "15%",
+          top:'15%',
+          top:'15%',
+          bottom: '15%',
+          containLabel: true
+        },
         series: [
           {
             type: "pie",
-            radius: [40, 150],
+            radius: [40, 100],
             roseType: "area",
             itemStyle: {
               normal: {
                 label: {
                   //指示到模块的标签文字
                   show: true,
-                  fontSize: 18,
+                  fontSize: 16,
                   formatter: "{b} : {c}"
                 },
                 labelLine: {
@@ -856,7 +863,7 @@ export default {
           name: "",
           type: "pie",
           clockWise: false,
-          radius: [60, 120],
+          radius: [40, 80],
           hoverAnimation: false,
           itemStyle: {
             normal: {
@@ -1044,7 +1051,7 @@ export default {
 
 .main {
   display: flex;
-
+  justify-content: space-between;
   flex-direction: column;
 
   height: 100%;
@@ -1059,13 +1066,12 @@ export default {
 }
 
 .main .mian-footer {
-  flex: 1;
+  height: 400px;
 }
 
 .aside-charts {
   position: relative;
-
-  height: 18vw;
+  height: 250px;
 }
 
 .aside::after {
@@ -1079,7 +1085,7 @@ export default {
 
   width: 80%;
 
-  top: 450px;
+  top: 260px;
 
   left: 50%;
 
@@ -1143,7 +1149,7 @@ export default {
   background-color: #37a2da;
   top: 50%;
   margin-top: -5px;
-  left: 28%;
+  left: 20%;
 }
 .aside-list--td.type1::after {
   content: "";
@@ -1154,7 +1160,7 @@ export default {
   background-color: #32c5e9;
   top: 50%;
   margin-top: -5px;
-  left: 28%;
+  left: 20%;
 }
 .aside-list--td.type2::after {
   content: "";
@@ -1165,7 +1171,7 @@ export default {
   background-color: #9fe6b8;
   top: 50%;
   margin-top: -5px;
-  left: 28%;
+  left: 20%;
 }
 .aside-list--td.type3::after {
   content: "";
@@ -1176,7 +1182,7 @@ export default {
   background-color: #ffdb5c;
   top: 50%;
   margin-top: -5px;
-  left: 28%;
+  left: 20%;
 }
 .aside-list--td.type4::after {
   content: "";
@@ -1187,11 +1193,11 @@ export default {
   background-color: #ff9f7f;
   top: 50%;
   margin-top: -5px;
-  left: 28%;
+  left: 20%;
 }
 
 .main-top {
-  height: 20vw;
+  height: 300px;
 
   border-bottom: 1px solid #022ac8;
 

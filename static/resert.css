@@ -38,3 +38,50 @@ html,body,.page-other {
   .el-carousel__arrow--right {
       font-size: 50px!important;
   }
+  @media (min-width: 1024px){
+    body{font-size: 18px}
+    .wrapper {
+        transform: scale(0.5);
+    }
+    } /*>=1024的设备*/
+    
+    @media (min-width: 1100px) {
+    body{font-size: 20px}
+    .wrapper {
+        transform: scale(0.5);
+    }
+    } /*>=1100的设备*/
+    @media (min-width: 1280px) {
+    body{font-size: 22px;}
+    .wrapper {
+        transform: scale(0.5);
+    }
+    } /*>=1280的设备*/
+    
+    @media (min-width: 1366px) {
+    
+    body{font-size: 24px;}
+    .wrapper {
+        transform: scale(0.6);
+    }
+    }  
+    
+    @media (min-width: 1440px) {
+    body{font-size: 25px !important;}
+    .wrapper {
+        transform: scale(0.7);
+    }
+    } 
+    
+    @media (min-width: 1680px) {
+    body{font-size: 28px;}
+    .wrapper {
+        transform: scale(0.8);
+    }
+    } 
+    @media (min-width: 1920px) {
+    body{font-size: 33px;}
+    .wrapper {
+        transform: scale(1.0);
+    }
+    } 

@@ -1,5 +1,5 @@
 <template>
-  <div class="map-wrapper">
+  <div class="map-wrapper wrapper">
    <el-row :gutter="24">
     <el-col :span="6">
       <div class="map-tab">
@@ -274,8 +274,8 @@ export default {
         }
         userMapData.push(obj)
       }
-       //this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
-       this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
+       this.$axios.get("../screen/static/geoJson/jiangsu.json").then(response => {
+       //this.$axios.get("../../../static/geoJson/jiangsu.json").then(response => {
         this.$echarts.registerMap("江苏", response.data);
         var myChart = this.$echarts.extendsMap("chart-panel", {
           bgColor: "#0f6ab8", // 画布背景色

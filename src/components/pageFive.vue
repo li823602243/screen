@@ -10,8 +10,9 @@
         <div id="today-service--num"></div>
       </el-col>
       <el-col :span="8" class="wrapper-col" >
-        <div class="aggregate-people--num">累计服务人数</div>
+        <div class="aggregate-people--num">累计服务人数/w</div>
         <div id="aggregate-people"></div>
+        <div class="aggregate-people--num1">{{utils.numFormat(YearDataAll)}}人</div>
         </el-col>
       <el-col :span="8" class="wrapper-col">
         <span class="entrance-num--now">在馆人数</span>
@@ -147,7 +148,7 @@ export default {
             name: "业务指标",
             type: "gauge",
             min: 0,
-            max: 200000,
+            max: 1000000/10000,
             splitNumber: 5,
             pointer: {
               length: "60%",
@@ -163,9 +164,9 @@ export default {
             },
             detail: {
               formatter:function(p){
-                return numFormat(p)+'人'
+                return ''
               },
-              color: "#fff",
+              color: "trans",
               offsetCenter: [0, "100%"],
               rich:{
                 color:'#fff'
@@ -173,7 +174,7 @@ export default {
             },
             data: [
               {
-                value: this.YearDataAll,
+                value: this.YearDataAll/10000,
                 // name: "累计服务人数"
               }
             ]
@@ -1067,6 +1068,16 @@ export default {
   color: #55FFFF;
   font-size: 20px;
   top:35%;
+  left:50%;
+  -webkit-transform: translate(-50%,-50%);
+  -moz-transform: translate(-50%,-50%);
+  transform:translate(-50%,-50%);
+}
+.aggregate-people--num1 {
+  position: absolute;
+  color: #fff;
+  font-size: 25px;
+  bottom:10%;
   left:50%;
   -webkit-transform: translate(-50%,-50%);
   -moz-transform: translate(-50%,-50%);

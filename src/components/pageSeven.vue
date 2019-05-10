@@ -1,5 +1,5 @@
 <template>
-  <div class="resource-wrapper">
+  <div class="resource-wrapper wrapper">
     <div class="resource-left">
       <div class="title-flag left">分类排名TOP</div>
       <div class="resource-left--content">
